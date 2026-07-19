@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GeoRates – Der beste Gesamtpreis für dein Wunschhotel auf Booking.com</title>
+<title>GeoRates – Dein persönlicher Buchungs-Check für Booking.com</title>
 <style>
   :root {
     --navy: #1F4E78;
@@ -229,12 +229,12 @@
 <section class="hero" id="top">
   <div class="hero-grid">
     <div>
-      <span class="eyebrow">In Vorbereitung · Preisvergleich für Booking.com</span>
-      <h1>Für dein Wunschzimmer automatisch den besten Gesamtpreis finden.</h1>
+      <span class="eyebrow">In Vorbereitung · Persönlicher Buchungs-Check für Booking.com</span>
+      <h1>Für dein Wunschzimmer den fairen Gesamtpreis sichern.</h1>
       <p class="sub">
-        Füg den Booking.com-Link zu deinem Hotel ein, wähl dein bevorzugtes Zimmer – wir prüfen,
-        ob es für exakt dieses Zimmer und diese Verpflegung einen günstigeren, steuer- und
-        gebühreninklusiven Gesamtpreis gibt.
+        Füg den Booking.com-Link zu deinem Hotel ein, wähl dein bevorzugtes Zimmer – wir prüfen
+        für dich persönlich, ob es für exakt dieses Zimmer und diese Verpflegung einen
+        günstigeren, steuer- und gebühreninklusiven Gesamtpreis gibt.
       </p>
     </div>
     <div class="hero-visual">
@@ -323,7 +323,7 @@
           <label for="email-1">Deine E-Mail (für das Ergebnis)</label>
           <input type="email" id="email-1" placeholder="du@beispiel.de" required>
         </div>
-        <button type="submit">Preisvergleich anfragen</button>
+        <button type="submit">Buchungs-Check anfragen</button>
       </form>
       <div class="form-msg" id="request-msg-1"></div>
     </div>
@@ -351,9 +351,9 @@
       </div>
       <div class="step">
         <div class="step-num">2</div>
-        <h3>Wir ermitteln den besten Preis</h3>
+        <h3>Wir prüfen deinen Preis persönlich</h3>
         <p>
-          Wir prüfen, ob für exakt dieses Zimmer und diese Verpflegung ein günstigerer,
+          Wir checken, ob für exakt dieses Zimmer und diese Verpflegung ein günstigerer,
           steuer- und gebühreninklusiver Gesamtpreis verfügbar ist.
         </p>
       </div>
@@ -467,16 +467,16 @@
         <h3>Immer inkl. Steuern & Gebühren</h3>
         <p>
           Manche Buchungsseiten zeigen zusätzliche Steuern erst später an. Wir rechnen sie
-          immer sofort mit ein, damit unsere Vergleichszahl der tatsächliche Endpreis ist.
+          immer sofort mit ein, damit die von uns genannte Zahl der tatsächliche Endpreis ist.
         </p>
       </div>
       <div class="trust-card">
         <div class="trust-icon">↔</div>
         <h3>Kein künstlicher Aufschlag</h3>
         <p>
-          Der Ausgangspreis, mit dem wir vergleichen, wird nicht schöngerechnet oder erhöht,
-          um eine größere Ersparnis vorzutäuschen – beide Seiten des Vergleichs sind echte,
-          identisch berechnete Gesamtpreise.
+          Der Ausgangspreis, den wir zur Prüfung heranziehen, wird nicht schöngerechnet oder
+          erhöht, um eine größere Ersparnis vorzutäuschen – beide Zahlen sind echte, identisch
+          berechnete Gesamtpreise.
         </p>
       </div>
       <div class="trust-card">
@@ -494,7 +494,7 @@
 <section id="suche">
   <div class="container">
     <div class="final-cta">
-      <h2>Jetzt deinen Preisvergleich anfragen</h2>
+      <h2>Jetzt deinen Buchungs-Check anfragen</h2>
       <p>Hotel-Link, Zimmer und Verpflegung eintragen – wir melden uns per E-Mail mit dem Ergebnis.</p>
       <div class="mini-guide">
         <strong>So kommst du an den richtigen Link:</strong>
@@ -569,7 +569,7 @@
             <label for="email-2">Deine E-Mail (für das Ergebnis)</label>
             <input type="email" id="email-2" placeholder="du@beispiel.de" required>
           </div>
-          <button type="submit">Preisvergleich anfragen</button>
+          <button type="submit">Buchungs-Check anfragen</button>
         </form>
         <div class="form-msg" id="request-msg-2"></div>
       </div>
@@ -579,7 +579,7 @@
 
 <footer>
   <div class="container">
-    GeoRates · Preisvergleich für Hotelbuchungen · Kein Reiseveranstalter, keine Buchungsabwicklung.<br>
+    GeoRates · Persönlicher Buchungs-Check für Hotelbuchungen · Kein Reiseveranstalter, keine Buchungsabwicklung.<br>
     Fragen? <a href="mailto:info@georates.tech">info@georates.tech</a><br>
     <a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a> ·
     <a href="agb.html">Nutzungsbedingungen</a>
@@ -605,7 +605,7 @@
   const CANCEL_LABELS = { ja: 'Ja', nein: 'Nein', unsicher: 'Weiß ich nicht' };
 
   function buildMailto(data) {
-    const subject = 'GeoRates Preisvergleich-Anfrage: ' + data.room;
+    const subject = 'GeoRates Buchungs-Check-Anfrage: ' + data.room;
     let cancelLine = 'Kostenlos stornierbar: ' + (CANCEL_LABELS[data.cancel] || data.cancel);
     if (data.cancel === 'ja') {
       cancelLine += ' (Frist: ' + (data.cancelDeadline || 'nicht angegeben') + ')';
