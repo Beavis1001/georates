@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reisebudget-Rechner – GeoRates</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="index.html">Geo<span>Rates</span></a>
+    <a class="back-link" href="index.html">← Zur Startseite</a>
+  </div>
+</header>
+
+<div class="page-header">
+  <h1>Reisebudget-Rechner</h1>
+  <p>Schätze dein Reisebudget in Sekunden – wähle eine Kategorie oder passe alle Werte selbst an.</p>
+</div>
+
+<main class="tool">
+  <div class="panel">
+    <h2>Angaben zur Reise</h2>
+    <div class="field-row">
+      <div class="field">
+        <label for="preset">Reisestil</label>
+        <select id="preset">
+          <option value="guenstig">Günstig (Hostel/Budget)</option>
+          <option value="mittel" selected>Mittel (Standard-Hotel)</option>
+          <option value="luxus">Luxus</option>
+          <option value="custom">Eigene Werte</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="personen">Anzahl Personen</label>
+        <input type="number" id="personen" min="1" value="2">
+      </div>
+      <div class="field">
+        <label for="naechte">Anzahl Nächte</label>
+        <input type="number" id="naechte" min="1" value="7">
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Kosten (bearbeitbar)</h2>
+    <div class="field-row">
+      <div class="field">
+        <label for="unterkunft">Unterkunft pro Nacht (gesamt, €)</label>
+        <input type="number" id="unterkunft" min="0" value="70">
+      </div>
+      <div class="field">
+        <label for="verpflegung">Verpflegung pro Person/Tag (€)</label>
+        <input type="number" id="verpflegung" min="0" value="35">
+      </div>
+      <div class="field">
+        <label for="transport">Transport vor Ort pro Person/Tag (€)</label>
+        <input type="number" id="transport" min="0" value="15">
+      </div>
+      <div class="field">
+        <label for="aktivitaeten">Aktivitäten pro Person/Tag (€)</label>
+        <input type="number" id="aktivitaeten" min="0" value="20">
+      </div>
+      <div class="field">
+        <label for="sonstiges">Sonstiges pro Person/Tag (€)</label>
+        <input type="number" id="sonstiges" min="0" value="10">
+      </div>
+    </div>
+    <button class="btn" id="calc-btn" type="button">Budget berechnen</button>
+    <p class="hint">Die Werte sind grobe Richtwerte – passe sie gerne an dein Reiseziel an.</p>
+  </div>
+
+  <div class="panel" id="result-panel" style="display:none;">
+    <h2>Geschätztes Budget</h2>
+    <div class="result-row"><span>Unterkunft (gesamt)</span><span id="r-unterkunft">–</span></div>
+    <div class="result-row"><span>Verpflegung (gesamt)</span><span id="r-verpflegung">–</span></div>
+    <div class="result-row"><span>Transport vor Ort (gesamt)</span><span id="r-transport">–</span></div>
+    <div class="result-row"><span>Aktivitäten (gesamt)</span><span id="r-aktivitaeten">–</span></div>
+    <div class="result-row"><span>Sonstiges (gesamt)</span><span id="r-sonstiges">–</span></div>
+    <div class="result-row total"><span>Gesamtbudget</span><span id="r-gesamt">–</span></div>
+    <div class="result-row"><span class="muted">Pro Person</span><span class="muted" id="r-pro-person">–</span></div>
+    <div class="result-row"><span class="muted">Pro Tag (Gruppe)</span><span class="muted" id="r-pro-tag">–</span></div>
+  </div>
+
+  <div class="cta-box">
+    <p>Hotel für die Reise schon ausgesucht? Wir finden automatisch den besten Gesamtpreis auf Booking.com.</p>
+    <a class="btn" href="index.html#suche">Zur Hotelsuche</a>
+  </div>
+</main>
+
+<footer>
+  <a href="index.html">GeoRates</a> · <a href="impressum.html">Impressum</a> ·
+  <a href="datenschutz.html">Datenschutz</a> · <a href="agb.html">Nutzungsbedingungen</a>
+</footer>
+
+<script>
+  const PRESETS = {
+    guenstig:  { unterkunft: 30,  verpflegung: 20, transport: 8,  aktivitaeten: 10, sonstiges: 5  },
+    mittel:    { unterkunft: 70,  verpflegung: 35, transport: 15, aktivitaeten: 20, sonstiges: 10 },
+    luxus:     { unterkunft: 180, verpflegung: 70, transport: 30, aktivitaeten: 50, sonstiges: 25 },
+  };
+  const FIELD_IDS = ['unterkunft', 'verpflegung', 'transport', 'aktivitaeten', 'sonstiges'];
+
+  function applyPreset() {
+    const preset = document.getElementById('preset').value;
+    if (preset === 'custom' || !PRESETS[preset]) return;
+    const values = PRESETS[preset];
+    FIELD_IDS.forEach(id => { document.getElementById(id).value = values[id]; });
+  }
+
+  function computeBudget(input) {
+    const unterkunftGesamt = input.unterkunft * input.naechte;
+    const proPersonProTag = input.verpflegung + input.transport + input.aktivitaeten + input.sonstiges;
+    const verpflegungGesamt = input.verpflegung * input.personen * input.naechte;
+    const transportGesamt = input.transport * input.personen * input.naechte;
+    const aktivitaetenGesamt = input.aktivitaeten * input.personen * input.naechte;
+    const sonstigesGesamt = input.sonstiges * input.personen * input.naechte;
+    const gesamt = unterkunftGesamt + verpflegungGesamt + transportGesamt + aktivitaetenGesamt + sonstigesGesamt;
+    return {
+      unterkunftGesamt, verpflegungGesamt, transportGesamt, aktivitaetenGesamt, sonstigesGesamt,
+      gesamt,
+      proPerson: gesamt / input.personen,
+      proTag: gesamt / input.naechte,
+    };
+  }
+
+  function formatEUR(n) {
+    return n.toLocaleString('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+  }
+
+  function calculate() {
+    const input = {
+      personen: parseFloat(document.getElementById('personen').value) || 1,
+      naechte: parseFloat(document.getElementById('naechte').value) || 1,
+      unterkunft: parseFloat(document.getElementById('unterkunft').value) || 0,
+      verpflegung: parseFloat(document.getElementById('verpflegung').value) || 0,
+      transport: parseFloat(document.getElementById('transport').value) || 0,
+      aktivitaeten: parseFloat(document.getElementById('aktivitaeten').value) || 0,
+      sonstiges: parseFloat(document.getElementById('sonstiges').value) || 0,
+    };
+    const r = computeBudget(input);
+    document.getElementById('r-unterkunft').textContent = formatEUR(r.unterkunftGesamt);
+    document.getElementById('r-verpflegung').textContent = formatEUR(r.verpflegungGesamt);
+    document.getElementById('r-transport').textContent = formatEUR(r.transportGesamt);
+    document.getElementById('r-aktivitaeten').textContent = formatEUR(r.aktivitaetenGesamt);
+    document.getElementById('r-sonstiges').textContent = formatEUR(r.sonstigesGesamt);
+    document.getElementById('r-gesamt').textContent = formatEUR(r.gesamt);
+    document.getElementById('r-pro-person').textContent = formatEUR(r.proPerson);
+    document.getElementById('r-pro-tag').textContent = formatEUR(r.proTag);
+    document.getElementById('result-panel').style.display = 'block';
+  }
+
+  document.getElementById('preset').addEventListener('change', applyPreset);
+  document.getElementById('calc-btn').addEventListener('click', calculate);
+</script>
+</body>
+</html>
