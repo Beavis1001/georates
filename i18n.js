@@ -102,6 +102,7 @@
       idx_footer_line1: `GeoRates · Persönlicher Buchungs-Check für Hotelbuchungen · Kein Reiseveranstalter, keine Buchungsabwicklung.`,
       idx_footer_questions: `Fragen?`,
       idx_js_msg_success: `Hotelseite geöffnet & Anfrage vorbereitet – bitte die sich öffnende E-Mail absenden, damit wir sie erhalten.`,
+      idx_js_msg_sent: `Anfrage gesendet! Wir prüfen deinen Preis persönlich und melden uns per E-Mail.`,
 
       /* ---------- budget.html ---------- */
       budget_title: `Reisebudget-Rechner – GeoRates`,
@@ -410,6 +411,7 @@
       idx_footer_line1: `GeoRates · Personal booking check for hotel bookings · Not a tour operator, no booking handling.`,
       idx_footer_questions: `Questions?`,
       idx_js_msg_success: `Hotel page opened & request prepared – please send the email that just opened so we receive it.`,
+      idx_js_msg_sent: `Request sent! We'll personally check your price and get back to you by email.`,
 
       budget_title: `Travel Budget Calculator – GeoRates`,
       budget_h1: `Travel Budget Calculator`,
@@ -712,6 +714,7 @@
       idx_footer_line1: `GeoRates · Comprobación personal de reservas de hotel · No es un operador turístico ni gestiona reservas.`,
       idx_footer_questions: `¿Preguntas?`,
       idx_js_msg_success: `Página del hotel abierta y solicitud preparada – por favor envía el correo electrónico que se ha abierto para que lo recibamos.`,
+      idx_js_msg_sent: `¡Solicitud enviada! Revisaremos tu precio personalmente y te responderemos por correo electrónico.`,
 
       budget_title: `Calculadora de presupuesto de viaje – GeoRates`,
       budget_h1: `Calculadora de presupuesto de viaje`,
@@ -1014,6 +1017,7 @@
       idx_footer_line1: `GeoRates · Vérification personnelle de réservation pour les hôtels · Ni voyagiste, ni gestion de réservation.`,
       idx_footer_questions: `Des questions ?`,
       idx_js_msg_success: `Page de l'hôtel ouverte et demande préparée – veuillez envoyer l'e-mail qui vient de s'ouvrir pour que nous le recevions.`,
+      idx_js_msg_sent: `Demande envoyée ! Nous vérifierons personnellement votre prix et vous répondrons par e-mail.`,
 
       budget_title: `Calculateur de budget de voyage – GeoRates`,
       budget_h1: `Calculateur de budget de voyage`,
@@ -1316,6 +1320,7 @@
       idx_footer_line1: `GeoRates · Controllo personale delle prenotazioni hotel · Non è un tour operator, nessuna gestione delle prenotazioni.`,
       idx_footer_questions: `Domande?`,
       idx_js_msg_success: `Pagina dell'hotel aperta e richiesta preparata – ti preghiamo di inviare l'email che si è appena aperta, così la riceviamo.`,
+      idx_js_msg_sent: `Richiesta inviata! Controlleremo personalmente il tuo prezzo e ti risponderemo via email.`,
 
       budget_title: `Calcolatore del budget di viaggio – GeoRates`,
       budget_h1: `Calcolatore del budget di viaggio`,
@@ -1618,6 +1623,7 @@
       idx_footer_line1: `GeoRates · Persoonlijke boekingscheck voor hotelboekingen · Geen touroperator, geen boekingsafhandeling.`,
       idx_footer_questions: `Vragen?`,
       idx_js_msg_success: `Hotelpagina geopend & aanvraag voorbereid – stuur de geopende e-mail alsjeblieft, zodat wij deze ontvangen.`,
+      idx_js_msg_sent: `Aanvraag verzonden! We controleren je prijs persoonlijk en nemen per e-mail contact met je op.`,
 
       budget_title: `Reisbudget-calculator – GeoRates`,
       budget_h1: `Reisbudget-calculator`,

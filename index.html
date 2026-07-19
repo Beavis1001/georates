@@ -599,13 +599,22 @@
 </footer>
 
 <script src="i18n.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
-  // Aktueller Stand: kein automatisiertes Backend online, daher zwei ehrliche, echte
-  // Wirkungen beim Absenden statt eines Fake-Ergebnisses: (1) der eingefuegte Booking.com-
-  // Link wird in einem neuen Tab geoeffnet, damit man das Hotel/Zimmer selbst pruefen kann,
-  // (2) eine E-Mail mit allen Angaben geht per mailto an uns, wir pruefen manuell (siehe
-  // "manuelle Rebooking-Check-Variante"). Sobald hotel_compare.py als Web-Service laeuft,
-  // wird dieser Teil durch einen echten API-Aufruf ersetzt.
+  // Formular-Backend: Anfragen werden per EmailJS (clientseitiger E-Mail-Versand, kein
+  // eigener Server noetig) automatisch (1) an uns (info@georates.tech) und (2) als
+  // Bestaetigung an die anfragende Person verschickt. Der Preis-Check selbst bleibt bewusst
+  // manuell (siehe Positionierung "Buchungs-Check", kein automatisiertes Booking.com-Scraping).
+  // Setup: Account auf emailjs.com anlegen, E-Mail-Service verbinden, zwei Templates
+  // (Owner-Benachrichtigung + Kunden-Bestaetigung) anlegen, dann die vier Werte unten
+  // eintragen. Solange EMAILJS_PUBLIC_KEY auf 'YOUR_' beginnt, faellt das Formular
+  // automatisch auf den bisherigen mailto-Weg zurueck (Hotel-Link oeffnet sich trotzdem).
+  const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
+  const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
+  const EMAILJS_TEMPLATE_OWNER = 'YOUR_TEMPLATE_OWNER_ID';
+  const EMAILJS_TEMPLATE_CUSTOMER = 'YOUR_TEMPLATE_CUSTOMER_ID';
+  const EMAILJS_READY = !EMAILJS_PUBLIC_KEY.startsWith('YOUR_') && typeof emailjs !== 'undefined';
+  if (EMAILJS_READY) { emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); }
   function setDefaultDates(checkinId, checkoutId) {
     const today = new Date();
     const checkin = new Date(today); checkin.setDate(checkin.getDate() + 30);
@@ -672,10 +681,44 @@
       };
       if (!data.link || !data.room || !data.email) return;
       window.open(data.link, '_blank', 'noopener');
-      window.location.href = buildMailto(data);
-      msg.textContent = (typeof t === 'function') ? t('idx_js_msg_success') :
-        'Hotelseite geöffnet & Anfrage vorbereitet – bitte die sich öffnende E-Mail absenden, damit wir sie erhalten.';
-      msg.style.color = '#227a54';
+
+      const fallback = () => {
+        window.location.href = buildMailto(data);
+        msg.textContent = (typeof t === 'function') ? t('idx_js_msg_success') :
+          'Hotelseite geöffnet & Anfrage vorbereitet – bitte die sich öffnende E-Mail absenden, damit wir sie erhalten.';
+        msg.style.color = '#227a54';
+      };
+
+      if (EMAILJS_READY) {
+        const boardLabel = BOARD_LABELS_DE[data.board] || data.board;
+        let cancelLabel = CANCEL_LABELS_DE[data.cancel] || data.cancel;
+        if (data.cancel === 'ja') {
+          cancelLabel += ' (Frist: ' + (data.cancelDeadline || 'nicht angegeben') + ')';
+        }
+        const templateParams = {
+          link: data.link,
+          room: data.room,
+          board: boardLabel,
+          checkin: data.checkin || '–',
+          checkout: data.checkout || '–',
+          cancel: cancelLabel,
+          email: data.email,
+        };
+        msg.textContent = '…';
+        msg.style.color = '#5B6B75';
+        Promise.all([
+          emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_OWNER, templateParams),
+          emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CUSTOMER, templateParams),
+        ]).then(() => {
+          msg.textContent = (typeof t === 'function') ? t('idx_js_msg_sent') :
+            'Anfrage gesendet! Wir prüfen deinen Preis persönlich und melden uns per E-Mail.';
+          msg.style.color = '#227a54';
+          form.reset();
+          setDefaultDates(ids.checkin, ids.checkout);
+        }).catch(() => { fallback(); });
+      } else {
+        fallback();
+      }
     });
   }
 
