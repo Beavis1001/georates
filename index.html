@@ -603,8 +603,7 @@
 <script>
   // Formular-Backend: Anfragen werden per EmailJS (clientseitiger E-Mail-Versand, kein
   // eigener Server noetig) automatisch (1) an uns (info@georates.tech) und (2) als
-  // Bestaetigung an die anfragende Person verschickt. Der Preis-Check selbst bleibt bewusst
-  // manuell (siehe Positionierung "Buchungs-Check", kein automatisiertes Booking.com-Scraping).
+  // Bestaetigung an die anfragende Person verschickt.
   // Setup: Account auf emailjs.com anlegen, E-Mail-Service verbinden, zwei Templates
   // (Owner-Benachrichtigung + Kunden-Bestaetigung) anlegen, dann die vier Werte unten
   // eintragen. Solange EMAILJS_PUBLIC_KEY auf 'YOUR_' beginnt, faellt das Formular
@@ -615,6 +614,36 @@
   const EMAILJS_TEMPLATE_CUSTOMER = 'YOUR_TEMPLATE_CUSTOMER_ID';
   const EMAILJS_READY = !EMAILJS_PUBLIC_KEY.startsWith('YOUR_') && typeof emailjs !== 'undefined';
   if (EMAILJS_READY) { emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); }
+
+  // Automatischer Preis-Check (best effort): ruft eine Serverless-Function auf (siehe
+  // price-api-Repo), die per Headless-Chrome versucht, den auf Booking.com angezeigten
+  // Gesamtpreis fuer die gewaehlten Daten auszulesen. Booking.com blockt Bot-Traffic
+  // teilweise und aendert seine Seitenstruktur - schlaegt der automatische Check fehl,
+  // greift ohne sichtbaren Unterschied fuer die Nutzerin/den Nutzer die bisherige manuelle
+  // Pruefung per E-Mail. Solange PRICE_API_URL auf 'YOUR_' beginnt, wird der Schritt
+  // uebersprungen und direkt manuell geprueft.
+  const PRICE_API_URL = 'YOUR_PRICE_API_URL';
+  const PRICE_API_READY = !PRICE_API_URL.startsWith('YOUR_');
+
+  async function checkPriceAutomatically(data) {
+    if (!PRICE_API_READY) return null;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 28000);
+    try {
+      const res = await fetch(PRICE_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ link: data.link, checkin: data.checkin, checkout: data.checkout }),
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
+      const json = await res.json();
+      return (json && json.success) ? json.price : null;
+    } catch (e) {
+      clearTimeout(timeout);
+      return null; // API nicht erreichbar/blockiert -> stiller Fallback auf manuell
+    }
+  }
   function setDefaultDates(checkinId, checkoutId) {
     const today = new Date();
     const checkin = new Date(today); checkin.setDate(checkin.getDate() + 30);
@@ -667,7 +696,7 @@
   function handleRequest(formId, ids, msgId) {
     const form = document.getElementById(formId);
     const msg = document.getElementById(msgId);
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', async function (e) {
       e.preventDefault();
       const data = {
         link: document.getElementById(ids.link).value.trim(),
@@ -695,6 +724,14 @@
         if (data.cancel === 'ja') {
           cancelLabel += ' (Frist: ' + (data.cancelDeadline || 'nicht angegeben') + ')';
         }
+
+        msg.textContent = PRICE_API_READY ? '… Preis wird automatisch geprüft' : '…';
+        msg.style.color = '#5B6B75';
+
+        // Best-effort automatischer Preis-Check; liefert null bei Timeout/Blockade/nicht
+        // konfiguriert - dann laeuft alles wie gehabt rein manuell weiter.
+        const autoPrice = await checkPriceAutomatically(data);
+
         const templateParams = {
           link: data.link,
           room: data.room,
@@ -703,15 +740,16 @@
           checkout: data.checkout || '–',
           cancel: cancelLabel,
           email: data.email,
+          autoPrice: autoPrice || 'automatisch nicht ermittelbar – bitte manuell prüfen',
         };
         msg.textContent = '…';
-        msg.style.color = '#5B6B75';
         Promise.all([
           emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_OWNER, templateParams),
           emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CUSTOMER, templateParams),
         ]).then(() => {
-          msg.textContent = (typeof t === 'function') ? t('idx_js_msg_sent') :
+          const base = (typeof t === 'function') ? t('idx_js_msg_sent') :
             'Anfrage gesendet! Wir prüfen deinen Preis persönlich und melden uns per E-Mail.';
+          msg.textContent = autoPrice ? (base + ' (automatisch gefundener Preis: ' + autoPrice + ')') : base;
           msg.style.color = '#227a54';
           form.reset();
           setDefaultDates(ids.checkin, ids.checkout);
