@@ -78,8 +78,11 @@
     border-bottom: 1px solid var(--border); font-size: 15px;
   }
   .mock-row:last-of-type { border-bottom: none; }
-  .mock-row .flag { margin-right: 6px; }
+  .mock-row .old-price { text-decoration: line-through; color: var(--muted); font-weight: 500; }
   .mock-row.best { color: var(--accent-dark); font-weight: 800; }
+  .mock-arrow {
+    text-align: center; font-size: 13px; font-weight: 700; color: var(--accent-dark); padding: 4px 0;
+  }
   .mock-badge {
     margin-top: 14px; background: #E5F5EC; color: var(--accent-dark); font-weight: 800; font-size: 13px;
     padding: 7px 12px; border-radius: 999px; display: inline-block;
@@ -240,8 +243,9 @@
     <div class="hero-visual">
       <div class="mock-card">
         <div class="mock-card-title">BEISPIEL · DOPPELZIMMER MIT MEERBLICK, FRÜHSTÜCK</div>
-        <div class="mock-row"><span><span class="flag">🇩🇪</span>Ausgangspreis</span><span>1.240 €</span></div>
-        <div class="mock-row best"><span><span class="flag">🇨🇴</span>Bester gefundener Preis</span><span>1.080 €</span></div>
+        <div class="mock-row"><span>Ausgangspreis</span><span class="old-price">1.240 €</span></div>
+        <div class="mock-arrow">↓ 160 € gespart</div>
+        <div class="mock-row best"><span>Bester gefundener Preis</span><span>1.080 €</span></div>
         <span class="mock-badge">≈13 % günstiger</span>
       </div>
     </div>
