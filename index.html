@@ -343,7 +343,7 @@
           <input type="date" id="cancel-deadline-1">
         </div>
         <div class="full">
-          <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY"></div>
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAD5R3U1E9Flp_-6V"></div>
         </div>
         <button type="submit" data-i18n="idx_form_submit">Preis automatisch prüfen</button>
       </form>
@@ -581,7 +581,7 @@
             <input type="date" id="cancel-deadline-2">
           </div>
           <div class="full">
-            <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY"></div>
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAAD5R3U1E9Flp_-6V"></div>
           </div>
           <button type="submit" data-i18n="idx_form_submit">Preis automatisch prüfen</button>
         </form>
@@ -609,7 +609,7 @@
   // Zimmer ausliest. Keine E-Mails mehr - das Ergebnis erscheint direkt auf der Seite.
   // Solange PRICE_API_URL auf 'YOUR_' beginnt, wird nur die Hotelseite geoeffnet, ohne
   // automatischen Check (Setup siehe README im price-api-Repo).
-  const PRICE_API_URL = 'YOUR_PRICE_API_URL';
+  const PRICE_API_URL = 'https://georates-price-api.vercel.app/api/check-price';
   const PRICE_API_READY = !PRICE_API_URL.startsWith('YOUR_');
 
   // Sobald echte Partner-Links vorhanden sind, hier eintragen - tauchen dann automatisch in
