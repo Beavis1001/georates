@@ -643,7 +643,7 @@
     price_not_found: 'Für dieses Zimmer konnte gerade in keinem geprüften Land ein Preis gefunden werden.',
   };
 
-  function renderResults(panel, json, cancelInfo) {
+  function renderResults(panel, json, cancelInfo, hotelLink) {
     panel.style.display = 'block';
     if (!json || json.success === false) {
       const text = ERROR_TEXTS[json && json.reason] || 'Der automatische Check war gerade nicht möglich. Bitte später erneut versuchen.';
@@ -659,6 +659,9 @@
     }).join('');
 
     let html = '<table class="result-table"><thead><tr><th>Land-Session</th><th>Gefundener Preis</th></tr></thead><tbody>' + rows + '</tbody></table>';
+    if (hotelLink) {
+      html += '<p style="margin-bottom:14px;"><a href="' + hotelLink + '" target="_blank" rel="noopener" style="color:var(--accent-dark); font-weight:700;">Hotelseite öffnen →</a></p>';
+    }
 
     if (json.recommendVpnCountry) {
       const countryName = COUNTRY_NAMES[json.recommendVpnCountry] || json.recommendVpnCountry;
@@ -704,10 +707,10 @@
         return;
       }
 
-      window.open(data.link, '_blank', 'noopener');
       panel.style.display = 'none';
 
       if (!PRICE_API_READY) {
+        window.open(data.link, '_blank', 'noopener');
         msg.textContent = 'Automatischer Check ist noch nicht aktiv – Hotelseite wurde geöffnet, bitte manuell vergleichen.';
         msg.style.color = '#5B6B75';
         return;
@@ -733,7 +736,7 @@
         clearTimeout(timeout);
         const json = await res.json();
         msg.textContent = '';
-        renderResults(panel, json, cancelInfo);
+        renderResults(panel, json, cancelInfo, data.link);
       } catch (err) {
         msg.textContent = 'Der automatische Check hat zu lange gedauert oder ist fehlgeschlagen – bitte später erneut versuchen.';
         msg.style.color = '#C0392B';
