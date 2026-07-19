@@ -12,6 +12,7 @@
 <meta property="og:url" content="https://georates.tech/">
 <meta property="og:type" content="website">
 <title data-i18n-title="idx_title">GeoRates – Dein persönlicher Buchungs-Check für Booking.com</title>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
   :root {
     --navy: #1F4E78;
@@ -119,6 +120,24 @@
   }
   .request-form button:hover { background: var(--accent-dark); }
   .form-msg { font-size: 13.5px; margin-top: 12px; font-weight: 600; color: var(--text); }
+  .result-panel {
+    margin-top: 18px; border-top: 1px solid var(--border); padding-top: 18px;
+  }
+  .result-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 14px; }
+  .result-table th, .result-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+  .result-table tr.best-row { background: #E5F5EC; font-weight: 700; }
+  .result-savings {
+    background: #E5F5EC; color: var(--accent-dark); font-weight: 800; padding: 10px 14px;
+    border-radius: 10px; margin-bottom: 14px;
+  }
+  .result-instructions {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px;
+  }
+  .result-instructions h4 { font-size: 14px; margin-bottom: 8px; }
+  .result-instructions ol { margin: 0 0 0 18px; font-size: 14px; }
+  .result-instructions li { margin-bottom: 6px; }
+  .result-instructions a { color: var(--accent-dark); font-weight: 700; }
+  .result-partial-note { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
   .hint { font-size: 12.5px; color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: normal; margin-top: 6px; }
   .mini-guide {
     background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px;
@@ -310,14 +329,6 @@
             <option value="egal" data-i18n="idx_board_any">Egal</option>
           </select>
         </div>
-        <div>
-          <label for="checkin-1" data-i18n="idx_form_label_checkin">Anreise</label>
-          <input type="date" id="checkin-1">
-        </div>
-        <div>
-          <label for="checkout-1" data-i18n="idx_form_label_checkout">Abreise</label>
-          <input type="date" id="checkout-1">
-        </div>
         <div class="full">
           <label for="cancel-1" data-i18n="idx_form_label_cancel">Kostenlos stornierbar?</label>
           <select id="cancel-1">
@@ -332,15 +343,15 @@
           <input type="date" id="cancel-deadline-1">
         </div>
         <div class="full">
-          <label for="email-1" data-i18n="idx_form_label_email">Deine E-Mail (für das Ergebnis)</label>
-          <input type="email" id="email-1" placeholder="du@beispiel.de" required>
+          <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY"></div>
         </div>
-        <button type="submit" data-i18n="idx_form_submit">Buchungs-Check anfragen</button>
+        <button type="submit" data-i18n="idx_form_submit">Preis automatisch prüfen</button>
       </form>
       <div class="form-msg" id="request-msg-1"></div>
+      <div class="result-panel" id="result-panel-1" style="display:none;"></div>
     </div>
     <div class="hero-note" style="color: var(--muted); text-align:center; margin-top:14px;" data-i18n="idx_hero_note">
-      Kostenlos & unverbindlich · Anfragen werden aktuell manuell geprüft, bis unser automatischer Check live ist.
+      Kostenlos & unverbindlich · automatischer Check über mehrere Länder-Sessions.
     </div>
   </div>
 </section>
@@ -507,7 +518,7 @@
   <div class="container">
     <div class="final-cta">
       <h2 data-i18n="idx_final_h2">Jetzt deinen Buchungs-Check anfragen</h2>
-      <p data-i18n="idx_final_p">Hotel-Link, Zimmer und Verpflegung eintragen – wir melden uns per E-Mail mit dem Ergebnis.</p>
+      <p data-i18n="idx_final_p">Hotel-Link, Zimmer und Verpflegung eintragen – das Ergebnis erscheint direkt hier auf der Seite.</p>
       <div class="mini-guide">
         <strong data-i18n="idx_guide_title">So kommst du an den richtigen Link:</strong>
         <svg class="guide-diagram" viewBox="0 0 640 130" xmlns="http://www.w3.org/2000/svg">
@@ -556,14 +567,6 @@
               <option value="egal" data-i18n="idx_board_any">Egal</option>
             </select>
           </div>
-          <div>
-            <label for="checkin-2" data-i18n="idx_form_label_checkin">Anreise</label>
-            <input type="date" id="checkin-2">
-          </div>
-          <div>
-            <label for="checkout-2" data-i18n="idx_form_label_checkout">Abreise</label>
-            <input type="date" id="checkout-2">
-          </div>
           <div class="full">
             <label for="cancel-2" data-i18n="idx_form_label_cancel">Kostenlos stornierbar?</label>
             <select id="cancel-2">
@@ -578,12 +581,12 @@
             <input type="date" id="cancel-deadline-2">
           </div>
           <div class="full">
-            <label for="email-2" data-i18n="idx_form_label_email">Deine E-Mail (für das Ergebnis)</label>
-            <input type="email" id="email-2" placeholder="du@beispiel.de" required>
+            <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY"></div>
           </div>
-          <button type="submit" data-i18n="idx_form_submit">Buchungs-Check anfragen</button>
+          <button type="submit" data-i18n="idx_form_submit">Preis automatisch prüfen</button>
         </form>
         <div class="form-msg" id="request-msg-2"></div>
+        <div class="result-panel" id="result-panel-2" style="display:none;"></div>
       </div>
     </div>
   </div>
@@ -599,91 +602,26 @@
 </footer>
 
 <script src="i18n.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
-  // Formular-Backend: Anfragen werden per EmailJS (clientseitiger E-Mail-Versand, kein
-  // eigener Server noetig) automatisch (1) an uns (info@georates.tech) und (2) als
-  // Bestaetigung an die anfragende Person verschickt.
-  // Setup: Account auf emailjs.com anlegen, E-Mail-Service verbinden, zwei Templates
-  // (Owner-Benachrichtigung + Kunden-Bestaetigung) anlegen, dann die vier Werte unten
-  // eintragen. Solange EMAILJS_PUBLIC_KEY auf 'YOUR_' beginnt, faellt das Formular
-  // automatisch auf den bisherigen mailto-Weg zurueck (Hotel-Link oeffnet sich trotzdem).
-  const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
-  const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
-  const EMAILJS_TEMPLATE_OWNER = 'YOUR_TEMPLATE_OWNER_ID';
-  const EMAILJS_TEMPLATE_CUSTOMER = 'YOUR_TEMPLATE_CUSTOMER_ID';
-  const EMAILJS_READY = !EMAILJS_PUBLIC_KEY.startsWith('YOUR_') && typeof emailjs !== 'undefined';
-  if (EMAILJS_READY) { emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); }
-
-  // Automatischer Preis-Check (best effort): ruft eine Serverless-Function auf (siehe
-  // price-api-Repo), die per Headless-Chrome versucht, den auf Booking.com angezeigten
-  // Gesamtpreis fuer die gewaehlten Daten auszulesen. Booking.com blockt Bot-Traffic
-  // teilweise und aendert seine Seitenstruktur - schlaegt der automatische Check fehl,
-  // greift ohne sichtbaren Unterschied fuer die Nutzerin/den Nutzer die bisherige manuelle
-  // Pruefung per E-Mail. Solange PRICE_API_URL auf 'YOUR_' beginnt, wird der Schritt
-  // uebersprungen und direkt manuell geprueft.
+  // Automatischer Geo-Preisvergleich: ruft eine Serverless-Function auf (siehe
+  // georates-price-api-Repo), die ueber Proxy-Sessions aus mehreren Laendern (aktuell
+  // Deutschland + Kolumbien, bei Bedarf mehr) den Booking.com-Preis fuer das gewuenschte
+  // Zimmer ausliest. Keine E-Mails mehr - das Ergebnis erscheint direkt auf der Seite.
+  // Solange PRICE_API_URL auf 'YOUR_' beginnt, wird nur die Hotelseite geoeffnet, ohne
+  // automatischen Check (Setup siehe README im price-api-Repo).
   const PRICE_API_URL = 'YOUR_PRICE_API_URL';
   const PRICE_API_READY = !PRICE_API_URL.startsWith('YOUR_');
 
-  async function checkPriceAutomatically(data) {
-    if (!PRICE_API_READY) return null;
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 28000);
-    try {
-      const res = await fetch(PRICE_API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ link: data.link, checkin: data.checkin, checkout: data.checkout }),
-        signal: controller.signal,
-      });
-      clearTimeout(timeout);
-      const json = await res.json();
-      return (json && json.success) ? json.price : null;
-    } catch (e) {
-      clearTimeout(timeout);
-      return null; // API nicht erreichbar/blockiert -> stiller Fallback auf manuell
-    }
-  }
-  function setDefaultDates(checkinId, checkoutId) {
-    const today = new Date();
-    const checkin = new Date(today); checkin.setDate(checkin.getDate() + 30);
-    const checkout = new Date(today); checkout.setDate(checkout.getDate() + 37);
-    const fmt = (d) => d.toISOString().slice(0, 10);
-    document.getElementById(checkinId).value = fmt(checkin);
-    document.getElementById(checkoutId).value = fmt(checkout);
-  }
+  // Sobald echte Partner-Links vorhanden sind, hier eintragen - tauchen dann automatisch in
+  // den Buchungs-Anweisungen unterhalb des Ergebnisses auf.
+  const VPN_AFFILIATE_URL = 'YOUR_VPN_AFFILIATE_URL';
+  const REVOLUT_AFFILIATE_URL = 'YOUR_REVOLUT_AFFILIATE_URL';
 
-  // Diese Labels bleiben IMMER Deutsch, unabhaengig von der UI-Sprache der Besucherin/des
-  // Besuchers: die interne E-Mail an info@georates.tech wird vom (deutschsprachigen)
-  // Betreiber gelesen, nur die sichtbare Website-UI wird uebersetzt.
-  const CANCEL_LABELS_DE = { ja: 'Ja', nein: 'Nein', unsicher: 'Weiß ich nicht' };
-  const BOARD_LABELS_DE = {
-    uebernachtung: 'Nur Übernachtung',
-    fruehstueck: 'Frühstück',
-    halbpension: 'Halbpension',
-    vollpension: 'Vollpension',
-    allinclusive: 'All-Inclusive',
-    egal: 'Egal',
+  const COUNTRY_NAMES = {
+    DE: 'Deutschland', CO: 'Kolumbien', US: 'USA', TH: 'Thailand', IN: 'Indien', EG: 'Ägypten',
+    AR: 'Argentinien', TR: 'Türkei', LK: 'Sri Lanka', VN: 'Vietnam', ID: 'Indonesien', PK: 'Pakistan',
+    PE: 'Peru', MX: 'Mexiko', PH: 'Philippinen', JP: 'Japan',
   };
-
-  function buildMailto(data) {
-    const subject = 'GeoRates Buchungs-Check-Anfrage: ' + data.room;
-    let cancelLine = 'Kostenlos stornierbar: ' + (CANCEL_LABELS_DE[data.cancel] || data.cancel);
-    if (data.cancel === 'ja') {
-      cancelLine += ' (Frist: ' + (data.cancelDeadline || 'nicht angegeben') + ')';
-    }
-    const boardLabel = BOARD_LABELS_DE[data.board] || data.board;
-    const body =
-      'Hotel-Link: ' + data.link + '\n' +
-      'Bevorzugtes Zimmer: ' + data.room + '\n' +
-      'Verpflegung: ' + boardLabel + '\n' +
-      'Anreise: ' + (data.checkin || '–') + '\n' +
-      'Abreise: ' + (data.checkout || '–') + '\n' +
-      cancelLine + '\n' +
-      'Kontakt-E-Mail: ' + data.email;
-    return 'mailto:info@georates.tech?subject=' + encodeURIComponent(subject) +
-      '&body=' + encodeURIComponent(body);
-  }
 
   function setupCancelToggle(cancelId, wrapId) {
     const select = document.getElementById(cancelId);
@@ -693,79 +631,124 @@
     sync();
   }
 
-  function handleRequest(formId, ids, msgId) {
+  function euro(val) {
+    return val.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  }
+
+  const ERROR_TEXTS = {
+    bot_check_failed: 'Sicherheitsprüfung fehlgeschlagen – bitte Haken oben erneut setzen und nochmal senden.',
+    invalid_link: 'Der Link sieht nicht wie ein gültiger Booking.com-Link aus.',
+    missing_room: 'Bitte ein Zimmer angeben.',
+    proxy_not_configured: 'Der automatische Check ist noch nicht vollständig eingerichtet.',
+    price_not_found: 'Für dieses Zimmer konnte gerade in keinem geprüften Land ein Preis gefunden werden.',
+  };
+
+  function renderResults(panel, json, cancelInfo) {
+    panel.style.display = 'block';
+    if (!json || json.success === false) {
+      const text = ERROR_TEXTS[json && json.reason] || 'Der automatische Check war gerade nicht möglich. Bitte später erneut versuchen.';
+      panel.innerHTML = '<div class="form-msg" style="color:#C0392B;">' + text + '</div>';
+      return;
+    }
+
+    const rows = json.results.map((r) => {
+      const isBest = json.best && r.country === json.best.country;
+      const priceText = r.priceEuro !== null ? euro(r.priceEuro) : '–';
+      const name = COUNTRY_NAMES[r.country] || r.country;
+      return '<tr class="' + (isBest ? 'best-row' : '') + '"><td>' + name + '</td><td>' + priceText + '</td></tr>';
+    }).join('');
+
+    let html = '<table class="result-table"><thead><tr><th>Land-Session</th><th>Gefundener Preis</th></tr></thead><tbody>' + rows + '</tbody></table>';
+
+    if (json.recommendVpnCountry) {
+      const countryName = COUNTRY_NAMES[json.recommendVpnCountry] || json.recommendVpnCountry;
+      html += '<div class="result-savings">Über ' + countryName + ' ca. ' + json.savingsPct + ' % günstiger als über Deutschland.</div>';
+      html += '<div class="result-instructions"><h4>So buchst du zum gefundenen Preis:</h4><ol>'
+        + '<li>Mit einem VPN auf <strong>' + countryName + '</strong> stellen ('
+        + '<a href="' + VPN_AFFILIATE_URL + '" target="_blank" rel="noopener">VPN-Empfehlung</a>).</li>'
+        + '<li>Bei Booking.com <strong>ausgeloggt</strong> bleiben bzw. ein privates Browserfenster nutzen, damit keine personalisierten Preise angezeigt werden.</li>'
+        + '<li>Hotelseite neu laden und Preis prüfen – er sollte jetzt dem oben gefundenen entsprechen.</li>'
+        + '<li>Am besten mit <a href="' + REVOLUT_AFFILIATE_URL + '" target="_blank" rel="noopener">Revolut</a> bezahlen (gute Wechselkurse, keine versteckten Auslandsgebühren).</li>'
+        + '</ol></div>';
+    } else {
+      html += '<div class="form-msg" style="color:#227a54;">Kein Land deutlich günstiger als Deutschland – am besten ganz normal direkt auf Booking.com buchen.</div>';
+    }
+
+    if (cancelInfo) html += '<div class="result-partial-note">' + cancelInfo + '</div>';
+    if (json.partial) html += '<div class="result-partial-note">Hinweis: Zeitbudget erreicht – es konnten nicht alle Länder geprüft werden.</div>';
+    if (json.fromCache) html += '<div class="result-partial-note">Ergebnis aus dem Cache (dieselbe Suche wurde kürzlich schon geprüft).</div>';
+
+    panel.innerHTML = html;
+  }
+
+  function handleRequest(formId, ids, msgId, panelId) {
     const form = document.getElementById(formId);
     const msg = document.getElementById(msgId);
+    const panel = document.getElementById(panelId);
+
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       const data = {
         link: document.getElementById(ids.link).value.trim(),
         room: document.getElementById(ids.room).value.trim(),
         board: document.getElementById(ids.board).value,
-        checkin: document.getElementById(ids.checkin).value,
-        checkout: document.getElementById(ids.checkout).value,
         cancel: document.getElementById(ids.cancel).value,
         cancelDeadline: document.getElementById(ids.cancelDeadline).value,
-        email: document.getElementById(ids.email).value.trim(),
       };
-      if (!data.link || !data.room || !data.email) return;
+      if (!data.link || !data.room) return;
+
+      const turnstileToken = new FormData(form).get('cf-turnstile-response');
+      if (!turnstileToken) {
+        msg.textContent = 'Bitte kurz die Sicherheitsprüfung oben im Formular abschließen.';
+        msg.style.color = '#C0392B';
+        return;
+      }
+
       window.open(data.link, '_blank', 'noopener');
+      panel.style.display = 'none';
 
-      const fallback = () => {
-        window.location.href = buildMailto(data);
-        msg.textContent = (typeof t === 'function') ? t('idx_js_msg_success') :
-          'Hotelseite geöffnet & Anfrage vorbereitet – bitte die sich öffnende E-Mail absenden, damit wir sie erhalten.';
-        msg.style.color = '#227a54';
-      };
-
-      if (EMAILJS_READY) {
-        const boardLabel = BOARD_LABELS_DE[data.board] || data.board;
-        let cancelLabel = CANCEL_LABELS_DE[data.cancel] || data.cancel;
-        if (data.cancel === 'ja') {
-          cancelLabel += ' (Frist: ' + (data.cancelDeadline || 'nicht angegeben') + ')';
-        }
-
-        msg.textContent = PRICE_API_READY ? '… Preis wird automatisch geprüft' : '…';
+      if (!PRICE_API_READY) {
+        msg.textContent = 'Automatischer Check ist noch nicht aktiv – Hotelseite wurde geöffnet, bitte manuell vergleichen.';
         msg.style.color = '#5B6B75';
+        return;
+      }
 
-        // Best-effort automatischer Preis-Check; liefert null bei Timeout/Blockade/nicht
-        // konfiguriert - dann laeuft alles wie gehabt rein manuell weiter.
-        const autoPrice = await checkPriceAutomatically(data);
+      msg.textContent = 'Preis wird automatisch über mehrere Länder-Sessions geprüft (kann bis zu einer Minute dauern) …';
+      msg.style.color = '#5B6B75';
 
-        const templateParams = {
-          link: data.link,
-          room: data.room,
-          board: boardLabel,
-          checkin: data.checkin || '–',
-          checkout: data.checkout || '–',
-          cancel: cancelLabel,
-          email: data.email,
-          autoPrice: autoPrice || 'automatisch nicht ermittelbar – bitte manuell prüfen',
-        };
-        msg.textContent = '…';
-        Promise.all([
-          emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_OWNER, templateParams),
-          emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CUSTOMER, templateParams),
-        ]).then(() => {
-          const base = (typeof t === 'function') ? t('idx_js_msg_sent') :
-            'Anfrage gesendet! Wir prüfen deinen Preis persönlich und melden uns per E-Mail.';
-          msg.textContent = autoPrice ? (base + ' (automatisch gefundener Preis: ' + autoPrice + ')') : base;
-          msg.style.color = '#227a54';
-          form.reset();
-          setDefaultDates(ids.checkin, ids.checkout);
-        }).catch(() => { fallback(); });
-      } else {
-        fallback();
+      let cancelInfo = '';
+      if (data.cancel === 'ja' && data.cancelDeadline) {
+        cancelInfo = 'Kostenlos stornierbar bis ' + data.cancelDeadline + ' – bis dahin kannst du bei Bedarf noch umbuchen.';
+      }
+
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 55000);
+        const res = await fetch(PRICE_API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ link: data.link, room: data.room, board: data.board, turnstileToken }),
+          signal: controller.signal,
+        });
+        clearTimeout(timeout);
+        const json = await res.json();
+        msg.textContent = '';
+        renderResults(panel, json, cancelInfo);
+      } catch (err) {
+        msg.textContent = 'Der automatische Check hat zu lange gedauert oder ist fehlgeschlagen – bitte später erneut versuchen.';
+        msg.style.color = '#C0392B';
+      } finally {
+        if (typeof turnstile !== 'undefined') {
+          try { turnstile.reset(form.querySelector('.cf-turnstile')); } catch (e) { /* ignorieren */ }
+        }
       }
     });
   }
 
-  setDefaultDates('checkin-1', 'checkout-1');
-  setDefaultDates('checkin-2', 'checkout-2');
   setupCancelToggle('cancel-1', 'cancel-deadline-wrap-1');
   setupCancelToggle('cancel-2', 'cancel-deadline-wrap-2');
-  handleRequest('request-form-1', { link: 'link-1', room: 'room-1', board: 'board-1', checkin: 'checkin-1', checkout: 'checkout-1', cancel: 'cancel-1', cancelDeadline: 'cancel-deadline-1', email: 'email-1' }, 'request-msg-1');
-  handleRequest('request-form-2', { link: 'link-2', room: 'room-2', board: 'board-2', checkin: 'checkin-2', checkout: 'checkout-2', cancel: 'cancel-2', cancelDeadline: 'cancel-deadline-2', email: 'email-2' }, 'request-msg-2');
+  handleRequest('request-form-1', { link: 'link-1', room: 'room-1', board: 'board-1', cancel: 'cancel-1', cancelDeadline: 'cancel-deadline-1' }, 'request-msg-1', 'result-panel-1');
+  handleRequest('request-form-2', { link: 'link-2', room: 'room-2', board: 'board-2', cancel: 'cancel-2', cancelDeadline: 'cancel-deadline-2' }, 'request-msg-2', 'result-panel-2');
 </script>
 
 </body>
