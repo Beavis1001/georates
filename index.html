@@ -652,14 +652,19 @@
       return;
     }
 
+    function localPrice(r) {
+      if (r.priceLocal === null || r.priceLocal === undefined || !r.currency) return '–';
+      return r.priceLocal.toLocaleString('de-DE', { maximumFractionDigits: 2 }) + ' ' + r.currency;
+    }
     const rows = json.results.map((r) => {
       const isBest = json.best && r.country === json.best.country;
       const priceText = r.priceEuro !== null ? euro(r.priceEuro) : '–';
       const name = COUNTRY_NAMES[r.country] || r.country;
-      return '<tr class="' + (isBest ? 'best-row' : '') + '"><td>' + name + '</td><td>' + priceText + '</td></tr>';
+      return '<tr class="' + (isBest ? 'best-row' : '') + '"><td>' + name + '</td><td>' + localPrice(r) + '</td><td>' + priceText + '</td></tr>';
     }).join('');
 
-    let html = '<table class="result-table"><thead><tr><th>Land-Session</th><th>Gefundener Preis</th></tr></thead><tbody>' + rows + '</tbody></table>';
+    let html = '<table class="result-table"><thead><tr><th>Land-Session</th><th>Preis vor Ort</th><th>≈ in Euro</th></tr></thead><tbody>' + rows + '</tbody></table>'
+      + '<p class="result-partial-note">Die Spalte „Preis vor Ort" zeigt den Betrag in der Landeswährung – so kannst du prüfen, ob dein VPN wirklich im jeweiligen Land ist und dir derselbe Preis angezeigt wird.</p>';
     if (hotelLink) {
       html += '<p style="margin-bottom:14px;"><a href="' + hotelLink + '" target="_blank" rel="noopener" style="color:var(--accent-dark); font-weight:700;">Hotelseite öffnen →</a></p>';
     }
