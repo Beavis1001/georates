@@ -665,16 +665,25 @@
     }
 
     const baselineName = COUNTRY_NAMES[json.baselineCountry] || json.baselineCountry || 'deinem Ausgangsland';
-    if (json.recommendVpnCountry) {
+    const baselineRow = json.results.find(function (r) { return r.country === json.baselineCountry; });
+    const baselineMissing = !baselineRow || baselineRow.priceEuro === null;
+    const isRealUrl = function (u) { return u && u.indexOf('YOUR_') !== 0; };
+
+    if (baselineMissing) {
+      html += '<div class="form-msg" style="color:#C0392B;">Der Ausgangspreis (' + baselineName + ') konnte diesmal nicht geladen werden – deshalb ist gerade kein zuverlässiger Vergleich möglich. Bitte in ein bis zwei Minuten erneut prüfen. Die oben gefundenen Länderpreise dienen nur zur groben Orientierung.</div>';
+    } else if (json.recommendVpnCountry) {
       const countryName = COUNTRY_NAMES[json.recommendVpnCountry] || json.recommendVpnCountry;
       html += '<div class="result-savings">Über ' + countryName + ' ca. ' + json.savingsPct + ' % günstiger als über ' + baselineName + '.</div>';
-      html += '<div class="result-instructions"><h4>So buchst du zum gefundenen Preis:</h4><ol>'
-        + '<li>Mit einem VPN auf <strong>' + countryName + '</strong> stellen ('
-        + '<a href="' + VPN_AFFILIATE_URL + '" target="_blank" rel="noopener">VPN-Empfehlung</a>).</li>'
+      const vpnStep = isRealUrl(VPN_AFFILIATE_URL)
+        ? 'Mit einem VPN auf <strong>' + countryName + '</strong> stellen (<a href="' + VPN_AFFILIATE_URL + '" target="_blank" rel="noopener">VPN-Empfehlung</a>).'
+        : 'Mit einem VPN dein Land auf <strong>' + countryName + '</strong> stellen.';
+      let steps = '<li>' + vpnStep + '</li>'
         + '<li>Bei Booking.com <strong>ausgeloggt</strong> bleiben bzw. ein privates Browserfenster nutzen, damit keine personalisierten Preise angezeigt werden.</li>'
-        + '<li>Hotelseite neu laden und Preis prüfen – er sollte jetzt dem oben gefundenen entsprechen.</li>'
-        + '<li>Am besten mit <a href="' + REVOLUT_AFFILIATE_URL + '" target="_blank" rel="noopener">Revolut</a> bezahlen (gute Wechselkurse, keine versteckten Auslandsgebühren).</li>'
-        + '</ol></div>';
+        + '<li>Hotelseite neu laden und Preis prüfen – er sollte jetzt dem oben gefundenen entsprechen.</li>';
+      if (isRealUrl(REVOLUT_AFFILIATE_URL)) {
+        steps += '<li>Am besten mit <a href="' + REVOLUT_AFFILIATE_URL + '" target="_blank" rel="noopener">Revolut</a> bezahlen (gute Wechselkurse, keine versteckten Auslandsgebühren).</li>';
+      }
+      html += '<div class="result-instructions"><h4>So buchst du zum gefundenen Preis:</h4><ol>' + steps + '</ol></div>';
     } else {
       html += '<div class="form-msg" style="color:#227a54;">Kein Land deutlich günstiger als ' + baselineName + ' – am besten ganz normal direkt auf Booking.com buchen.</div>';
     }
