@@ -31,6 +31,7 @@
     color: var(--text);
     background: var(--bg);
     line-height: 1.6;
+    overflow-x: hidden;
   }
   a { color: inherit; }
   .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
@@ -140,7 +141,7 @@
   .result-partial-note { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
   .hint { font-size: 12.5px; color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: normal; margin-top: 6px; }
   .mini-guide {
-    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px;
+    background: var(--navy-dark); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px;
     padding: 16px 20px; margin-bottom: 16px; color: #fff;
   }
   .mini-guide strong { display: block; font-size: 13.5px; margin-bottom: 10px; }
@@ -238,7 +239,18 @@
     .steps, .trust-grid, .tool-grid { grid-template-columns: 1fr; }
     .request-form { grid-template-columns: 1fr; }
     .nav-links { display: none; }
-    section { padding: 56px 18px; }
+    section { padding: 56px 14px; }
+    /* Mobil: verschachtelte Innenabstände reduzieren, damit Felder nicht überstehen
+       und nicht unnötig nach rechts geschoben werden. */
+    .container { padding: 0 12px; }
+    #suche-hero { padding-left: 0; padding-right: 0; padding-bottom: 40px; }
+    #suche-hero .container { max-width: 100%; }
+    .mini-guide { padding: 14px 15px; margin-bottom: 10px; }
+    .request-card { padding: 16px; }
+    .final-cta { padding: 40px 16px; border-radius: 18px; }
+    /* Ergebnistabelle mit drei Spalten kompakter, damit sie auf schmalen Displays passt. */
+    .result-table { font-size: 12.5px; }
+    .result-table th, .result-table td { padding: 6px 6px; }
   }
 </style>
 </head>
