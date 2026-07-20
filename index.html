@@ -641,6 +641,7 @@
     missing_room: 'Bitte ein Zimmer angeben.',
     proxy_not_configured: 'Der automatische Check ist noch nicht vollständig eingerichtet.',
     price_not_found: 'Für dieses Zimmer konnte gerade in keinem geprüften Land ein Preis gefunden werden.',
+    fx_unavailable: 'Die aktuellen Wechselkurse konnten gerade nicht geladen werden – für einen korrekten Vergleich bitte in ein paar Minuten erneut versuchen.',
   };
 
   function renderResults(panel, json, cancelInfo, hotelLink) {
@@ -663,9 +664,10 @@
       html += '<p style="margin-bottom:14px;"><a href="' + hotelLink + '" target="_blank" rel="noopener" style="color:var(--accent-dark); font-weight:700;">Hotelseite öffnen →</a></p>';
     }
 
+    const baselineName = COUNTRY_NAMES[json.baselineCountry] || json.baselineCountry || 'deinem Ausgangsland';
     if (json.recommendVpnCountry) {
       const countryName = COUNTRY_NAMES[json.recommendVpnCountry] || json.recommendVpnCountry;
-      html += '<div class="result-savings">Über ' + countryName + ' ca. ' + json.savingsPct + ' % günstiger als über Deutschland.</div>';
+      html += '<div class="result-savings">Über ' + countryName + ' ca. ' + json.savingsPct + ' % günstiger als über ' + baselineName + '.</div>';
       html += '<div class="result-instructions"><h4>So buchst du zum gefundenen Preis:</h4><ol>'
         + '<li>Mit einem VPN auf <strong>' + countryName + '</strong> stellen ('
         + '<a href="' + VPN_AFFILIATE_URL + '" target="_blank" rel="noopener">VPN-Empfehlung</a>).</li>'
@@ -674,7 +676,7 @@
         + '<li>Am besten mit <a href="' + REVOLUT_AFFILIATE_URL + '" target="_blank" rel="noopener">Revolut</a> bezahlen (gute Wechselkurse, keine versteckten Auslandsgebühren).</li>'
         + '</ol></div>';
     } else {
-      html += '<div class="form-msg" style="color:#227a54;">Kein Land deutlich günstiger als Deutschland – am besten ganz normal direkt auf Booking.com buchen.</div>';
+      html += '<div class="form-msg" style="color:#227a54;">Kein Land deutlich günstiger als ' + baselineName + ' – am besten ganz normal direkt auf Booking.com buchen.</div>';
     }
 
     if (cancelInfo) html += '<div class="result-partial-note">' + cancelInfo + '</div>';
