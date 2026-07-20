@@ -776,7 +776,7 @@
         const res = await fetch(PRICE_API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ link: data.link, room: data.room, board: data.board, turnstileToken }),
+          body: JSON.stringify({ link: data.link, room: data.room, board: data.board, cancel: data.cancel, turnstileToken }),
           signal: controller.signal,
         });
         clearTimeout(timeout);
