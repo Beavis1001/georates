@@ -662,17 +662,47 @@
     return val.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
   }
 
-  // "Zimmer laden": ruft die echten Zimmernamen der Booking.com-Seite ab (ein Proxy-Abruf) und
-  // fuellt ein Auswahl-Dropdown, damit der Nutzer den Zimmernamen nicht mehr abtippen muss.
-  function setupRoomLoader(linkId, btnId, msgId, selectId, roomId) {
+  // Anzeige-Labels fuer die dynamisch je Zimmer geladenen Verpflegungs-/Storno-Optionen.
+  const BOARD_LABELS = { uebernachtung: 'Nur Übernachtung', fruehstueck: 'Frühstück', halbpension: 'Halbpension', vollpension: 'Vollpension', allinclusive: 'All-Inclusive' };
+  const CANCEL_LABELS = { ja: 'Kostenlos stornierbar', teilweise: 'Teilweise erstattbar', nein: 'Nicht kostenlos stornierbar' };
+  const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  // "Zimmer laden": ruft die echten Zimmer der Booking.com-Seite ab (ein Abruf) und fuellt das
+  // Auswahl-Dropdown. Zusaetzlich werden je Zimmer die real vorhandenen Verpflegungs- und
+  // Storno-Optionen mitgeliefert und beim Auswaehlen in die beiden Dropdowns uebernommen.
+  function setupRoomLoader(linkId, btnId, msgId, selectId, roomId, boardId, cancelId) {
     const btn = document.getElementById(btnId);
     if (!btn) return;
     const msg = document.getElementById(msgId);
     const select = document.getElementById(selectId);
     const roomInput = document.getElementById(roomId);
+    const boardSel = document.getElementById(boardId);
+    const cancelSel = document.getElementById(cancelId);
+    const boardDefault = boardSel ? boardSel.innerHTML : '';
+    const cancelDefault = cancelSel ? cancelSel.innerHTML : '';
+    let loadedRooms = [];
 
     select.addEventListener('change', function () {
-      if (select.value) roomInput.value = select.value;
+      if (!select.value) return;
+      roomInput.value = select.value;
+      const room = loadedRooms.find((r) => r.name === select.value) || {};
+      if (boardSel) {
+        if (room.boards && room.boards.length) {
+          boardSel.innerHTML = room.boards.map((v) => '<option value="' + v + '">' + (BOARD_LABELS[v] || v) + '</option>').join('')
+            + '<option value="egal">Egal</option>';
+        } else {
+          boardSel.innerHTML = boardDefault;
+        }
+      }
+      if (cancelSel) {
+        if (room.cancels && room.cancels.length) {
+          cancelSel.innerHTML = room.cancels.map((v) => '<option value="' + v + '">' + (CANCEL_LABELS[v] || v) + '</option>').join('')
+            + '<option value="unsicher">Weiß ich nicht</option>';
+        } else {
+          cancelSel.innerHTML = cancelDefault;
+        }
+        cancelSel.dispatchEvent(new Event('change'));
+      }
     });
 
     btn.addEventListener('click', async function () {
@@ -698,15 +728,14 @@
           msg.style.color = '#C0392B';
           return;
         }
+        // Backend kann Objekte {name,boards,cancels} ODER (Fallback) reine Strings liefern.
+        loadedRooms = json.rooms.map((r) => (typeof r === 'string' ? { name: r, boards: [], cancels: [] } : r));
         select.innerHTML = '<option value="">– Zimmer wählen –</option>'
-          + json.rooms.map(function (r) {
-              const safe = String(r).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-              return '<option>' + safe + '</option>';
-            }).join('');
+          + loadedRooms.map((r) => '<option>' + escHtml(r.name) + '</option>').join('');
         select.style.display = 'block';
         roomInput.style.display = 'none';
         roomInput.value = '';
-        msg.innerHTML = json.rooms.length + ' Zimmer geladen – bitte oben auswählen. <a href="#" class="manual-room-link">Nicht dabei? Manuell eintragen</a>';
+        msg.innerHTML = loadedRooms.length + ' Zimmer geladen – bitte oben auswählen. <a href="#" class="manual-room-link">Nicht dabei? Manuell eintragen</a>';
         msg.style.color = '#227a54';
         const manual = msg.querySelector('.manual-room-link');
         if (manual) manual.addEventListener('click', function (e) {
@@ -714,6 +743,8 @@
           select.style.display = 'none';
           roomInput.style.display = 'block';
           roomInput.focus();
+          if (boardSel) boardSel.innerHTML = boardDefault;
+          if (cancelSel) { cancelSel.innerHTML = cancelDefault; cancelSel.dispatchEvent(new Event('change')); }
         });
       } catch (err) {
         msg.textContent = 'Zimmer-Laden hat zu lange gedauert – bitte den Zimmernamen manuell eintragen.';
@@ -874,8 +905,8 @@
 
   setupCancelToggle('cancel-1', 'cancel-deadline-wrap-1');
   setupCancelToggle('cancel-2', 'cancel-deadline-wrap-2');
-  setupRoomLoader('link-1', 'load-rooms-1', 'load-rooms-msg-1', 'room-select-1', 'room-1');
-  setupRoomLoader('link-2', 'load-rooms-2', 'load-rooms-msg-2', 'room-select-2', 'room-2');
+  setupRoomLoader('link-1', 'load-rooms-1', 'load-rooms-msg-1', 'room-select-1', 'room-1', 'board-1', 'cancel-1');
+  setupRoomLoader('link-2', 'load-rooms-2', 'load-rooms-msg-2', 'room-select-2', 'room-2', 'board-2', 'cancel-2');
   handleRequest('request-form-1', { link: 'link-1', room: 'room-1', board: 'board-1', cancel: 'cancel-1', cancelDeadline: 'cancel-deadline-1' }, 'request-msg-1', 'result-panel-1');
   handleRequest('request-form-2', { link: 'link-2', room: 'room-2', board: 'board-2', cancel: 'cancel-2', cancelDeadline: 'cancel-deadline-2' }, 'request-msg-2', 'result-panel-2');
 </script>
