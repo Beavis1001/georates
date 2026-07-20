@@ -718,8 +718,26 @@
         return;
       }
 
-      msg.textContent = 'Preis wird automatisch über mehrere Länder-Sessions geprüft (kann bis zu einer Minute dauern) …';
+      // Live-Statusmeldungen, die dem Nutzer zeigen, was im Hintergrund passiert. Der Check
+      // ruft nacheinander echte Booking.com-Seiten über Länder-Proxys ab – das dauert bis zu
+      // ~1 Minute. Die Meldungen rotieren, damit klar ist, dass es aktiv weiterläuft.
       msg.style.color = '#5B6B75';
+      const progressSteps = [
+        'Ausgangsland wird aus deinem Link ermittelt …',
+        'Aktuelle Wechselkurse werden geladen …',
+        'Preis wird über die Session deines Ausgangslands geladen …',
+        'Vergleichspreis über eine Kolumbien-Session wird geprüft …',
+        'Weitere Länder-Sessions werden geprüft (USA, Thailand, Indien, Ägypten …) …',
+        'Echte Buchungsseiten werden geladen – das braucht einen Moment …',
+        'Alle Länderpreise werden in Euro umgerechnet und verglichen …',
+        'Das günstigste Land wird ermittelt – fast fertig …',
+      ];
+      let stepIdx = 0;
+      msg.textContent = progressSteps[0];
+      const progressTimer = setInterval(function () {
+        stepIdx = Math.min(stepIdx + 1, progressSteps.length - 1);
+        msg.textContent = progressSteps[stepIdx];
+      }, 6000);
 
       let cancelInfo = '';
       if (data.cancel === 'ja' && data.cancelDeadline) {
@@ -728,7 +746,7 @@
 
       try {
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 55000);
+        const timeout = setTimeout(() => controller.abort(), 90000);
         const res = await fetch(PRICE_API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -743,6 +761,7 @@
         msg.textContent = 'Der automatische Check hat zu lange gedauert oder ist fehlgeschlagen – bitte später erneut versuchen.';
         msg.style.color = '#C0392B';
       } finally {
+        clearInterval(progressTimer);
         if (typeof turnstile !== 'undefined') {
           try { turnstile.reset(form.querySelector('.cf-turnstile')); } catch (e) { /* ignorieren */ }
         }
