@@ -120,6 +120,15 @@
     margin-top: 4px;
   }
   .request-form button:hover { background: var(--accent-dark); }
+  .request-form .load-rooms-btn {
+    grid-column: auto; width: auto; margin-top: 10px;
+    background: #fff; color: var(--navy-dark); border: 1px solid var(--navy-dark);
+    padding: 9px 14px; border-radius: 8px; font-weight: 700; font-size: 13.5px; cursor: pointer;
+  }
+  .request-form .load-rooms-btn:hover { background: var(--navy-dark); color: #fff; }
+  .request-form .load-rooms-btn:disabled { opacity: 0.6; cursor: default; }
+  .load-rooms-msg { display: block; margin-top: 8px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
+  .load-rooms-msg a { color: var(--accent-dark); font-weight: 700; }
   .form-msg { font-size: 13.5px; margin-top: 12px; font-weight: 600; color: var(--text); }
   .result-panel {
     margin-top: 18px; border-top: 1px solid var(--border); padding-top: 18px;
@@ -324,10 +333,13 @@
           <label for="link-1" data-i18n="idx_form_label_link">Link zu deinem Wunschhotel (Booking.com)</label>
           <input type="url" id="link-1" placeholder="https://www.booking.com/hotel/..." required>
           <p class="hint" data-i18n="idx_form_hint_link">Bitte die komplette Adresse aus der Adresszeile einfügen, nicht nur den sichtbaren Teil.</p>
+          <button type="button" class="load-rooms-btn" id="load-rooms-1" data-i18n="idx_load_rooms">Zimmer von Booking laden</button>
+          <span class="load-rooms-msg" id="load-rooms-msg-1"></span>
         </div>
         <div>
           <label for="room-1" data-i18n="idx_form_label_room">Bevorzugtes Zimmer</label>
-          <input type="text" id="room-1" placeholder="z. B. Doppelzimmer mit Meerblick" data-i18n-placeholder="idx_form_placeholder_room" required>
+          <select id="room-select-1" style="display:none;"></select>
+          <input type="text" id="room-1" placeholder="z. B. Doppelzimmer mit Meerblick" data-i18n-placeholder="idx_form_placeholder_room">
           <p class="hint" data-i18n="idx_form_hint_room">Genauer Zimmername wie auf Booking.com – unterschiedliche Zimmerkategorien haben oft unterschiedliche Preise & Stornobedingungen.</p>
         </div>
         <div>
@@ -562,10 +574,13 @@
             <label for="link-2" data-i18n="idx_form_label_link">Link zu deinem Wunschhotel (Booking.com)</label>
             <input type="url" id="link-2" placeholder="https://www.booking.com/hotel/..." required>
             <p class="hint" data-i18n="idx_form_hint_link">Bitte die komplette Adresse aus der Adresszeile einfügen, nicht nur den sichtbaren Teil.</p>
+            <button type="button" class="load-rooms-btn" id="load-rooms-2" data-i18n="idx_load_rooms">Zimmer von Booking laden</button>
+            <span class="load-rooms-msg" id="load-rooms-msg-2"></span>
           </div>
           <div>
             <label for="room-2" data-i18n="idx_form_label_room">Bevorzugtes Zimmer</label>
-            <input type="text" id="room-2" placeholder="z. B. Doppelzimmer mit Meerblick" data-i18n-placeholder="idx_form_placeholder_room" required>
+            <select id="room-select-2" style="display:none;"></select>
+            <input type="text" id="room-2" placeholder="z. B. Doppelzimmer mit Meerblick" data-i18n-placeholder="idx_form_placeholder_room">
             <p class="hint" data-i18n="idx_form_hint_room">Genauer Zimmername wie auf Booking.com – unterschiedliche Zimmerkategorien haben oft unterschiedliche Preise & Stornobedingungen.</p>
           </div>
           <div>
@@ -645,6 +660,68 @@
 
   function euro(val) {
     return val.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  }
+
+  // "Zimmer laden": ruft die echten Zimmernamen der Booking.com-Seite ab (ein Proxy-Abruf) und
+  // fuellt ein Auswahl-Dropdown, damit der Nutzer den Zimmernamen nicht mehr abtippen muss.
+  function setupRoomLoader(linkId, btnId, msgId, selectId, roomId) {
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+    const msg = document.getElementById(msgId);
+    const select = document.getElementById(selectId);
+    const roomInput = document.getElementById(roomId);
+
+    select.addEventListener('change', function () {
+      if (select.value) roomInput.value = select.value;
+    });
+
+    btn.addEventListener('click', async function () {
+      const link = document.getElementById(linkId).value.trim();
+      if (!link) { msg.textContent = 'Bitte zuerst den Booking.com-Link oben einfügen.'; msg.style.color = '#C0392B'; return; }
+      if (!PRICE_API_READY) { msg.textContent = 'Zimmer-Laden ist noch nicht aktiv.'; msg.style.color = '#5B6B75'; return; }
+      btn.disabled = true;
+      msg.style.color = '#5B6B75';
+      msg.textContent = 'Zimmer werden von Booking.com geladen (kann ~20 Sekunden dauern) …';
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 55000);
+        const res = await fetch(PRICE_API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mode: 'rooms', link: link }),
+          signal: controller.signal,
+        });
+        clearTimeout(timeout);
+        const json = await res.json();
+        if (!json || json.success === false || !json.rooms || !json.rooms.length) {
+          msg.textContent = 'Zimmer konnten gerade nicht geladen werden – bitte den Zimmernamen manuell eintragen.';
+          msg.style.color = '#C0392B';
+          return;
+        }
+        select.innerHTML = '<option value="">– Zimmer wählen –</option>'
+          + json.rooms.map(function (r) {
+              const safe = String(r).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+              return '<option>' + safe + '</option>';
+            }).join('');
+        select.style.display = 'block';
+        roomInput.style.display = 'none';
+        roomInput.value = '';
+        msg.innerHTML = json.rooms.length + ' Zimmer geladen – bitte oben auswählen. <a href="#" class="manual-room-link">Nicht dabei? Manuell eintragen</a>';
+        msg.style.color = '#227a54';
+        const manual = msg.querySelector('.manual-room-link');
+        if (manual) manual.addEventListener('click', function (e) {
+          e.preventDefault();
+          select.style.display = 'none';
+          roomInput.style.display = 'block';
+          roomInput.focus();
+        });
+      } catch (err) {
+        msg.textContent = 'Zimmer-Laden hat zu lange gedauert – bitte den Zimmernamen manuell eintragen.';
+        msg.style.color = '#C0392B';
+      } finally {
+        btn.disabled = false;
+      }
+    });
   }
 
   const ERROR_TEXTS = {
@@ -797,6 +874,8 @@
 
   setupCancelToggle('cancel-1', 'cancel-deadline-wrap-1');
   setupCancelToggle('cancel-2', 'cancel-deadline-wrap-2');
+  setupRoomLoader('link-1', 'load-rooms-1', 'load-rooms-msg-1', 'room-select-1', 'room-1');
+  setupRoomLoader('link-2', 'load-rooms-2', 'load-rooms-msg-2', 'room-select-2', 'room-2');
   handleRequest('request-form-1', { link: 'link-1', room: 'room-1', board: 'board-1', cancel: 'cancel-1', cancelDeadline: 'cancel-deadline-1' }, 'request-msg-1', 'result-panel-1');
   handleRequest('request-form-2', { link: 'link-2', room: 'room-2', board: 'board-2', cancel: 'cancel-2', cancelDeadline: 'cancel-deadline-2' }, 'request-msg-2', 'result-panel-2');
 </script>
