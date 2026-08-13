@@ -1,0 +1,17 @@
+{
+  "name": "GeoRates – Hotelpreis-Check",
+  "short_name": "GeoRates",
+  "description": "Vergleiche Hotelpreise auf Booking.com aus verschiedenen Ländern und finde heraus, ob dieselbe Buchung aus einem anderen Land günstiger ist.",
+  "lang": "de",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#143349",
+  "theme_color": "#143349",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
