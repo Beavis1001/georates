@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="GeoRates vergleicht Hotelpreise auf Booking.com aus verschiedenen Ländern und zeigt dir, ob dieselbe Buchung aus einem anderen Land günstiger ist – kostenlos und unabhängig.">
+<link rel="canonical" href="https://georates.tech/">
+<link rel="icon" type="image/png" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#143349">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GeoRates">
+<script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+<meta property="og:title" content="GeoRates – Globale Hotelpreis-Transparenz">
+<meta property="og:description" content="Persönlicher Buchungs-Check für Booking.com Hotelpreise.">
+<meta property="og:image" content="https://georates.tech/og-image.jpg">
+<meta property="og:url" content="https://georates.tech/">
+<meta property="og:type" content="website">
+<title data-i18n-title="idx_title">GeoRates – Dein persönlicher Buchungs-Check für Booking.com</title>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"GeoRates","url":"https://georates.tech/","inLanguage":"de","description":"GeoRates vergleicht Hotelpreise auf Booking.com aus verschiedenen Ländern und zeigt, ob dieselbe Buchung aus einem anderen Land günstiger ist."}
+</script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<style>
+  :root {
+    --navy: #1F4E78;
+    --navy-dark: #143349;
+    --accent: #2E9E6C;
+    --accent-dark: #227a54;
+    --bg: #F7F9FB;
+    --text: #1E2A32;
+    --muted: #5B6B75;
+    --card: #FFFFFF;
+    --border: #E3E9ED;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  a { color: inherit; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  header.nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 24px; max-width: 1080px; margin: 0 auto;
+  }
+  .logo { font-weight: 800; font-size: 20px; color: var(--navy-dark); letter-spacing: -0.5px; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 28px; font-size: 15px; font-weight: 500; }
+  .nav-links a { text-decoration: none; color: var(--muted); }
+  .nav-links a:hover { color: var(--navy-dark); }
+  .nav-cta {
+    background: var(--navy-dark); color: #fff; padding: 10px 20px; border-radius: 8px;
+    font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 55%, #2c6e9e 100%);
+    color: #fff; padding: 76px 24px 90px; position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(circle at 85% 15%, rgba(46,158,108,0.28), transparent 55%);
+  }
+  .hero-grid {
+    position: relative; max-width: 1080px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center;
+  }
+  .eyebrow {
+    display: inline-block; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+    padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; margin-bottom: 22px;
+    letter-spacing: 0.3px;
+  }
+  h1 { font-size: 40px; font-weight: 800; letter-spacing: -1px; margin-bottom: 18px; }
+  .hero p.sub { font-size: 18px; color: rgba(255,255,255,0.88); max-width: 520px; margin: 0 0 8px; }
+
+  /* Decorative comparison mockup */
+  .hero-visual { display: flex; justify-content: center; }
+  .mock-card {
+    background: #fff; color: var(--text); border-radius: 18px; padding: 24px; width: 300px;
+    box-shadow: 0 24px 60px rgba(6,20,32,0.35); transform: rotate(2deg);
+  }
+  .mock-card-title { font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 14px; }
+  .mock-row {
+    display: flex; justify-content: space-between; align-items: center; padding: 10px 0;
+    border-bottom: 1px solid var(--border); font-size: 15px;
+  }
+  .mock-row:last-of-type { border-bottom: none; }
+  .mock-row .old-price { text-decoration: line-through; color: var(--muted); font-weight: 500; }
+  .mock-row.best { color: var(--accent-dark); font-weight: 800; }
+  .mock-arrow {
+    text-align: center; font-size: 13px; font-weight: 700; color: var(--accent-dark); padding: 4px 0;
+  }
+  .mock-badge {
+    margin-top: 14px; background: #E5F5EC; color: var(--accent-dark); font-weight: 800; font-size: 13px;
+    padding: 7px 12px; border-radius: 999px; display: inline-block;
+  }
+
+  /* Request form (Booking-Link + Zimmer + Verpflegung + Daten + E-Mail) */
+  .request-card {
+    background: #fff; border-radius: 16px; padding: 22px; box-shadow: 0 20px 44px rgba(6,20,32,0.25);
+  }
+  .request-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .request-form .full { grid-column: 1 / -1; }
+  .request-form label {
+    display: block; font-size: 12.5px; font-weight: 700; color: var(--muted); margin-bottom: 5px;
+    text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  .request-form input, .request-form select {
+    width: 100%; border: 1px solid var(--border); background: var(--bg); color: var(--text);
+    padding: 11px 12px; border-radius: 8px; font-size: 14.5px; font-family: inherit;
+  }
+  .request-form input:focus, .request-form select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .request-form input[type="date"] { color-scheme: light; }
+  .request-form button {
+    grid-column: 1 / -1; background: var(--accent); color: #fff; border: none; padding: 13px 18px;
+    border-radius: 8px; font-weight: 800; font-size: 15px; cursor: pointer; transition: background 0.15s;
+    margin-top: 4px;
+  }
+  .request-form button:hover { background: var(--accent-dark); }
+  /* Während der Prüfung dunkler statt blass – der Knopf soll "arbeitet gerade" sagen,
+     nicht "ist deaktiviert". */
+  .request-form button:disabled { background: var(--accent-dark); cursor: progress; }
+  .request-form .load-rooms-btn {
+    grid-column: auto; width: auto; margin-top: 10px;
+    background: #fff; color: var(--navy-dark); border: 1px solid var(--navy-dark);
+    padding: 9px 14px; border-radius: 8px; font-weight: 700; font-size: 13.5px; cursor: pointer;
+  }
+  .request-form .load-rooms-btn:hover { background: var(--navy-dark); color: #fff; }
+  /* Beim Laden wird der Knopf NICHT blasser, sondern gefüllt: Ein ausgegrauter Knopf sieht aus,
+     als sei er kaputt oder der Klick nicht angekommen. Gefüllt plus Spinner heißt "läuft". */
+  .request-form .load-rooms-btn:disabled {
+    background: var(--navy-dark); color: #fff; border-color: var(--navy-dark);
+    cursor: progress; opacity: 1;
+  }
+  .btn-spinner {
+    display: inline-block; width: 12px; height: 12px; margin-right: 8px; vertical-align: -1px;
+    border: 2px solid rgba(255, 255, 255, 0.35); border-top-color: #fff;
+    border-radius: 50%; animation: georates-spin 0.7s linear infinite;
+  }
+  @keyframes georates-spin { to { transform: rotate(360deg); } }
+  /* Wer Bewegung reduziert haben will, bekommt sie langsamer – aber nicht gar nicht, sonst
+     fehlt genau das Signal, um das es hier geht. */
+  @media (prefers-reduced-motion: reduce) { .btn-spinner { animation-duration: 2.4s; } }
+  .load-rooms-msg { display: block; margin-top: 8px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
+  .load-rooms-msg a { color: var(--accent-dark); font-weight: 700; }
+  /* Hinweis direkt am Link-Feld. Bewusst auffällig (gelber Kasten), aber nicht rot: Der Link
+     ist nicht falsch, er ist nur unvollständig – und der Check läuft trotzdem. */
+  .link-warn {
+    display: none; margin: 8px 0 0; padding: 9px 11px; border-radius: 8px;
+    background: #FFF6E0; border: 1px solid #E9C46A; color: #6B4E00;
+    font-size: 12.5px; line-height: 1.45; font-weight: 600;
+  }
+  .link-warn.is-visible { display: block; }
+  .form-msg { font-size: 13.5px; margin-top: 12px; font-weight: 600; color: var(--text); }
+  .result-panel {
+    margin-top: 18px; border-top: 1px solid var(--border); padding-top: 18px;
+  }
+  .result-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 14px; }
+  .result-table th, .result-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+  .result-table tr.best-row { background: #E5F5EC; font-weight: 700; }
+  .result-savings {
+    background: #E5F5EC; color: var(--accent-dark); font-weight: 800; padding: 10px 14px;
+    border-radius: 10px; margin-bottom: 14px;
+  }
+  .result-instructions {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px;
+  }
+  .result-instructions h4 { font-size: 14px; margin-bottom: 8px; }
+  .result-instructions ol { margin: 0 0 0 18px; font-size: 14px; }
+  .result-instructions li { margin-bottom: 6px; }
+  .result-instructions a { color: var(--accent-dark); font-weight: 700; }
+  .result-partial-note { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+  .hint { font-size: 12.5px; color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: normal; margin-top: 6px; }
+  .mini-guide {
+    background: var(--navy-dark); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px;
+    padding: 16px 20px; margin-bottom: 16px; color: #fff;
+  }
+  .mini-guide strong { display: block; font-size: 13.5px; margin-bottom: 10px; }
+  .mini-guide ol { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: rgba(255,255,255,0.85); }
+  .mini-guide li { margin-bottom: 4px; }
+  .final-cta .mini-guide { background: rgba(255,255,255,0.06); }
+  .guide-diagram { width: 100%; height: auto; display: block; border-radius: 10px; }
+  .hero-note { font-size: 12.5px; color: rgba(255,255,255,0.7); margin-top: 8px; }
+
+  section { padding: 84px 24px; }
+  .section-label {
+    text-transform: uppercase; letter-spacing: 1.2px; font-size: 13px; font-weight: 700;
+    color: var(--accent-dark); margin-bottom: 12px; text-align: center;
+  }
+  h2 { font-size: 32px; font-weight: 800; text-align: center; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .section-sub {
+    text-align: center; color: var(--muted); font-size: 17px; max-width: 620px; margin: 0 auto 56px;
+  }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .step {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 32px 26px;
+    box-shadow: 0 4px 16px rgba(20,51,73,0.05);
+  }
+  .step-num {
+    width: 40px; height: 40px; border-radius: 10px; background: var(--navy-dark); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 17px;
+    margin-bottom: 18px;
+  }
+  .step h3 { font-size: 18px; margin-bottom: 10px; font-weight: 700; }
+  .step p { color: var(--muted); font-size: 15px; }
+
+  .tools { background: var(--card); }
+  .tool-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .tool-card {
+    display: block; text-decoration: none; color: inherit;
+    border: 1px solid var(--border); border-radius: 16px; padding: 30px 26px; background: var(--bg);
+    box-shadow: 0 4px 16px rgba(20,51,73,0.04);
+    transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  }
+  .tool-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 10px 26px rgba(20,51,73,0.1); }
+  .tool-icon {
+    width: 46px; height: 46px; border-radius: 12px; background: #E5F5EC; color: var(--accent-dark);
+    display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
+  }
+  .tool-icon svg { width: 24px; height: 24px; }
+  .tool-card h3 { font-size: 17.5px; font-weight: 800; margin-bottom: 8px; color: var(--navy-dark); }
+  .tool-card p { color: var(--muted); font-size: 14.5px; margin-bottom: 0; }
+  .tool-card .tool-link { color: var(--accent-dark); font-weight: 700; font-size: 13.5px; margin-top: 12px; display: inline-block; }
+
+  .example {
+    background: linear-gradient(180deg, #fff, var(--bg));
+  }
+  .example-card {
+    max-width: 640px; margin: 0 auto; background: #fff; border: 1px solid var(--border);
+    border-radius: 16px; padding: 36px 40px; box-shadow: 0 12px 32px rgba(20,51,73,0.06);
+  }
+  .example-row { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .example-row:last-child { border-bottom: none; }
+  .example-row .label { color: var(--muted); font-size: 15px; }
+  .example-row .value { font-weight: 700; font-size: 17px; }
+  .example-row.total .value { color: var(--accent-dark); font-size: 22px; }
+  .example-disclaimer { font-size: 13px; color: var(--muted); text-align: center; margin-top: 20px; }
+
+  .trust { background: var(--card); }
+  .trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .trust-card { text-align: center; padding: 12px; }
+  .trust-icon {
+    width: 52px; height: 52px; border-radius: 50%; background: #E5F5EC; color: var(--accent-dark);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; font-size: 22px; font-weight: 800;
+  }
+  .trust-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .trust-card p { color: var(--muted); font-size: 14.5px; }
+
+  .final-cta {
+    background: var(--navy-dark); color: #fff; text-align: center; border-radius: 24px;
+    max-width: 1032px; margin: 0 auto; padding: 56px 40px;
+  }
+  .final-cta h2 { color: #fff; }
+  .final-cta p { color: rgba(255,255,255,0.8); max-width: 520px; margin: 0 auto 28px; text-align: center; }
+  .final-cta .request-card { max-width: 560px; margin: 0 auto; text-align: left; }
+
+  footer { padding: 48px 24px; text-align: center; color: var(--muted); font-size: 13.5px; }
+  footer a { color: var(--navy); font-weight: 600; text-decoration: none; }
+  /* Badge-Zeile: bewusst zurueckhaltend, damit sie den Footer nicht dominiert. */
+  .footer-badges { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; opacity: .75; }
+  .footer-badges img { height: 40px; width: auto; display: block; }
+  .footer-badges a:hover { opacity: 1; }
+
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: 1fr; text-align: center; }
+    .hero p.sub { margin-left: auto; margin-right: auto; }
+    .hero-visual { order: -1; margin-bottom: 8px; }
+    .mock-card { transform: none; }
+    .request-card { text-align: left; }
+  }
+  @media (max-width: 760px) {
+    h1 { font-size: 29px; }
+    .steps, .trust-grid, .tool-grid { grid-template-columns: 1fr; }
+    .request-form { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    section { padding: 56px 14px; }
+    /* Mobil: verschachtelte Innenabstände reduzieren, damit Felder nicht überstehen
+       und nicht unnötig nach rechts geschoben werden. */
+    .container { padding: 0 12px; }
+    #suche-hero { padding-left: 0; padding-right: 0; padding-bottom: 40px; }
+    #suche-hero .container { max-width: 100%; }
+    .mini-guide { padding: 14px 15px; margin-bottom: 10px; }
+    .request-card { padding: 16px; }
+    .final-cta { padding: 40px 16px; border-radius: 18px; }
+    /* Ergebnistabelle mit drei Spalten kompakter, damit sie auf schmalen Displays passt. */
+    .result-table { font-size: 12.5px; }
+    .result-table th, .result-table td { padding: 6px 6px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="logo"><img src="nav-icon.png" alt="" width="26" height="26" style="vertical-align:-6px;margin-right:6px;">Geo<span>Rates</span></div>
+    <nav class="nav-links">
+      <a href="#so-funktionierts" data-i18n="idx_nav_how">So funktioniert's</a>
+      <a href="#tools" data-i18n="idx_nav_tools">Tools</a>
+      <a href="#transparenz" data-i18n="idx_nav_transparency">Transparenz</a>
+    </nav>
+    <a class="nav-cta" href="#suche" data-i18n="idx_nav_cta">Preis anfragen</a>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-grid">
+    <div>
+      <span class="eyebrow" data-i18n="idx_hero_eyebrow">Persönlicher Buchungs-Check für Booking.com</span>
+      <h1 data-i18n="idx_hero_h1">Für dein Wunschzimmer den fairen Gesamtpreis sichern.</h1>
+      <p class="sub" data-i18n="idx_hero_sub">
+        Füg den Booking.com-Link zu deinem Hotel ein, wähl dein bevorzugtes Zimmer – wir prüfen
+        für dich persönlich, ob es für exakt dieses Zimmer und diese Verpflegung einen
+        günstigeren, steuer- und gebühreninklusiven Gesamtpreis gibt.
+      </p>
+    </div>
+    <div class="hero-visual">
+      <div class="mock-card">
+        <div class="mock-card-title" data-i18n="idx_mock_title">BEISPIEL · DOPPELZIMMER MIT MEERBLICK, FRÜHSTÜCK</div>
+        <div class="mock-row"><span data-i18n="idx_mock_start_label">Ausgangspreis</span><span class="old-price">1.240 €</span></div>
+        <div class="mock-arrow" data-i18n="idx_mock_arrow">↓ 160 € gespart</div>
+        <div class="mock-row best"><span data-i18n="idx_mock_best_label">Bester gefundener Preis</span><span>1.080 €</span></div>
+        <span class="mock-badge" data-i18n="idx_mock_badge">≈13 % günstiger</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="suche-hero" style="padding-top:0; margin-top:-48px; position:relative; z-index:2;">
+  <div class="container" style="max-width:720px;">
+    <div class="mini-guide">
+      <strong data-i18n="idx_guide_title">So kommst du an den richtigen Link:</strong>
+      <svg class="guide-diagram" viewBox="0 0 640 130" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="8" width="624" height="114" rx="14" fill="#ffffff" stroke="#E3E9ED" stroke-width="2"></rect>
+        <path d="M8 22 a14 14 0 0 1 14 -14 h584 a14 14 0 0 1 14 14 v28 h-612 z" fill="#F1F4F6"></path>
+        <circle cx="34" cy="36" r="5" fill="#C7D0D6"></circle>
+        <circle cx="52" cy="36" r="5" fill="#C7D0D6"></circle>
+        <circle cx="70" cy="36" r="5" fill="#C7D0D6"></circle>
+        <rect x="96" y="24" width="500" height="24" rx="12" fill="#ffffff" stroke="#C7D0D6" stroke-width="1.5"></rect>
+        <text x="110" y="41" font-family="Menlo, Consolas, monospace" font-size="12" fill="#5B6B75">booking.com/hotel/it/grand-fasano.de.html?aid=304142&amp;label=…</text>
+        <rect x="90" y="19" width="512" height="34" rx="15" fill="none" stroke="#C0392B" stroke-width="3"></rect>
+        <line x1="230" y1="88" x2="268" y2="56" stroke="#2E9E6C" stroke-width="3" stroke-linecap="round" marker-end="url(#gr-arrow-1)"></line>
+        <defs>
+          <marker id="gr-arrow-1" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 Z" fill="#2E9E6C"></path>
+          </marker>
+        </defs>
+        <text x="118" y="106" font-size="13" font-weight="700" fill="#143349" data-i18n="idx_guide_svg_caption">Adresszeile anklicken, alles markieren &amp; kopieren</text>
+      </svg>
+      <ol>
+        <li data-i18n="idx_guide_step1">Öffne dein Wunschhotel auf Booking.com.</li>
+        <li data-i18n="idx_guide_step2">In die Adresszeile klicken, alles markieren (Strg/⌘+A) und kopieren (Strg/⌘+C) – auch wenn sie gekürzt mit „…” angezeigt wird, wird die komplette Adresse erfasst.</li>
+        <li data-i18n="idx_guide_step3">Link unten einfügen und dein bevorzugtes Zimmer eintragen.</li>
+      </ol>
+    </div>
+    <div class="request-card">
+      <form class="request-form" id="request-form-1">
+        <div class="full">
+          <label for="link-1" data-i18n="idx_form_label_link">Link zu deinem Wunschhotel (Booking.com)</label>
+          <input type="url" id="link-1" placeholder="https://www.booking.com/hotel/..." required>
+          <p class="hint" data-i18n="idx_form_hint_link">Bitte die komplette Adresse aus der Adresszeile einfügen, nicht nur den sichtbaren Teil.</p>
+          <p class="link-warn" id="link-warn-1" role="status" aria-live="polite"></p>
+          <button type="button" class="load-rooms-btn" id="load-rooms-1">Zimmer von Booking laden</button>
+          <span class="load-rooms-msg" id="load-rooms-msg-1" role="status" aria-live="polite"></span>
+        </div>
+        <div>
+          <label for="room-1" data-i18n="idx_form_label_room">Bevorzugtes Zimmer</label>
+          <select id="room-select-1" style="display:none;"></select>
+          <input type="text" id="room-1" placeholder="z. B. Doppelzimmer mit Meerblick" data-i18n-placeholder="idx_form_placeholder_room">
+          <p class="hint" data-i18n="idx_form_hint_room">Genauer Zimmername wie auf Booking.com – unterschiedliche Zimmerkategorien haben oft unterschiedliche Preise & Stornobedingungen.</p>
+        </div>
+        <div>
+          <label for="board-1" data-i18n="idx_form_label_board">Verpflegung</label>
+          <select id="board-1">
+            <option value="uebernachtung" data-i18n="idx_board_room_only">Nur Übernachtung</option>
+            <option value="fruehstueck" selected data-i18n="idx_board_breakfast">Frühstück</option>
+            <option value="halbpension" data-i18n="idx_board_half">Halbpension</option>
+            <option value="vollpension" data-i18n="idx_board_full">Vollpension</option>
+            <option value="allinclusive" data-i18n="idx_board_allinclusive">All-Inclusive</option>
+            <option value="egal" data-i18n="idx_board_any">Egal</option>
+          </select>
+        </div>
+        <div class="full">
+          <label for="cancel-1" data-i18n="idx_form_label_cancel">Kostenlos stornierbar?</label>
+          <select id="cancel-1">
+            <option value="ja" data-i18n="idx_cancel_yes">Ja</option>
+            <option value="nein" data-i18n="idx_cancel_no">Nein</option>
+            <option value="unsicher" selected data-i18n="idx_cancel_unsure">Weiß ich nicht</option>
+          </select>
+          <p class="hint" style="margin-top:6px;" data-i18n="idx_form_hint_cancel">Wichtig, damit wir wissen, bis wann eine Umbuchung noch kostenlos möglich wäre.</p>
+        </div>
+        <div class="full" id="cancel-deadline-wrap-1" style="display:none;">
+          <label for="cancel-deadline-1" data-i18n="idx_form_label_cancel_deadline">Kostenlos stornierbar bis</label>
+          <input type="date" id="cancel-deadline-1">
+        </div>
+        <div class="full">
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAD5R3U1E9Flp_-6V"></div>
+        </div>
+        <button type="submit" data-i18n="idx_form_submit">Preis automatisch prüfen</button>
+      </form>
+      <div class="form-msg" id="request-msg-1"></div>
+      <div class="result-panel" id="result-panel-1" style="display:none;"></div>
+    </div>
+    <div class="hero-note" style="color: var(--muted); text-align:center; margin-top:14px;" data-i18n="idx_hero_note">
+      Kostenlos & unverbindlich · automatischer Check über mehrere Länder-Sessions.
+    </div>
+  </div>
+</section>
+
+<section id="so-funktionierts">
+  <div class="container">
+    <div class="section-label" data-i18n="idx_how_label">So funktioniert's</div>
+    <h2 data-i18n="idx_how_h2">In drei Schritten zum besten Preis</h2>
+    <p class="section-sub" data-i18n="idx_how_sub">
+      Ein einfacher Ablauf, der dir Zeit und Geld sparen soll – ganz ohne Umwege beim Buchen.
+    </p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3 data-i18n="idx_step1_title">Hotel-Link & Zimmer angeben</h3>
+        <p data-i18n="idx_step1_text">
+          Du fügst den Booking.com-Link zu deinem Hotel ein und wählst dein bevorzugtes Zimmer
+          sowie die gewünschte Verpflegung.
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3 data-i18n="idx_step2_title">Wir prüfen deinen Preis persönlich</h3>
+        <p data-i18n="idx_step2_text">
+          Wir checken, ob für exakt dieses Zimmer und diese Verpflegung ein günstigerer,
+          steuer- und gebühreninklusiver Gesamtpreis verfügbar ist.
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3 data-i18n="idx_step3_title">Du buchst direkt</h3>
+        <p data-i18n="idx_step3_text">
+          Die eigentliche Buchung läuft ganz normal über Booking.com – wir zeigen dir nur den
+          besten Weg dorthin.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tools" class="tools">
+  <div class="container">
+    <div class="section-label" data-i18n="idx_tools_label">Kostenlos & ohne Anmeldung</div>
+    <h2 data-i18n="idx_tools_h2">Reise-Tools für die Planung</h2>
+    <p class="section-sub" data-i18n="idx_tools_sub">
+      Nützliche Rechner rund um deine Reise – unabhängig davon, wo du am Ende buchst.
+    </p>
+    <div class="tool-grid">
+      <a class="tool-card" href="budget.html">
+        <div class="tool-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2.5" width="14" height="19" rx="2"></rect>
+            <line x1="8" y1="6.5" x2="16" y2="6.5"></line>
+            <line x1="8" y1="11" x2="8" y2="11.01"></line>
+            <line x1="12" y1="11" x2="12" y2="11.01"></line>
+            <line x1="16" y1="11" x2="16" y2="11.01"></line>
+            <line x1="8" y1="15" x2="8" y2="15.01"></line>
+            <line x1="12" y1="15" x2="12" y2="15.01"></line>
+            <line x1="16" y1="15" x2="16" y2="15.01"></line>
+            <line x1="8" y1="18.5" x2="16" y2="18.5"></line>
+          </svg>
+        </div>
+        <h3 data-i18n="idx_tool1_title">Reisebudget-Rechner</h3>
+        <p data-i18n="idx_tool1_text">Schätze dein Gesamtbudget nach Reisestil, Personenzahl und Reisedauer.</p>
+        <span class="tool-link" data-i18n="idx_tool1_link">Rechner öffnen →</span>
+      </a>
+      <a class="tool-card" href="packliste.html">
+        <div class="tool-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 3.5h6a1 1 0 0 1 1 1V6h1.5A2.5 2.5 0 0 1 20 8.5V19a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 19V8.5A2.5 2.5 0 0 1 6.5 6H8V4.5a1 1 0 0 1 1-1Z"></path>
+            <path d="M9 6V4.5h6V6"></path>
+            <path d="M9 10.5c0 1.4 1.3 2.2 3 2.2s3-.8 3-2.2"></path>
+          </svg>
+        </div>
+        <h3 data-i18n="idx_tool2_title">Packlisten-Generator</h3>
+        <p data-i18n="idx_tool2_text">Individuelle Checkliste je nach Reiseart, Klima und Dauer der Reise.</p>
+        <span class="tool-link" data-i18n="idx_tool2_link">Liste erstellen →</span>
+      </a>
+      <a class="tool-card" href="gruppenkosten.html">
+        <div class="tool-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="8.5" cy="8" r="2.6"></circle>
+            <circle cx="16" cy="8.5" r="2.1"></circle>
+            <path d="M3.5 19c0-2.8 2.2-5 5-5s5 2.2 5 5"></path>
+            <path d="M13.7 14.4c2.4.3 4.3 2.3 4.3 4.9"></path>
+          </svg>
+        </div>
+        <h3 data-i18n="idx_tool3_title">Reisekosten-Tracker</h3>
+        <p data-i18n="idx_tool3_text">Gemeinsame Ausgaben in der Gruppe erfassen und fair aufteilen lassen.</p>
+        <span class="tool-link" data-i18n="idx_tool3_link">Tracker öffnen →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="example">
+  <div class="container">
+    <div class="section-label" data-i18n="idx_example_label">Beispielhaft</div>
+    <h2 data-i18n="idx_example_h2">So könnte eine Ersparnis aussehen</h2>
+    <p class="section-sub" data-i18n="idx_example_sub">
+      Illustratives Rechenbeispiel auf Basis typischer Preisunterschiede, die wir beim
+      Testen beobachtet haben – kein konkretes Buchungsversprechen für ein bestimmtes Hotel.
+    </p>
+    <div class="example-card">
+      <div class="example-row">
+        <span class="label" data-i18n="idx_ex_row1_label">Zimmer & Verpflegung</span>
+        <span class="value" data-i18n="idx_ex_row1_value">Doppelzimmer mit Meerblick, Frühstück</span>
+      </div>
+      <div class="example-row">
+        <span class="label" data-i18n="idx_ex_row2_label">Ausgangspreis (inkl. Steuern & Gebühren)</span>
+        <span class="value">1.240 €</span>
+      </div>
+      <div class="example-row">
+        <span class="label" data-i18n="idx_ex_row3_label">Von uns gefundener Bestpreis (gleiches Zimmer)</span>
+        <span class="value">1.080 €</span>
+      </div>
+      <div class="example-row total">
+        <span class="label" data-i18n="idx_ex_row4_label">Mögliche Ersparnis</span>
+        <span class="value" data-i18n="idx_ex_row4_value">160 € (≈ 13 %)</span>
+      </div>
+    </div>
+    <p class="example-disclaimer" data-i18n="idx_example_disclaimer">
+      Tatsächliche Preisunterschiede variieren je Hotel und Zeitraum – manchmal ist der
+      angezeigte Ausgangspreis bereits der beste verfügbare.
+    </p>
+  </div>
+</section>
+
+<section id="transparenz" class="trust">
+  <div class="container">
+    <div class="section-label" data-i18n="idx_trust_label">Transparenz als Prinzip</div>
+    <h2 data-i18n="idx_trust_h2">Warum du uns die Zahlen glauben kannst</h2>
+    <div class="trust-grid">
+      <div class="trust-card">
+        <div class="trust-icon">€</div>
+        <h3 data-i18n="idx_trust1_title">Immer inkl. Steuern & Gebühren</h3>
+        <p data-i18n="idx_trust1_text">
+          Manche Buchungsseiten zeigen zusätzliche Steuern erst später an. Wir rechnen sie
+          immer sofort mit ein, damit die von uns genannte Zahl der tatsächliche Endpreis ist.
+        </p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">↔</div>
+        <h3 data-i18n="idx_trust2_title">Kein künstlicher Aufschlag</h3>
+        <p data-i18n="idx_trust2_text">
+          Der Ausgangspreis, den wir zur Prüfung heranziehen, wird nicht schöngerechnet oder
+          erhöht, um eine größere Ersparnis vorzutäuschen – beide Zahlen sind echte, identisch
+          berechnete Gesamtpreise.
+        </p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">✓</div>
+        <h3 data-i18n="idx_trust3_title">Du buchst weiterhin direkt</h3>
+        <p data-i18n="idx_trust3_text">
+          GeoRates bucht, storniert oder bezahlt nichts für dich – wir zeigen dir nur, wo
+          derselbe Aufenthalt günstiger ist. Gebucht wird ganz normal bei Booking.com.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="suche">
+  <div class="container">
+    <div class="final-cta">
+      <h2 data-i18n="idx_final_h2">Jetzt deinen Buchungs-Check anfragen</h2>
+      <p data-i18n="idx_final_p">Hotel-Link, Zimmer und Verpflegung eintragen – das Ergebnis erscheint direkt hier auf der Seite.</p>
+      <div class="mini-guide">
+        <strong data-i18n="idx_guide_title">So kommst du an den richtigen Link:</strong>
+        <svg class="guide-diagram" viewBox="0 0 640 130" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="8" width="624" height="114" rx="14" fill="#ffffff" stroke="#E3E9ED" stroke-width="2"></rect>
+          <path d="M8 22 a14 14 0 0 1 14 -14 h584 a14 14 0 0 1 14 14 v28 h-612 z" fill="#F1F4F6"></path>
+          <circle cx="34" cy="36" r="5" fill="#C7D0D6"></circle>
+          <circle cx="52" cy="36" r="5" fill="#C7D0D6"></circle>
+          <circle cx="70" cy="36" r="5" fill="#C7D0D6"></circle>
+          <rect x="96" y="24" width="500" height="24" rx="12" fill="#ffffff" stroke="#C7D0D6" stroke-width="1.5"></rect>
+          <text x="110" y="41" font-family="Menlo, Consolas, monospace" font-size="12" fill="#5B6B75">booking.com/hotel/it/grand-fasano.de.html?aid=304142&amp;label=…</text>
+          <rect x="90" y="19" width="512" height="34" rx="15" fill="none" stroke="#C0392B" stroke-width="3"></rect>
+          <line x1="230" y1="88" x2="268" y2="56" stroke="#2E9E6C" stroke-width="3" stroke-linecap="round" marker-end="url(#gr-arrow-2)"></line>
+          <defs>
+            <marker id="gr-arrow-2" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto">
+              <path d="M0,0 L9,4.5 L0,9 Z" fill="#2E9E6C"></path>
+            </marker>
+          </defs>
+          <text x="118" y="106" font-size="13" font-weight="700" fill="#143349" data-i18n="idx_guide_svg_caption">Adresszeile anklicken, alles markieren &amp; kopieren</text>
+        </svg>
+        <ol>
+          <li data-i18n="idx_guide_step1">Öffne dein Wunschhotel auf Booking.com.</li>
+          <li data-i18n="idx_guide_step2">In die Adresszeile klicken, alles markieren (Strg/⌘+A) und kopieren (Strg/⌘+C) – auch wenn sie gekürzt mit „…” angezeigt wird, wird die komplette Adresse erfasst.</li>
+          <li data-i18n="idx_guide_step3">Link unten einfügen und dein bevorzugtes Zimmer eintragen.</li>
+        </ol>
+      </div>
+      <div class="request-card">
+        <form class="request-form" id="request-form-2">
+          <div class="full">
+            <label for="link-2" data-i18n="idx_form_label_link">Link zu deinem Wunschhotel (Booking.com)</label>
+            <input type="url" id="link-2" placeholder="https://www.booking.com/hotel/..." required>
+            <p class="hint" data-i18n="idx_form_hint_link">Bitte die komplette Adresse aus der Adresszeile einfügen, nicht nur den sichtbaren Teil.</p>
+            <p class="link-warn" id="link-warn-2" role="status" aria-live="polite"></p>
+            <button type="button" class="load-rooms-btn" id="load-rooms-2">Zimmer von Booking laden</button>
+            <span class="load-rooms-msg" id="load-rooms-msg-2" role="status" aria-live="polite"></span>
+          </div>
+          <div>
+            <label for="room-2" data-i18n="idx_form_label_room">Bevorzugtes Zimmer</label>
+            <select id="room-select-2" style="display:none;"></select>
+            <input type="text" id="room-2" placeholder="z. B. Doppelzimmer mit Meerblick" data-i18n-placeholder="idx_form_placeholder_room">
+            <p class="hint" data-i18n="idx_form_hint_room">Genauer Zimmername wie auf Booking.com – unterschiedliche Zimmerkategorien haben oft unterschiedliche Preise & Stornobedingungen.</p>
+          </div>
+          <div>
+            <label for="board-2" data-i18n="idx_form_label_board">Verpflegung</label>
+            <select id="board-2">
+              <option value="uebernachtung" data-i18n="idx_board_room_only">Nur Übernachtung</option>
+              <option value="fruehstueck" selected data-i18n="idx_board_breakfast">Frühstück</option>
+              <option value="halbpension" data-i18n="idx_board_half">Halbpension</option>
+              <option value="vollpension" data-i18n="idx_board_full">Vollpension</option>
+              <option value="allinclusive" data-i18n="idx_board_allinclusive">All-Inclusive</option>
+              <option value="egal" data-i18n="idx_board_any">Egal</option>
+            </select>
+          </div>
+          <div class="full">
+            <label for="cancel-2" data-i18n="idx_form_label_cancel">Kostenlos stornierbar?</label>
+            <select id="cancel-2">
+              <option value="ja" data-i18n="idx_cancel_yes">Ja</option>
+              <option value="nein" data-i18n="idx_cancel_no">Nein</option>
+              <option value="unsicher" selected data-i18n="idx_cancel_unsure">Weiß ich nicht</option>
+            </select>
+            <p class="hint" style="margin-top:6px;" data-i18n="idx_form_hint_cancel">Wichtig, damit wir wissen, bis wann eine Umbuchung noch kostenlos möglich wäre.</p>
+          </div>
+          <div class="full" id="cancel-deadline-wrap-2" style="display:none;">
+            <label for="cancel-deadline-2" data-i18n="idx_form_label_cancel_deadline">Kostenlos stornierbar bis</label>
+            <input type="date" id="cancel-deadline-2">
+          </div>
+          <div class="full">
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAAD5R3U1E9Flp_-6V"></div>
+          </div>
+          <button type="submit" data-i18n="idx_form_submit">Preis automatisch prüfen</button>
+        </form>
+        <div class="form-msg" id="request-msg-2"></div>
+        <div class="result-panel" id="result-panel-2" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <span data-i18n="idx_footer_line1">GeoRates · Persönlicher Buchungs-Check für Hotelbuchungen · Kein Reiseveranstalter, keine Buchungsabwicklung.</span><br>
+    <span data-i18n="idx_footer_questions">Fragen?</span> <a href="mailto:info@georates.tech">info@georates.tech</a><br>
+    <a href="ratgeber.html">Ratgeber: Hotelpreise je nach Land</a><br>
+    <a href="impressum.html" data-i18n="common_impressum">Impressum</a> · <a href="datenschutz.html" data-i18n="common_datenschutz">Datenschutz</a> ·
+    <a href="agb.html" data-i18n="common_agb">Nutzungsbedingungen</a>
+    <!-- Badges der Launch-Plattformen. Dort Bedingung für den kostenlosen Eintrag. -->
+    <div class="footer-badges">
+      <a href="https://openhunts.com/" target="_blank" rel="noopener">
+        <img src="https://cdn.openhunts.com/badges/club.webp" alt="OpenHunts Club Member" loading="lazy" height="40">
+      </a>
+      <a href="https://fazier.com/launches/georates.tech" target="_blank" rel="noopener">
+        <img src="https://fazier.com/api/v1/public/badges/launch_badges.svg" alt="Fazier badge" loading="lazy" height="40">
+      </a>
+      <a href="https://www.uneed.best/tool/georates" target="_blank" rel="noopener">
+        <img src="https://www.uneed.best/EMBED3.png" alt="Uneed Embed" loading="lazy" height="40">
+      </a>
+    </div>
+  </div>
+</footer>
+
+<!-- App-Installation anbieten (Android/Desktop per Prompt, iOS mit Anleitung) -->
+<div id="pwa-install" style="display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;max-width:520px;margin:0 auto;background:#143349;color:#fff;border-radius:14px;padding:13px 14px;box-shadow:0 10px 30px rgba(0,0,0,.28);font-size:14.5px;line-height:1.4;">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <img src="icon-192.png" alt="" width="42" height="42" style="border-radius:10px;flex:0 0 auto;">
+    <div style="flex:1 1 auto;min-width:0;">
+      <strong style="display:block;">GeoRates als App</strong>
+      <span id="pwa-install-text">Auf dem Startbildschirm speichern – startet im Vollbild.</span>
+    </div>
+    <button id="pwa-install-btn" type="button" style="flex:0 0 auto;background:#2E9E6C;color:#fff;border:0;border-radius:9px;padding:9px 14px;font-weight:700;font-size:14px;cursor:pointer;">Installieren</button>
+    <button id="pwa-install-close" type="button" aria-label="Schließen" style="flex:0 0 auto;background:transparent;color:#cfe0ee;border:0;font-size:19px;line-height:1;cursor:pointer;padding:4px 2px;">&times;</button>
+  </div>
+</div>
+<script>
+(function () {
+  var box = document.getElementById('pwa-install');
+  var btn = document.getElementById('pwa-install-btn');
+  var closeBtn = document.getElementById('pwa-install-close');
+  var txt = document.getElementById('pwa-install-text');
+  if (!box) return;
+  var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+  var hidden = false;
+  try { hidden = localStorage.getItem('pwaHide') === '1'; } catch (e) { /* ignorieren */ }
+  if (standalone || hidden) return;
+
+  var deferred = null;
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    deferred = e;
+    btn.style.display = '';
+    box.style.display = 'block';
+  });
+
+  // iOS bietet keinen Installations-Prompt an - dort die manuelle Anleitung zeigen.
+  var ua = navigator.userAgent || '';
+  var isIOS = /iPhone|iPad|iPod/i.test(ua);
+  if (isIOS) {
+    btn.style.display = 'none';
+    txt.textContent = 'Tippe unten auf das Teilen-Symbol und dann auf „Zum Home-Bildschirm".';
+    box.style.display = 'block';
+  }
+
+  btn.addEventListener('click', function () {
+    if (!deferred) return;
+    deferred.prompt();
+    deferred.userChoice.then(function () { deferred = null; box.style.display = 'none'; });
+  });
+  closeBtn.addEventListener('click', function () {
+    box.style.display = 'none';
+    try { localStorage.setItem('pwaHide', '1'); } catch (e) { /* ignorieren */ }
+  });
+})();
+</script>
+<script src="i18n.js"></script>
+<script>
+  // Automatischer Geo-Preisvergleich: ruft eine Serverless-Function auf (siehe
+  // georates-price-api-Repo), die ueber Proxy-Sessions aus mehreren Laendern (aktuell
+  // Deutschland + Kolumbien, bei Bedarf mehr) den Booking.com-Preis fuer das gewuenschte
+  // Zimmer ausliest. Keine E-Mails mehr - das Ergebnis erscheint direkt auf der Seite.
+  // Solange PRICE_API_URL auf 'YOUR_' beginnt, wird nur die Hotelseite geoeffnet, ohne
+  // automatischen Check (Setup siehe README im price-api-Repo).
+  const PRICE_API_URL = 'https://georates-price-api.vercel.app/api/check-price';
+  const PRICE_API_READY = !PRICE_API_URL.startsWith('YOUR_');
+
+  // Sobald echte Partner-Links vorhanden sind, hier eintragen - tauchen dann automatisch in
+  // den Buchungs-Anweisungen unterhalb des Ergebnisses auf.
+  const VPN_AFFILIATE_URL = 'YOUR_VPN_AFFILIATE_URL';
+  const REVOLUT_AFFILIATE_URL = 'YOUR_REVOLUT_AFFILIATE_URL';
+
+  const COUNTRY_NAMES = {
+    DE: 'Deutschland', CO: 'Kolumbien', US: 'USA', TH: 'Thailand', IN: 'Indien', EG: 'Ägypten',
+    AR: 'Argentinien', TR: 'Türkei', LK: 'Sri Lanka', VN: 'Vietnam', ID: 'Indonesien', PK: 'Pakistan',
+    PE: 'Peru', MX: 'Mexiko', PH: 'Philippinen', JP: 'Japan',
+  };
+
+  function setupCancelToggle(cancelId, wrapId) {
+    const select = document.getElementById(cancelId);
+    const wrap = document.getElementById(wrapId);
+    const sync = () => { wrap.style.display = select.value === 'ja' ? 'block' : 'none'; };
+    select.addEventListener('change', sync);
+    sync();
+  }
+
+  function euro(val) {
+    return val.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  }
+
+  // Anzeige-Labels fuer die dynamisch je Zimmer geladenen Verpflegungs-/Storno-Optionen.
+  const BOARD_LABELS = { uebernachtung: 'Nur Übernachtung', fruehstueck: 'Frühstück', halbpension: 'Halbpension', vollpension: 'Vollpension', allinclusive: 'All-Inclusive' };
+  const CANCEL_LABELS = { ja: 'Kostenlos stornierbar', teilweise: 'Teilweise erstattbar', nein: 'Nicht kostenlos stornierbar' };
+  const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  // "Zimmer laden": ruft die echten Zimmer der Booking.com-Seite ab (ein Abruf) und fuellt das
+  // Auswahl-Dropdown. Zusaetzlich werden je Zimmer die real vorhandenen Verpflegungs- und
+  // Storno-Optionen mitgeliefert und beim Auswaehlen in die beiden Dropdowns uebernommen.
+  function setupRoomLoader(linkId, btnId, msgId, selectId, roomId, boardId, cancelId) {
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+    const msg = document.getElementById(msgId);
+    const select = document.getElementById(selectId);
+    const roomInput = document.getElementById(roomId);
+    const boardSel = document.getElementById(boardId);
+    const cancelSel = document.getElementById(cancelId);
+    const boardDefault = boardSel ? boardSel.innerHTML : '';
+    const cancelDefault = cancelSel ? cancelSel.innerHTML : '';
+    let loadedRooms = [];
+
+    select.addEventListener('change', function () {
+      if (!select.value) return;
+      roomInput.value = select.value;
+      const room = loadedRooms.find((r) => r.name === select.value) || {};
+      if (boardSel) {
+        if (room.boards && room.boards.length) {
+          boardSel.innerHTML = room.boards.map((v) => '<option value="' + v + '">' + (BOARD_LABELS[v] || v) + '</option>').join('')
+            + '<option value="egal">Egal</option>';
+        } else {
+          boardSel.innerHTML = boardDefault;
+        }
+      }
+      if (cancelSel) {
+        if (room.cancels && room.cancels.length) {
+          cancelSel.innerHTML = room.cancels.map((v) => '<option value="' + v + '">' + (CANCEL_LABELS[v] || v) + '</option>').join('')
+            + '<option value="unsicher">Weiß ich nicht</option>';
+        } else {
+          cancelSel.innerHTML = cancelDefault;
+        }
+        cancelSel.dispatchEvent(new Event('change'));
+      }
+    });
+
+    btn.addEventListener('click', async function () {
+      const link = document.getElementById(linkId).value.trim();
+      if (!link) { msg.textContent = 'Bitte zuerst den Booking.com-Link oben einfügen.'; msg.style.color = '#C0392B'; return; }
+      if (!PRICE_API_READY) { msg.textContent = 'Zimmer-Laden ist noch nicht aktiv.'; msg.style.color = '#5B6B75'; return; }
+      // Rückmeldung gehört AUF den Knopf, nicht nur darunter: Nach dem Klick schaut man auf die
+      // Stelle, die man geklickt hat. Ein Hinweistext acht Pixel tiefer in grauer 12,5-px-Schrift
+      // wird schlicht übersehen – dann wirkt es, als sei der Klick ins Leere gegangen.
+      const btnLabel = btn.textContent;
+      btn.disabled = true;
+      btn.setAttribute('aria-busy', 'true');
+      btn.innerHTML = '<span class="btn-spinner" aria-hidden="true"></span>Zimmer werden geladen …';
+      msg.style.color = '#5B6B75';
+      msg.textContent = 'Booking.com wird für dich aufgerufen – das dauert etwa 20 Sekunden.';
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 55000);
+        const res = await fetch(PRICE_API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mode: 'rooms', link: link }),
+          signal: controller.signal,
+        });
+        clearTimeout(timeout);
+        const json = await res.json();
+        if (!json || json.success === false || !json.rooms || !json.rooms.length) {
+          // Auch hier die wahrscheinlichste Ursache benennen statt nur "hat nicht geklappt".
+          msg.textContent = /[?&](checkin|checkout)=|[?&]checkin_year=/i.test(link)
+            ? 'Zimmer konnten gerade nicht geladen werden – bitte den Zimmernamen manuell eintragen.'
+            : 'Keine Zimmer gefunden. Dein Link enthält keine Reisedaten – öffne das Hotel auf Booking.com mit An- und Abreisedatum und kopiere die Adresse erneut. Alternativ den Zimmernamen manuell eintragen.';
+          msg.style.color = '#C0392B';
+          return;
+        }
+        // Backend kann Objekte {name,boards,cancels} ODER (Fallback) reine Strings liefern.
+        loadedRooms = json.rooms.map((r) => (typeof r === 'string' ? { name: r, boards: [], cancels: [] } : r));
+        select.innerHTML = '<option value="">– Zimmer wählen –</option>'
+          + loadedRooms.map((r) => '<option>' + escHtml(r.name) + '</option>').join('');
+        select.style.display = 'block';
+        roomInput.style.display = 'none';
+        roomInput.value = '';
+        msg.innerHTML = loadedRooms.length + ' Zimmer geladen – bitte oben auswählen. <a href="#" class="manual-room-link">Nicht dabei? Manuell eintragen</a>';
+        msg.style.color = '#227a54';
+        const manual = msg.querySelector('.manual-room-link');
+        if (manual) manual.addEventListener('click', function (e) {
+          e.preventDefault();
+          select.style.display = 'none';
+          roomInput.style.display = 'block';
+          roomInput.focus();
+          if (boardSel) boardSel.innerHTML = boardDefault;
+          if (cancelSel) { cancelSel.innerHTML = cancelDefault; cancelSel.dispatchEvent(new Event('change')); }
+        });
+      } catch (err) {
+        msg.textContent = 'Zimmer-Laden hat zu lange gedauert – bitte den Zimmernamen manuell eintragen.';
+        msg.style.color = '#C0392B';
+      } finally {
+        btn.disabled = false;
+        btn.removeAttribute('aria-busy');
+        btn.textContent = btnLabel;
+      }
+    });
+  }
+
+  // ---- Link-Prüfung -------------------------------------------------------------------------
+  // Auswertung des Logs vom 17.09.: Alle fehlgeschlagenen Checks hatten denselben Link-Typ –
+  // die blanke Hotelseite ohne Reisedaten, also der Pfad /hotel/<land>/<hotel>.de.html ohne
+  // weitere Parameter.
+  //
+  // Hier stand vorher eine konkrete Hotel-Adresse aus dem Log als Beispiel. Das war falsch:
+  // Das Log enthält Suchen von Besuchern, und eine davon in einem öffentlichen Repository
+  // abzulegen, geht niemanden etwas an außer die Person, die gesucht hat. Beispiele in
+  // Kommentaren werden ab jetzt erfunden, nicht aus echten Abfragen entnommen.
+  //
+  // Ohne checkin/checkout sucht Booking sich selbst einen Termin aus. Das geht manchmal gut,
+  // liefert aber oft gar keine Zimmertabelle – und im schlimmsten Fall bekommt jede Länder-
+  // Sitzung einen anderen Standardtermin, dann vergleicht das Tool Äpfel mit Birnen.
+  //
+  // Deshalb: hinweisen, nicht blockieren. Es gibt belegte Fälle, in denen ein Link ohne Datum
+  // sauber durchgelaufen ist; wer den Check trotzdem starten will, soll das dürfen.
+  function pruefeBookingLink(link) {
+    const l = (link || '').trim();
+    if (!l) return null;
+    if (!/^https?:\/\/([a-z0-9-]+\.)*booking\.com\//i.test(l)) {
+      return 'Das sieht nicht nach einer Booking.com-Adresse aus. Bitte die komplette Adresse aus der Adresszeile einfügen.';
+    }
+    if (/\/searchresults/i.test(l)) {
+      return 'Das ist eine Ergebnisliste, keine Hotelseite. Bitte zuerst das gewünschte Hotel öffnen und dann dessen Adresse kopieren.';
+    }
+    if (!/\/hotel\//i.test(l)) {
+      return 'In der Adresse fehlt der Teil „/hotel/“. Bitte die Seite des konkreten Hotels öffnen und deren Adresse kopieren.';
+    }
+    // Booking schreibt die Daten je nach Oberfläche als checkin=/checkout= oder als
+    // checkin_year=&checkin_month=&checkin_monthday=. Beide Schreibweisen zählen.
+    const hatDatum = /[?&](checkin|checkout)=/i.test(l) || /[?&]checkin_year=/i.test(l);
+    if (!hatDatum) {
+      return 'In deinem Link stehen keine Reisedaten. Booking sucht sich dann selbst einen Termin aus – oft zeigt die Seite dann gar keine Preise, und der Ländervergleich kann auf unterschiedlichen Terminen beruhen. Am besten: Hotel auf Booking.com mit deinen An- und Abreisedaten öffnen und die Adresse dann erneut kopieren. Der Check läuft trotzdem, ist so aber weniger verlässlich.';
+    }
+    return null;
+  }
+
+  // Hängt die Live-Prüfung an ein Link-Feld und dessen Hinweiskasten.
+  function ueberwacheLinkFeld(linkId, warnId) {
+    const feld = document.getElementById(linkId);
+    const kasten = document.getElementById(warnId);
+    if (!feld || !kasten) return;
+    const pruefen = function () {
+      const t = pruefeBookingLink(feld.value);
+      kasten.textContent = t || '';
+      kasten.classList.toggle('is-visible', !!t);
+    };
+    feld.addEventListener('input', pruefen);
+    feld.addEventListener('blur', pruefen);
+    feld.addEventListener('paste', function () { setTimeout(pruefen, 0); });
+  }
+
+  const ERROR_TEXTS = {
+    bot_check_failed: 'Sicherheitsprüfung fehlgeschlagen – bitte Haken oben erneut setzen und nochmal senden.',
+    invalid_link: 'Der Link sieht nicht wie ein gültiger Booking.com-Link aus.',
+    missing_room: 'Bitte ein Zimmer angeben.',
+    proxy_not_configured: 'Der automatische Check ist noch nicht vollständig eingerichtet.',
+    // Die häufigste Ursache zuerst nennen, statt den Nutzer raten zu lassen: Laut Log lagen
+    // alle bisherigen Fehlschläge an einem Link ohne Reisedaten.
+    price_not_found: 'Für dieses Zimmer konnte in keinem geprüften Land ein Preis gefunden werden. Häufigste Ursache: Der Link enthält keine Reisedaten – dann zeigt Booking je nach Zufall gar keine Zimmerpreise. Öffne das Hotel auf Booking.com mit deinen An- und Abreisedaten, kopiere die Adresse erneut und versuche es damit. Möglich ist auch, dass das Zimmer für diesen Zeitraum ausgebucht ist oder anders heißt als eingegeben.',
+    fx_unavailable: 'Die aktuellen Wechselkurse konnten gerade nicht geladen werden – für einen korrekten Vergleich bitte in ein paar Minuten erneut versuchen.',
+  };
+
+  // Zwischenstand während der Check noch läuft. Bewusst ohne Bewertung: Es wird noch kein Land
+  // hervorgehoben und keine Ersparnis genannt, weil beides sich mit jedem weiteren Land noch
+  // ändern kann. Wer hier schon „Kolumbien ist am günstigsten" liest und wegklickt, bekommt
+  // womöglich eine falsche Antwort. Gezeigt werden nur die nackten Zahlen und der Fortschritt.
+  function renderLiveTable(panel, live) {
+    panel.style.display = 'block';
+    function localPrice(r) {
+      if (r.priceLocal === null || r.priceLocal === undefined || !r.currency) return '–';
+      return r.priceLocal.toLocaleString('de-DE', { maximumFractionDigits: 2 }) + ' ' + r.currency;
+    }
+    const rows = live.results.map(function (r) {
+      const name = COUNTRY_NAMES[r.country] || r.country;
+      const priceText = r.priceEuro !== null && r.priceEuro !== undefined ? euro(r.priceEuro) : '–';
+      return '<tr><td>' + name + '</td><td>' + localPrice(r) + '</td><td>' + priceText + '</td></tr>';
+    }).join('');
+    const done = live.results.length;
+    const total = live.total || '?';
+    panel.innerHTML = '<table class="result-table"><thead><tr><th>Land-Session</th><th>Preis vor Ort</th><th>≈ in Euro</th></tr></thead><tbody>'
+      + rows + '</tbody></table>'
+      + '<div class="form-msg" style="color:#5B6B75;">' + done + ' von ' + total
+      + ' Ländern geprüft – die Auswertung kommt, sobald alle durch sind.</div>';
+  }
+
+  function renderResults(panel, json, cancelInfo, hotelLink) {
+    panel.style.display = 'block';
+    if (!json || json.success === false) {
+      const text = ERROR_TEXTS[json && json.reason] || 'Der automatische Check war gerade nicht möglich. Bitte später erneut versuchen.';
+      panel.innerHTML = '<div class="form-msg" style="color:#C0392B;">' + text + '</div>';
+      return;
+    }
+
+    function localPrice(r) {
+      if (r.priceLocal === null || r.priceLocal === undefined || !r.currency) return '–';
+      return r.priceLocal.toLocaleString('de-DE', { maximumFractionDigits: 2 }) + ' ' + r.currency;
+    }
+    // Ein Vorsprung unter 1 % ist Wechselkurs-Rundung, kein Fund. Dann wird auch keine Zeile
+    // als "beste" hervorgehoben – sonst sieht es aus, als hätte der Check etwas gefunden.
+    const relevantSaving = json.relevantSaving === true;
+    const rows = json.results.map((r) => {
+      const isBest = relevantSaving && json.best && r.country === json.best.country;
+      const priceText = r.priceEuro !== null ? euro(r.priceEuro) : '–';
+      const name = COUNTRY_NAMES[r.country] || r.country;
+      return '<tr class="' + (isBest ? 'best-row' : '') + '"><td>' + name + '</td><td>' + localPrice(r) + '</td><td>' + priceText + '</td></tr>';
+    }).join('');
+
+    let html = '<table class="result-table"><thead><tr><th>Land-Session</th><th>Preis vor Ort</th><th>≈ in Euro</th></tr></thead><tbody>' + rows + '</tbody></table>'
+      + '<p class="result-partial-note">Die Spalte „Preis vor Ort" zeigt den Betrag in der Landeswährung – so kannst du prüfen, ob dein VPN wirklich im jeweiligen Land ist und dir derselbe Preis angezeigt wird.</p>';
+    if (hotelLink) {
+      html += '<p style="margin-bottom:14px;"><a href="' + hotelLink + '" target="_blank" rel="noopener" style="color:var(--accent-dark); font-weight:700;">Hotelseite öffnen →</a></p>';
+    }
+
+    const baselineName = COUNTRY_NAMES[json.baselineCountry] || json.baselineCountry || 'deinem Ausgangsland';
+    const baselineRow = json.results.find(function (r) { return r.country === json.baselineCountry; });
+    const baselineMissing = !baselineRow || baselineRow.priceEuro === null;
+    const isRealUrl = function (u) { return u && u.indexOf('YOUR_') !== 0; };
+
+    if (baselineMissing) {
+      html += '<div class="form-msg" style="color:#C0392B;">Der Ausgangspreis (' + baselineName + ') konnte diesmal nicht geladen werden – deshalb ist gerade kein zuverlässiger Vergleich möglich. Bitte in ein bis zwei Minuten erneut prüfen. Die oben gefundenen Länderpreise dienen nur zur groben Orientierung.</div>';
+    } else if (json.recommendVpnCountry) {
+      const countryName = COUNTRY_NAMES[json.recommendVpnCountry] || json.recommendVpnCountry;
+      html += '<div class="result-savings">Über ' + countryName + ' ca. ' + json.savingsPct + ' % günstiger als über ' + baselineName + '.</div>';
+      const vpnStep = isRealUrl(VPN_AFFILIATE_URL)
+        ? 'Mit einem VPN auf <strong>' + countryName + '</strong> stellen (<a href="' + VPN_AFFILIATE_URL + '" target="_blank" rel="noopener">VPN-Empfehlung</a>).'
+        : 'Mit einem VPN dein Land auf <strong>' + countryName + '</strong> stellen.';
+      let steps = '<li>' + vpnStep + '</li>'
+        + '<li>Bei Booking.com <strong>ausgeloggt</strong> bleiben bzw. ein privates Browserfenster nutzen, damit keine personalisierten Preise angezeigt werden.</li>'
+        + '<li>Hotelseite neu laden und Preis prüfen – er sollte jetzt dem oben gefundenen entsprechen.</li>';
+      if (isRealUrl(REVOLUT_AFFILIATE_URL)) {
+        steps += '<li>Am besten mit <a href="' + REVOLUT_AFFILIATE_URL + '" target="_blank" rel="noopener">Revolut</a> bezahlen (gute Wechselkurse, keine versteckten Auslandsgebühren).</li>';
+      }
+      html += '<div class="result-instructions"><h4>So buchst du zum gefundenen Preis:</h4><ol>' + steps + '</ol></div>';
+    } else if (relevantSaving && json.savingsPct != null) {
+      const countryName = COUNTRY_NAMES[json.best.country] || json.best.country;
+      html += '<div class="form-msg" style="color:#227a54;">Über ' + countryName + ' nur ca. ' + json.savingsPct
+        + ' % günstiger als über ' + baselineName + '. Das ist zwar ein echter Unterschied, für den Aufwand mit VPN '
+        + 'und möglichen Fremdwährungsgebühren lohnt er sich aber meist nicht – am besten normal direkt auf Booking.com buchen.</div>';
+    } else {
+      html += '<div class="form-msg" style="color:#227a54;">Kein Land günstiger als ' + baselineName
+        + ' – am besten ganz normal direkt auf Booking.com buchen. Abweichungen unter 1 % zählen wir bewusst nicht als Fund, '
+        + 'das ist Wechselkurs-Rundung und kein echter Vorteil.</div>';
+    }
+
+    if (cancelInfo) html += '<div class="result-partial-note">' + cancelInfo + '</div>';
+    if (json.partial) html += '<div class="result-partial-note">Hinweis: Zeitbudget erreicht – es konnten nicht alle Länder geprüft werden.</div>';
+    if (json.fromCache) html += '<div class="result-partial-note">Ergebnis aus dem Cache (dieselbe Suche wurde kürzlich schon geprüft).</div>';
+
+    panel.innerHTML = html;
+  }
+
+  function handleRequest(formId, ids, msgId, panelId) {
+    const form = document.getElementById(formId);
+    const msg = document.getElementById(msgId);
+    const panel = document.getElementById(panelId);
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const data = {
+        link: document.getElementById(ids.link).value.trim(),
+        room: document.getElementById(ids.room).value.trim(),
+        board: document.getElementById(ids.board).value,
+        cancel: document.getElementById(ids.cancel).value,
+        cancelDeadline: document.getElementById(ids.cancelDeadline).value,
+      };
+      if (!data.link || !data.room) return;
+
+      const turnstileToken = new FormData(form).get('cf-turnstile-response');
+      if (!turnstileToken) {
+        msg.textContent = 'Bitte kurz die Sicherheitsprüfung oben im Formular abschließen.';
+        msg.style.color = '#C0392B';
+        return;
+      }
+
+      panel.style.display = 'none';
+
+      if (!PRICE_API_READY) {
+        window.open(data.link, '_blank', 'noopener');
+        msg.textContent = 'Automatischer Check ist noch nicht aktiv – Hotelseite wurde geöffnet, bitte manuell vergleichen.';
+        msg.style.color = '#5B6B75';
+        return;
+      }
+
+      // Auch hier gilt: Die Rückmeldung muss auf dem geklickten Knopf sichtbar sein. Beim
+      // Länder-Check wartet man rund eine Minute – ohne Spinner auf dem Knopf ist in den
+      // ersten Sekunden völlig unklar, ob der Klick überhaupt angekommen ist.
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const submitLabel = submitBtn ? submitBtn.textContent : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.setAttribute('aria-busy', 'true');
+        submitBtn.innerHTML = '<span class="btn-spinner" aria-hidden="true"></span>Länderpreise werden geprüft …';
+      }
+
+      // Statusmeldungen für die Anlaufphase. Sobald die erste Länderzeile aus dem Stream
+      // eintrifft, werden sie abgeschaltet – ab da ist die sich füllende Tabelle der
+      // Fortschrittsanzeiger, und der ist ehrlicher als jeder rotierende Spruch.
+      msg.style.color = '#5B6B75';
+      const progressSteps = [
+        'Ausgangsland wird aus deinem Link ermittelt …',
+        'Aktuelle Wechselkurse werden geladen …',
+        'Echte Booking.com-Seiten werden über Länder-Sessions geladen – die ersten Preise erscheinen gleich hier …',
+      ];
+      let stepIdx = 0;
+      msg.textContent = progressSteps[0];
+      const progressTimer = setInterval(function () {
+        stepIdx = Math.min(stepIdx + 1, progressSteps.length - 1);
+        msg.textContent = progressSteps[stepIdx];
+      }, 7000);
+
+      let cancelInfo = '';
+      if (data.cancel === 'ja' && data.cancelDeadline) {
+        cancelInfo = 'Kostenlos stornierbar bis ' + data.cancelDeadline + ' – bis dahin kannst du bei Bedarf noch umbuchen.';
+      }
+
+      try {
+        const controller = new AbortController();
+        // Muss ueber maxDuration der Serverless-Funktion liegen (180s), sonst bricht der Browser
+        // ab, waehrend der Check serverseitig noch laeuft - und der Nutzer sieht faelschlich
+        // einen Fehler, obwohl das Ergebnis Sekunden spaeter dagewesen waere.
+        const timeout = setTimeout(() => controller.abort(), 190000);
+        const res = await fetch(PRICE_API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          // stream:true lässt den Server jedes Land einzeln schicken, statt eine Minute zu
+          // schweigen. Kann der Server das nicht (alte Version), antwortet er normal als JSON –
+          // deshalb wird unten anhand des Content-Type entschieden, nicht anhand einer Annahme.
+          body: JSON.stringify({ link: data.link, room: data.room, board: data.board, cancel: data.cancel, turnstileToken, stream: true }),
+          signal: controller.signal,
+        });
+
+        let json = null;
+        const contentType = res.headers.get('Content-Type') || '';
+        if (res.body && res.body.getReader && contentType.indexOf('ndjson') !== -1) {
+          // Live-Modus: Tabelle füllt sich Zeile für Zeile. Die rotierenden Statussprüche
+          // werden dadurch überflüssig – echte Zahlen sind der bessere Fortschrittsbalken.
+          clearInterval(progressTimer);
+          msg.textContent = '';
+          const live = { baselineCountry: null, results: [], total: null };
+          const reader = res.body.getReader();
+          const decoder = new TextDecoder();
+          let buffer = '';
+          for (;;) {
+            const chunk = await reader.read();
+            if (chunk.done) break;
+            buffer += decoder.decode(chunk.value, { stream: true });
+            let nl;
+            while ((nl = buffer.indexOf('\n')) >= 0) {
+              const line = buffer.slice(0, nl).trim();
+              buffer = buffer.slice(nl + 1);
+              if (!line) continue;
+              let evt;
+              try { evt = JSON.parse(line); } catch (e) { continue; }
+              if (evt.type === 'meta') {
+                live.baselineCountry = evt.baselineCountry;
+                live.total = evt.totalCountries;
+                renderLiveTable(panel, live);
+              } else if (evt.type === 'country') {
+                live.results.push(evt.result);
+                renderLiveTable(panel, live);
+              } else if (evt.type === 'summary') {
+                json = evt;
+              }
+            }
+          }
+          if (!json) throw new Error('Verbindung abgebrochen, bevor das Ergebnis vollständig war');
+        } else {
+          json = await res.json();
+        }
+        clearTimeout(timeout);
+        msg.textContent = '';
+        renderResults(panel, json, cancelInfo, data.link);
+      } catch (err) {
+        msg.textContent = 'Der automatische Check hat zu lange gedauert oder ist fehlgeschlagen – bitte später erneut versuchen.';
+        msg.style.color = '#C0392B';
+      } finally {
+        clearInterval(progressTimer);
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.removeAttribute('aria-busy');
+          submitBtn.textContent = submitLabel;
+        }
+        if (typeof turnstile !== 'undefined') {
+          try { turnstile.reset(form.querySelector('.cf-turnstile')); } catch (e) { /* ignorieren */ }
+        }
+      }
+    });
+  }
+
+  setupCancelToggle('cancel-1', 'cancel-deadline-wrap-1');
+  setupCancelToggle('cancel-2', 'cancel-deadline-wrap-2');
+  ueberwacheLinkFeld('link-1', 'link-warn-1');
+  ueberwacheLinkFeld('link-2', 'link-warn-2');
+  setupRoomLoader('link-1', 'load-rooms-1', 'load-rooms-msg-1', 'room-select-1', 'room-1', 'board-1', 'cancel-1');
+  setupRoomLoader('link-2', 'load-rooms-2', 'load-rooms-msg-2', 'room-select-2', 'room-2', 'board-2', 'cancel-2');
+  handleRequest('request-form-1', { link: 'link-1', room: 'room-1', board: 'board-1', cancel: 'cancel-1', cancelDeadline: 'cancel-deadline-1' }, 'request-msg-1', 'result-panel-1');
+  handleRequest('request-form-2', { link: 'link-2', room: 'room-2', board: 'board-2', cancel: 'cancel-2', cancelDeadline: 'cancel-deadline-2' }, 'request-msg-2', 'result-panel-2');
+</script>
+
+</body>
+</html>
