@@ -965,6 +965,31 @@
   function renderResults(panel, json, cancelInfo, hotelLink) {
     panel.style.display = 'block';
     if (!json || json.success === false) {
+      // Wenn der Grund schlicht ein Zimmername ist, den es auf der Hotelseite nicht gibt, ist
+      // "kein Preis gefunden" die unbrauchbarste aller Antworten. Dann zeigen wir stattdessen,
+      // welche Zimmer dort tatsächlich stehen – aus einer Sackgasse wird ein Klick zur Lösung.
+      const d = json && json.diagnose;
+      if (d && d.zimmerAufSeite && d.zimmerAufSeite.length && d.zimmerGefunden === false) {
+        panel.innerHTML = '<div class="form-msg" style="color:#C0392B;">Dieses Zimmer gibt es auf der Hotelseite nicht unter diesem Namen – deshalb konnte kein Preis geprüft werden.</div>'
+          + '<div class="form-msg" style="color:#5B6B75;">Booking.com listet dort diese Zimmer:</div>'
+          + '<ul style="margin:6px 0 10px 18px;padding:0;">'
+          + d.zimmerAufSeite.map(function (z) { return '<li>' + escHtml(z.name) + '</li>'; }).join('')
+          + '</ul>'
+          + '<div class="form-msg" style="color:#5B6B75;">Am einfachsten: oben auf „Zimmer von Booking laden“ klicken und aus der Liste auswählen – dann stimmt der Name garantiert.</div>';
+        return;
+      }
+      // Zimmer gefunden, aber die gewünschte Verpflegung gibt es für dieses Zimmer nicht.
+      if (d && d.zimmerGefunden === true && d.verpflegungPasst === false) {
+        const treffer = d.zimmerAufSeite.filter(function (z) { return z.boards && z.boards.length; });
+        panel.innerHTML = '<div class="form-msg" style="color:#C0392B;">Dieses Zimmer gibt es, aber nicht mit der gewählten Verpflegung – deshalb kein Preis.</div>'
+          + (treffer.length
+            ? '<div class="form-msg" style="color:#5B6B75;">Angeboten wird dort: '
+              + escHtml(treffer.map(function (z) { return z.name + ' (' + z.boards.map(function (b) { return BOARD_LABELS[b] || b; }).join(', ') + ')'; }).join(' · '))
+              + '</div>'
+            : '')
+          + '<div class="form-msg" style="color:#5B6B75;">Stell die Verpflegung auf „Egal“ und versuch es nochmal.</div>';
+        return;
+      }
       const text = ERROR_TEXTS[json && json.reason] || 'Der automatische Check war gerade nicht möglich. Bitte später erneut versuchen.';
       panel.innerHTML = '<div class="form-msg" style="color:#C0392B;">' + text + '</div>';
       return;
