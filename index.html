@@ -837,7 +837,10 @@
         const json = await res.json();
         if (!json || json.success === false || !json.rooms || !json.rooms.length) {
           // Auch hier die wahrscheinlichste Ursache benennen statt nur "hat nicht geklappt".
-          msg.textContent = /[?&](checkin|checkout)=|[?&]checkin_year=/i.test(link)
+          // Kennt das Backend einen konkreten Grund (z. B. die Zählbremse), hat der Vorrang.
+          msg.textContent = (json && json.reason && ERROR_TEXTS[json.reason])
+            ? ERROR_TEXTS[json.reason]
+            : /[?&](checkin|checkout)=|[?&]checkin_year=/i.test(link)
             ? 'Zimmer konnten gerade nicht geladen werden – bitte den Zimmernamen manuell eintragen.'
             : 'Keine Zimmer gefunden. Dein Link enthält keine Reisedaten – öffne das Hotel auf Booking.com mit An- und Abreisedatum und kopiere die Adresse erneut. Alternativ den Zimmernamen manuell eintragen.';
           msg.style.color = '#C0392B';
@@ -933,6 +936,7 @@
     // alle bisherigen Fehlschläge an einem Link ohne Reisedaten.
     price_not_found: 'Für dieses Zimmer konnte in keinem geprüften Land ein Preis gefunden werden. Häufigste Ursache: Der Link enthält keine Reisedaten – dann zeigt Booking je nach Zufall gar keine Zimmerpreise. Öffne das Hotel auf Booking.com mit deinen An- und Abreisedaten, kopiere die Adresse erneut und versuche es damit. Möglich ist auch, dass das Zimmer für diesen Zeitraum ausgebucht ist oder anders heißt als eingegeben.',
     fx_unavailable: 'Die aktuellen Wechselkurse konnten gerade nicht geladen werden – für einen korrekten Vergleich bitte in ein paar Minuten erneut versuchen.',
+    rate_limited: 'Du hast in der letzten Stunde sehr viele Zimmerlisten geladen. Jeder Abruf lädt eine echte Booking.com-Seite, deshalb ist die Anzahl begrenzt. Bitte später nochmal versuchen.',
   };
 
   // Zwischenstand während der Check noch läuft. Bewusst ohne Bewertung: Es wird noch kein Land
