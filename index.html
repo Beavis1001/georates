@@ -978,6 +978,23 @@
           + '<div class="form-msg" style="color:#5B6B75;">Am einfachsten: oben auf „Zimmer von Booking laden“ klicken und aus der Liste auswählen – dann stimmt der Name garantiert.</div>';
         return;
       }
+      // Zimmer steht auf der Seite, wir konnten dazu aber keine Preiszeile lesen. ACHTUNG:
+      // Das heißt NICHT "ausgebucht". Beim Ruby Lilly in München hatte genau so ein Zimmer
+      // zwei Tarife (539 und 583 Euro) und wurde trotzdem nicht erkannt – die Zeilen der Karte
+      // lagen im Seitentext nicht dort, wo unser Parser sie erwartet. Wer hier "ausgebucht"
+      // schreibt, nennt dem Nutzer wieder einen falschen Grund. Also sagen wir nur, was wir
+      // wissen, und zeigen den Weg, der erfahrungsgemäß funktioniert.
+      if (d && d.zimmerGefunden === true && d.ohneTarife === true) {
+        const lesbar = (d.zimmerAufSeite || []).filter(function (z) { return (z.boards && z.boards.length) || (z.cancels && z.cancels.length); });
+        panel.innerHTML = '<div class="form-msg" style="color:#C0392B;">Das Zimmer steht auf der Hotelseite, wir konnten dazu aber keinen Preis auslesen. Das kann bedeuten, dass es für deinen Zeitraum nicht buchbar ist – es kann auch an uns liegen.</div>'
+          + (lesbar.length
+            ? '<div class="form-msg" style="color:#5B6B75;">Bei diesen Zimmern desselben Hotels klappt es gerade:</div>'
+              + '<ul style="margin:6px 0 10px 18px;padding:0;">'
+              + lesbar.map(function (z) { return '<li>' + escHtml(z.name) + '</li>'; }).join('')
+              + '</ul>'
+            : '');
+        return;
+      }
       // Zimmer gefunden, aber die gewünschte Verpflegung gibt es für dieses Zimmer nicht.
       if (d && d.zimmerGefunden === true && d.verpflegungPasst === false) {
         const treffer = d.zimmerAufSeite.filter(function (z) { return z.boards && z.boards.length; });
@@ -990,7 +1007,12 @@
           + '<div class="form-msg" style="color:#5B6B75;">Stell die Verpflegung auf „Egal“ und versuch es nochmal.</div>';
         return;
       }
-      const text = ERROR_TEXTS[json && json.reason] || 'Der automatische Check war gerade nicht möglich. Bitte später erneut versuchen.';
+      let text = ERROR_TEXTS[json && json.reason] || 'Der automatische Check war gerade nicht möglich. Bitte später erneut versuchen.';
+      // Dem Nutzer keine fehlenden Reisedaten unterstellen, wenn sein Link welche enthält –
+      // das schickt ihn los, einen Fehler zu beheben, den er gar nicht gemacht hat.
+      if (json && json.reason === 'price_not_found' && /[?&](checkin|checkout)=|[?&]checkin_year=/i.test(hotelLink || '')) {
+        text = 'Für dieses Zimmer konnte in keinem geprüften Land ein Preis gefunden werden. Dein Link enthält Reisedaten, daran liegt es also nicht. Wahrscheinlich ist das Zimmer für diesen Zeitraum ausgebucht oder heißt auf der Hotelseite anders – am zuverlässigsten ist „Zimmer von Booking laden“ und dann aus der Liste auswählen.';
+      }
       panel.innerHTML = '<div class="form-msg" style="color:#C0392B;">' + text + '</div>';
       return;
     }
