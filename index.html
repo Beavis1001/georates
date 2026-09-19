@@ -750,10 +750,32 @@
   const VPN_AFFILIATE_URL = 'YOUR_VPN_AFFILIATE_URL';
   const REVOLUT_AFFILIATE_URL = 'YOUR_REVOLUT_AFFILIATE_URL';
 
+  // Die 15 festen Länder plus alle, die über den dynamischen Platz dazukommen können (das Land
+  // der Unterkunft). Fehlt ein Eintrag, zeigt die Tabelle das Kürzel – unschön, aber nicht falsch.
   const COUNTRY_NAMES = {
     DE: 'Deutschland', CO: 'Kolumbien', US: 'USA', TH: 'Thailand', IN: 'Indien', EG: 'Ägypten',
     AR: 'Argentinien', TR: 'Türkei', LK: 'Sri Lanka', VN: 'Vietnam', ID: 'Indonesien', PK: 'Pakistan',
     PE: 'Peru', MX: 'Mexiko', PH: 'Philippinen', JP: 'Japan',
+    FR: 'Frankreich', IT: 'Italien', ES: 'Spanien', PT: 'Portugal', NL: 'Niederlande',
+    BE: 'Belgien', AT: 'Österreich', IE: 'Irland', GR: 'Griechenland', FI: 'Finnland',
+    EE: 'Estland', LV: 'Lettland', LT: 'Litauen', SK: 'Slowakei', SI: 'Slowenien',
+    LU: 'Luxemburg', MT: 'Malta', CY: 'Zypern', HR: 'Kroatien', ME: 'Montenegro', XK: 'Kosovo',
+    GB: 'Großbritannien', CH: 'Schweiz', SE: 'Schweden', NO: 'Norwegen', DK: 'Dänemark',
+    PL: 'Polen', CZ: 'Tschechien', HU: 'Ungarn', RO: 'Rumänien', BG: 'Bulgarien',
+    RS: 'Serbien', UA: 'Ukraine', IS: 'Island', AL: 'Albanien', BA: 'Bosnien-Herzegowina',
+    MK: 'Nordmazedonien', MD: 'Moldau', GE: 'Georgien', AM: 'Armenien', AZ: 'Aserbaidschan',
+    CA: 'Kanada', BR: 'Brasilien', CL: 'Chile', UY: 'Uruguay', PY: 'Paraguay', BO: 'Bolivien',
+    EC: 'Ecuador', PA: 'Panama', CR: 'Costa Rica', GT: 'Guatemala', DO: 'Dominikanische Republik',
+    JM: 'Jamaika', TT: 'Trinidad und Tobago', BS: 'Bahamas', BB: 'Barbados',
+    CN: 'China', HK: 'Hongkong', TW: 'Taiwan', KR: 'Südkorea', SG: 'Singapur', MY: 'Malaysia',
+    BD: 'Bangladesch', NP: 'Nepal', KH: 'Kambodscha', LA: 'Laos', MN: 'Mongolei',
+    KZ: 'Kasachstan', UZ: 'Usbekistan', MV: 'Malediven', BN: 'Brunei',
+    AE: 'VAE', SA: 'Saudi-Arabien', QA: 'Katar', KW: 'Kuwait', BH: 'Bahrain', OM: 'Oman',
+    JO: 'Jordanien', IL: 'Israel',
+    MA: 'Marokko', TN: 'Tunesien', ZA: 'Südafrika', KE: 'Kenia', TZ: 'Tansania', UG: 'Uganda',
+    NG: 'Nigeria', GH: 'Ghana', ET: 'Äthiopien', MU: 'Mauritius', SC: 'Seychellen',
+    NA: 'Namibia', BW: 'Botswana', ZM: 'Sambia',
+    AU: 'Australien', NZ: 'Neuseeland', FJ: 'Fidschi', PG: 'Papua-Neuguinea',
   };
 
   function setupCancelToggle(cancelId, wrapId) {
