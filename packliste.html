@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
 <meta name="description" content="Packlisten-Generator für deine Reise: Erstelle in Sekunden eine passende Packliste – nach Reiseart, Dauer und Ziel. Kostenlos und ohne Anmeldung.">
 <link rel="canonical" href="https://georates.tech/packliste.html">
 <title data-i18n-title="pl_title">Packlisten-Generator – GeoRates</title>
@@ -13,7 +14,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="GeoRates">
-<script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+
+<link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="app.css">
 </head>
 <body>
@@ -227,5 +229,6 @@
     }
   };
 </script>
+<script src="pwa.js" defer></script>
 </body>
 </html>
