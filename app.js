@@ -234,11 +234,19 @@
         }
         // Backend kann Objekte {name,boards,cancels} ODER (Fallback) reine Strings liefern.
         loadedRooms = json.rooms.map(function (r) { return typeof r === 'string' ? { name: r, boards: [], cancels: [] } : r; });
-        el.roomSelect.innerHTML = '<option value="">' + escHtml(t('idx_room_choose')) + '</option>'
-          + loadedRooms.map(function (r) { return '<option>' + escHtml(r.name) + '</option>'; }).join('');
+        // Kein Platzhalter "- Zimmer waehlen -" mehr davor. An dieser Stelle steht fest, dass
+        // mindestens ein Zimmer geladen wurde (leere Antworten sind oben abgefangen), also wird
+        // das erste gleich ausgewaehlt. Der Platzhalter war ein zusaetzlicher Klick fuer alle -
+        // und eine Fehlerquelle, weil man ihn versehentlich wieder auswaehlen und damit ohne
+        // Zimmer abschicken konnte. Aendern geht weiterhin jederzeit ueber das Dropdown.
+        el.roomSelect.innerHTML = loadedRooms.map(function (r) { return '<option>' + escHtml(r.name) + '</option>'; }).join('');
         el.roomSelect.style.display = 'block';
         el.room.style.display = 'none';
         el.room.value = '';
+        // change ausloesen statt nur den Wert zu setzen: Daran haengt das Befuellen von
+        // Verpflegung und Storno mit den Optionen, die es fuer DIESES Zimmer wirklich gibt.
+        el.roomSelect.selectedIndex = 0;
+        el.roomSelect.dispatchEvent(new Event('change'));
         el.loadMsg.innerHTML = escHtml(t('idx_load_rooms_done', { n: loadedRooms.length })) + ' <a href="#" class="manual-room-link">' + escHtml(t('idx_load_rooms_manual')) + '</a>';
         el.loadMsg.style.color = 'var(--accent-dark)';
         var manual = el.loadMsg.querySelector('.manual-room-link');
