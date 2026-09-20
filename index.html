@@ -667,17 +667,18 @@
     <a href="ratgeber.html">Ratgeber: Hotelpreise je nach Land</a><br>
     <a href="impressum.html" data-i18n="common_impressum">Impressum</a> · <a href="datenschutz.html" data-i18n="common_datenschutz">Datenschutz</a> ·
     <a href="agb.html" data-i18n="common_agb">Nutzungsbedingungen</a>
-    <!-- Badges der Launch-Plattformen. Dort Bedingung für den kostenlosen Eintrag. -->
+    <!-- Verweise auf die Launch-Plattformen. Dort Bedingung für den kostenlosen Eintrag.
+         BEWUSST Textlinks statt eingebundener Bilder: Ein <img> von cdn.openhunts.com,
+         fazier.com und uneed.best hat bei JEDEM Seitenaufruf die IP-Adresse jedes Besuchers an
+         diese drei Server uebertragen - ohne Einwilligung, und im Widerspruch zu Abschnitt 6
+         der Datenschutzerklaerung ("keine Analyse- oder Trackingdienste"). Ein Textlink
+         uebertraegt erst dann etwas, wenn jemand ihn anklickt, und das ist seine Entscheidung.
+         Wer die Bild-Badges zurueck will: die drei Dateien einmal herunterladen, neben diese
+         Datei legen und lokal einbinden - dann bleibt der Seitenaufruf frei von Dritten. -->
     <div class="footer-badges">
-      <a href="https://openhunts.com/" target="_blank" rel="noopener">
-        <img src="https://cdn.openhunts.com/badges/club.webp" alt="OpenHunts Club Member" loading="lazy" height="40">
-      </a>
-      <a href="https://fazier.com/launches/georates.tech" target="_blank" rel="noopener">
-        <img src="https://fazier.com/api/v1/public/badges/launch_badges.svg" alt="Fazier badge" loading="lazy" height="40">
-      </a>
-      <a href="https://www.uneed.best/tool/georates" target="_blank" rel="noopener">
-        <img src="https://www.uneed.best/EMBED3.png" alt="Uneed Embed" loading="lazy" height="40">
-      </a>
+      <a href="https://openhunts.com/" target="_blank" rel="noopener">OpenHunts</a> ·
+      <a href="https://fazier.com/launches/georates.tech" target="_blank" rel="noopener">Fazier</a> ·
+      <a href="https://www.uneed.best/tool/georates" target="_blank" rel="noopener">Uneed</a>
     </div>
   </div>
 </footer>
@@ -958,7 +959,10 @@
     // alle bisherigen Fehlschläge an einem Link ohne Reisedaten.
     price_not_found: 'Für dieses Zimmer konnte in keinem geprüften Land ein Preis gefunden werden. Häufigste Ursache: Der Link enthält keine Reisedaten – dann zeigt Booking je nach Zufall gar keine Zimmerpreise. Öffne das Hotel auf Booking.com mit deinen An- und Abreisedaten, kopiere die Adresse erneut und versuche es damit. Möglich ist auch, dass das Zimmer für diesen Zeitraum ausgebucht ist oder anders heißt als eingegeben.',
     fx_unavailable: 'Die aktuellen Wechselkurse konnten gerade nicht geladen werden – für einen korrekten Vergleich bitte in ein paar Minuten erneut versuchen.',
-    rate_limited: 'Du hast in der letzten Stunde sehr viele Zimmerlisten geladen. Jeder Abruf lädt eine echte Booking.com-Seite, deshalb ist die Anzahl begrenzt. Bitte später nochmal versuchen.',
+    rate_limited: 'Du hast in der letzten Stunde sehr viele Abfragen gestartet. Jede lädt echte Booking.com-Seiten, deshalb ist die Anzahl pro Stunde begrenzt. Bitte später nochmal versuchen.',
+    // Ehrlich benennen, woran es liegt. „Technischer Fehler" wäre bequemer, aber gelogen: Die
+    // Seite ist kostenlos und der Datenverkehr kostet echtes Geld, deshalb gibt es ein Tageslimit.
+    daily_budget_reached: 'Für heute ist das Abfrage-Kontingent aufgebraucht. Jeder Ländervergleich lädt rund 30 MB über bezahlte Verbindungen – damit das Projekt kostenlos bleiben kann, gibt es eine Tagesgrenze. Morgen geht es wieder.',
   };
 
   // Zwischenstand während der Check noch läuft. Bewusst ohne Bewertung: Es wird noch kein Land
