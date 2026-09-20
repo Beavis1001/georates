@@ -1,8 +1,9 @@
 /* GeoRates Service Worker – App-Shell-Cache für Offline-Nutzung & Installierbarkeit */
-const CACHE = 'georates-v6';
+const CACHE = 'georates-v7';
 const ASSETS = [
   '/', '/index.html', '/budget.html', '/gruppenkosten.html', '/packliste.html', '/ratgeber.html',
-  '/app.css', '/legal.css', '/i18n.js',
+  '/tokens.css', '/app.css', '/legal.css', '/i18n.js', '/app.js', '/pwa.js',
+  '/i18n/en.json', '/i18n/es.json', '/i18n/fr.json', '/i18n/it.json', '/i18n/nl.json',
   '/icon-192.png', '/icon-512.png', '/favicon-32.png', '/apple-touch-icon.png', '/nav-icon.png'
 ];
 

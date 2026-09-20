@@ -1,0 +1,19 @@
+/* GeoRates – Farb- und Schrift-Tokens. Einzige Quelle; vorher standen dieselben Werte dreifach
+   in index.html, app.css und legal.css und liefen bei jeder Aenderung auseinander. */
+:root {
+  --navy: #1F4E78;
+  --navy-dark: #143349;
+  --accent: #2E9E6C;
+  --accent-dark: #227a54;
+  --accent-soft: #E5F5EC;
+  --bg: #F7F9FB;
+  --text: #1E2A32;
+  --muted: #5B6B75;
+  --card: #FFFFFF;
+  --border: #E3E9ED;
+  --danger: #C0392B;
+  --warn-bg: #FFF6E0;
+  --warn-border: #E9C46A;
+  --warn-text: #6B4E00;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}

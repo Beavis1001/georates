@@ -1,0 +1,15 @@
+# Laeuft bei jedem Push und Pull Request: i18n-Vollstaendigkeit, fremde Hosts, Inline-Skripte,
+# Leck-Check. Rot heisst: nicht mergen, bevor das geklaert ist.
+name: Check
+on:
+  push:
+  pull_request:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node test/check.js

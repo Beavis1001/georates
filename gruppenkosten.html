@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
 <meta name="description" content="Reisekosten-Tracker für Gruppen: Wer hat was bezahlt? Teile Ausgaben fair auf und sieh sofort, wer wem wie viel schuldet – kostenlos.">
 <link rel="canonical" href="https://georates.tech/gruppenkosten.html">
 <title data-i18n-title="gk_title">Reisekosten-Tracker für Gruppen – GeoRates</title>
@@ -13,7 +14,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="GeoRates">
-<script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+
+<link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="app.css">
 </head>
 <body>
@@ -102,6 +104,8 @@
 <script src="i18n.js"></script>
 <script>
   const STORAGE_KEY = 'georates_gruppenkosten_v1';
+  // Namen und Beschreibungen sind Nutzereingaben und landen in innerHTML - deshalb immer escapen.
+  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   let state = loadState();
 
   function loadState() {
@@ -166,7 +170,7 @@
     state.members.forEach(name => {
       const chip = document.createElement('span');
       chip.className = 'chip';
-      chip.innerHTML = `${name} <button type="button" aria-label="${t('gk_aria_remove')}">×</button>`;
+      chip.innerHTML = `${esc(name)} <button type="button" aria-label="${t('gk_aria_remove')}">×</button>`;
       chip.querySelector('button').addEventListener('click', () => {
         state.members = state.members.filter(m => m !== name);
         state.expenses = state.expenses.filter(e => e.paidBy !== name);
@@ -179,7 +183,7 @@
 
   function renderPaidBySelect() {
     const select = document.getElementById('exp-paidby');
-    select.innerHTML = state.members.map(m => `<option value="${m}">${m}</option>`).join('');
+    select.innerHTML = state.members.map(m => `<option value="${esc(m)}">${esc(m)}</option>`).join('');
   }
 
   function renderSplitCheckboxes() {
@@ -271,5 +275,6 @@
   window.onLanguageChange = renderAll;
   renderAll();
 </script>
+<script src="pwa.js" defer></script>
 </body>
 </html>

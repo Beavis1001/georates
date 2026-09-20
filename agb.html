@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
 <title data-i18n-title="agb_title">Nutzungsbedingungen – GeoRates</title>
 <link rel="icon" type="image/png" href="favicon-32.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="legal.css">
 </head>
 <body>
@@ -105,5 +107,6 @@
   <a href="datenschutz.html" data-i18n="common_datenschutz">Datenschutz</a>
 </footer>
 <script src="i18n.js"></script>
+<script src="pwa.js" defer></script>
 </body>
 </html>
