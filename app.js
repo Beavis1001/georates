@@ -172,6 +172,11 @@
     el.roomSelect.addEventListener('change', function () {
       if (!el.roomSelect.value) return;
       el.room.value = el.roomSelect.value;
+      // Eine alte Fehlermeldung "Bitte ein Zimmer auswaehlen" steht in einem ANDEREN Feld als
+      // die Meldungen des Zimmer-Laders (request-msg gegen load-rooms-msg) und blieb deshalb
+      // stehen, bis der Nutzer erneut absendet - auch wenn laengst ein Zimmer gewaehlt war.
+      // Sobald eines gewaehlt ist, ist der Grund weg, also auch die Meldung.
+      setMsg(el.msg, '');
       var room = loadedRooms.find(function (r) { return r.name === el.roomSelect.value; }) || {};
       if (room.boards && room.boards.length) {
         el.board.innerHTML = room.boards.map(function (v) { return '<option value="' + escHtml(v) + '">' + escHtml(boardLabel(v)) + '</option>'; }).join('')
@@ -199,6 +204,9 @@
     };
 
     el.loadBtn.addEventListener('click', async function () {
+      // Wer neu laedt, faengt neu an: Ein Fehler aus einem frueheren Absendeversuch gehoert
+      // nicht mehr auf den Schirm, egal wie dieser Abruf ausgeht.
+      setMsg(el.msg, '');
       var link = el.link.value.trim();
       if (!link) { setMsg(el.loadMsg, t('idx_load_rooms_need_link'), 'error'); return; }
       if (!PRICE_API_READY) { setMsg(el.loadMsg, t('idx_load_rooms_inactive')); return; }
