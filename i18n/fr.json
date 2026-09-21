@@ -383,5 +383,7 @@
  "idx_pwa_close": "Fermer",
  "idx_cancel_partial": "Partiellement remboursable",
  "common_stand_sep2026": "Mise à jour : septembre 2026",
- "err_daily_budget_reached": "Le quota de vérifications du jour est épuisé : chacune nous coûte du trafic réel. Ça reprend demain."
+ "err_daily_budget_reached": "Le quota de vérifications du jour est épuisé : chacune nous coûte du trafic réel. Ça reprend demain.",
+ "idx_step2_hint": "Chambre, formule et annulation apparaissent après le chargement, avec les options réellement proposées par cet hôtel.",
+ "idx_manual_entry": "Ou saisir le nom de la chambre vous-même"
 }

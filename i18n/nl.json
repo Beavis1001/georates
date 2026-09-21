@@ -383,5 +383,7 @@
  "idx_pwa_close": "Sluiten",
  "idx_cancel_partial": "Gedeeltelijk terugbetaalbaar",
  "common_stand_sep2026": "Stand: september 2026",
- "err_daily_budget_reached": "Het dagelijkse quotum aan checks is op – elke check kost ons echt dataverkeer. Morgen gaat het verder."
+ "err_daily_budget_reached": "Het dagelijkse quotum aan checks is op – elke check kost ons echt dataverkeer. Morgen gaat het verder.",
+ "idx_step2_hint": "Kamer, verzorging en annulering verschijnen na het laden – met de opties die dit hotel echt aanbiedt.",
+ "idx_manual_entry": "Of typ de kamernaam zelf"
 }
