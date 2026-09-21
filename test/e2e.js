@@ -145,11 +145,14 @@ async function streuung(browser, base) {
   const co = { country: 'CO', priceEuro: 890, priceLocal: 4000000, currency: 'COP', deals: ['online_payment'] };
   const coUpd = Object.assign({}, co, { priceEuro: 1250, samples: [890, 1250], spreadPct: 40.4 });
   const jp = { country: 'JP', priceEuro: 1150, priceLocal: 190000, currency: 'JPY', deals: ['mobile'] };
+  // Smartphone-Zeile (API-Experiment MOBILE_CHECK): 1.080 gegen 1.200 = 10 %, schlaegt Japan (1.150).
+  const mobil = { country: 'DE', device: 'Android/Smartphone', mobile: true, priceEuro: 1080, priceLocal: 1080, currency: 'EUR', deals: ['mobile'] };
+  const mobilBewertet = Object.assign({}, mobil, { samples: [1080, 1080], spreadPct: 0, savingsPct: 10, relevant: true, implausible: false, beatsBestCountry: true, confirmation: { done: true, savingsBeforePct: 10, savingsAfterPct: 10, stable: true } });
   const summary = { type: 'summary', success: true, results: [de, coUpd, jp], best: jp, savingsPct: 9, relevantSaving: true, relevantThresholdPct: 3, convertedCurrency: true, recommendVpnCountry: null, baselineCountry: 'DE',
-    baselineUsedEuro: 1200, userPriceEuro: 1200, userPriceDiffers: true, baselineSamples: [1292.06, 1264], baselineSpreadPct: 2.2,
+    baselineUsedEuro: 1200, userPriceEuro: 1200, userPriceDiffers: true, baselineSamples: [1292.06, 1264], baselineSpreadPct: 2.2, mobile: mobilBewertet,
     confirmation: { done: true, country: 'CO', savingsBeforePct: 29.6, savingsAfterPct: 9, stable: false }, partial: false, resultId: 'abcDEF123456', countries: ['DE', 'CO', 'JP'] };
   const { page, ctx, errors, calls } = await neueSeite(browser, {
-    preisAntwort: () => ndjson([{ type: 'meta', baselineCountry: 'DE', totalCountries: 3 }].concat([de, co, jp].map((x) => ({ type: 'country', result: x }))).concat([{ type: 'update', result: coUpd }, summary])),
+    preisAntwort: () => ndjson([{ type: 'meta', baselineCountry: 'DE', totalCountries: 3 }, { type: 'mobile', result: mobil }].concat([de, co, jp].map((x) => ({ type: 'country', result: x }))).concat([{ type: 'update', result: coUpd }, summary])),
   });
   await page.goto(base, { waitUntil: 'load' }); await page.waitForTimeout(300);
   await page.fill('#link', LINK); await page.click('#manual-entry'); await page.fill('#room', 'Doppelzimmer'); await page.fill('#user-price', '1.200,00');
@@ -157,7 +160,11 @@ async function streuung(browser, base) {
   await page.waitForSelector('#result-panel .result-partial-note', { timeout: 8000 }); await page.waitForTimeout(200);
   ok('userPrice wird mitgeschickt', calls[0].userPrice === '1.200,00');
   const txt = await page.textContent('#result-panel');
-  ok('update ersetzt Zeile statt anzuhaengen (3 Zeilen)', (await page.$$eval('#result-panel tbody tr', (x) => x.length)) === 3);
+  ok('update ersetzt Zeile statt anzuhaengen (3 Laender + 1 Smartphone-Zeile)', (await page.$$eval('#result-panel tbody tr', (x) => x.length)) === 4);
+  ok('Smartphone-Zeile direkt unter Deutschland mit Plakette', (await page.$$eval('#result-panel tbody tr', (x) => x.map((r) => r.className + ':' + r.firstChild.textContent.slice(0, 11)))).slice(0, 2).join('|') === ':Deutschland|mobile-row:Deutschland' && (await page.textContent('.mobile-row .device-tag')) === 'Smartphone');
+  ok('Smartphone schlaegt alle Laender (Text, 10 %, kein VPN)', /schlägt alle Länder/.test(txt) && txt.includes('10 %') && /ohne VPN/.test(txt));
+  ok('Smartphone: Weg zum Preis genannt', txt.includes('Booking-App'));
+  ok('Smartphone-Preis bestaetigt', /Smartphone-Preis bestätigt/.test(txt));
   ok('Deal-Tag Online-Zahlung', txt.includes('Rabatt für Online-Zahlung'));
   ok('Deal-Tag Mobile Rate', txt.includes('Mobile Rate'));
   ok('Zwei Ausgangspreise mit lokalisiertem Prozent', /zwei Abrufen verschiedene Preise/.test(txt) && txt.includes('2,2 %'));
