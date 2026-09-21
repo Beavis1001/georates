@@ -400,5 +400,7 @@
  "idx_res_userprice": "Il nostro prezzo per il tuo paese: {ours}. Tu vedi {yours}. Confrontiamo con il più basso: {used}.",
  "idx_res_confirmed": "Ritrovamento confermato: {country} era ancora più economico a una seconda consultazione ({before} % → {after} %).",
  "idx_res_unstable": "Differenza non stabile: a una seconda consultazione {country} non era più così economico ({before} % → {after} %). Probabilmente una lotteria di sessione, non un prezzo paese.",
- "idx_res_spread_note": "Booking assegna i prezzi per sessione (offerte, metodo di pagamento, dispositivo). Per questo consultiamo il tuo paese due volte, confermiamo i ritrovamenti una volta e mostriamo le etichette offerta riconosciute."
+ "idx_res_spread_note": "Booking assegna i prezzi per sessione (offerte, metodo di pagamento, dispositivo). Per questo consultiamo il tuo paese due volte, confermiamo i ritrovamenti una volta e mostriamo le etichette offerta riconosciute.",
+ "idx_step2_hint": "Camera, trattamento e cancellazione compaiono dopo il caricamento, con le opzioni che questo hotel offre davvero.",
+ "idx_manual_entry": "Oppure inserisci tu il nome della camera"
 }

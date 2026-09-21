@@ -326,6 +326,8 @@
     "idx_res_confirmed": "Fund bestätigt: {country} lag bei einem zweiten Abruf weiterhin günstiger ({before} % → {after} %).",
     "idx_res_unstable": "Unterschied nicht stabil: Bei einem zweiten Abruf war {country} nicht mehr so günstig ({before} % → {after} %). Das war vermutlich ein Sitzungs-Los, kein Landespreis.",
     "idx_res_spread_note": "Booking teilt Preise pro Sitzung zu (Deals, Zahlungsart, Gerät). Deshalb prüfen wir das Ausgangsland doppelt, bestätigen Funde einmal und zeigen erkannte Deal-Plaketten an.",
+      "idx_step2_hint": "Zimmer, Verpflegung und Storno erscheinen nach dem Laden – mit den Optionen, die es für dieses Hotel wirklich gibt.",
+    "idx_manual_entry": "Oder Zimmernamen selbst eintragen",
     "idx_load_rooms_btn": "Zimmer von Booking laden",
       "idx_load_rooms_loading": "Zimmer werden geladen …",
       "idx_load_rooms_need_link": "Bitte zuerst den Booking.com-Link oben einfügen.",
@@ -508,9 +510,9 @@
     style.id = "i18n-style";
     style.textContent =
       "#lang-switch{border:1px solid var(--border,#E3E9ED);background:#fff;" +
-      "color:var(--navy-dark,#143349);font-size:12.5px;font-weight:600;" +
+      "color:var(--navy-dark,#011d3a);font-size:12.5px;font-weight:600;" +
       "padding:5px 8px;border-radius:6px;cursor:pointer;line-height:1.2;}" +
-      "#lang-switch:focus{outline:2px solid var(--accent,#2E9E6C);outline-offset:1px;}" +
+      "#lang-switch:focus{outline:2px solid var(--accent,#028659);outline-offset:1px;}" +
       "#i18n-nav-right{display:flex;align-items:center;gap:16px;}";
     document.head.appendChild(style);
   }

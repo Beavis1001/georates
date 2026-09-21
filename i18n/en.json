@@ -400,5 +400,7 @@
  "idx_res_userprice": "Our price for your home country: {ours}. You see {yours}. We compare against the lower: {used}.",
  "idx_res_confirmed": "Find confirmed: {country} was still cheaper on a second fetch ({before} % → {after} %).",
  "idx_res_unstable": "Difference not stable: on a second fetch {country} was no longer that cheap ({before} % → {after} %). Probably a session lottery, not a country price.",
- "idx_res_spread_note": "Booking assigns prices per session (deals, payment method, device). That is why we fetch the home country twice, confirm finds once and show detected deal badges."
+ "idx_res_spread_note": "Booking assigns prices per session (deals, payment method, device). That is why we fetch the home country twice, confirm finds once and show detected deal badges.",
+ "idx_step2_hint": "Room, board and cancellation appear after loading – with the options this hotel actually offers.",
+ "idx_manual_entry": "Or type the room name yourself"
 }

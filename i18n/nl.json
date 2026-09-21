@@ -400,5 +400,7 @@
  "idx_res_userprice": "Onze prijs voor jouw land: {ours}. Jij ziet {yours}. We vergelijken met de laagste: {used}.",
  "idx_res_confirmed": "Vondst bevestigd: {country} was bij een tweede opvraging nog steeds goedkoper ({before} % → {after} %).",
  "idx_res_unstable": "Verschil niet stabiel: bij een tweede opvraging was {country} niet meer zo goedkoop ({before} % → {after} %). Waarschijnlijk een sessie-loterij, geen landprijs.",
- "idx_res_spread_note": "Booking wijst prijzen per sessie toe (deals, betaalwijze, apparaat). Daarom halen we je land twee keer op, bevestigen we vondsten één keer en tonen we herkende deal-labels."
+ "idx_res_spread_note": "Booking wijst prijzen per sessie toe (deals, betaalwijze, apparaat). Daarom halen we je land twee keer op, bevestigen we vondsten één keer en tonen we herkende deal-labels.",
+ "idx_step2_hint": "Kamer, verzorging en annulering verschijnen na het laden – met de opties die dit hotel echt aanbiedt.",
+ "idx_manual_entry": "Of typ de kamernaam zelf"
 }
