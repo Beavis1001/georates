@@ -2,9 +2,9 @@
    in index.html, app.css und legal.css und liefen bei jeder Aenderung auseinander. */
 :root {
   --navy: #1F4E78;
-  --navy-dark: #143349;
-  --accent: #2E9E6C;
-  --accent-dark: #227a54;
+  --navy-dark: #011d3a; /* Marine des Logos */
+  --accent: #028659;    /* Gruen des Logos */
+  --accent-dark: #026a47;
   --accent-soft: #E5F5EC;
   --bg: #F7F9FB;
   --text: #1E2A32;
