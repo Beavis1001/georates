@@ -383,5 +383,7 @@
  "idx_pwa_close": "Chiudi",
  "idx_cancel_partial": "Parzialmente rimborsabile",
  "common_stand_sep2026": "Aggiornato: settembre 2026",
- "err_daily_budget_reached": "La quota di controlli di oggi è esaurita: ognuno ci costa traffico reale. Si riprende domani."
+ "err_daily_budget_reached": "La quota di controlli di oggi è esaurita: ognuno ci costa traffico reale. Si riprende domani.",
+ "idx_step2_hint": "Camera, trattamento e cancellazione compaiono dopo il caricamento, con le opzioni che questo hotel offre davvero.",
+ "idx_manual_entry": "Oppure inserisci tu il nome della camera"
 }

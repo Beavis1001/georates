@@ -383,5 +383,7 @@
  "idx_pwa_close": "Close",
  "idx_cancel_partial": "Partially refundable",
  "common_stand_sep2026": "Last updated: September 2026",
- "err_daily_budget_reached": "Today's quota of checks is used up – every check costs us real data traffic. It continues tomorrow."
+ "err_daily_budget_reached": "Today's quota of checks is used up – every check costs us real data traffic. It continues tomorrow.",
+ "idx_step2_hint": "Room, board and cancellation appear after loading – with the options this hotel actually offers.",
+ "idx_manual_entry": "Or type the room name yourself"
 }
