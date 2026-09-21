@@ -65,7 +65,10 @@ Die API laesst sich lokal nicht mitstarten. Zum Testen von `app.js` die Aufrufe 
   Schritt 2 (`#step2`, Zimmer, Verpflegung, Storno, Nutzerpreis, Laenderauswahl, Absenden) bleibt
   `hidden`, bis Zimmer geladen sind oder "Oder Zimmernamen selbst eintragen" (`#manual-entry`)
   geklickt wurde. Der Ausweg zur Handeingabe muss auch nach einem fehlgeschlagenen Abruf sichtbar
-  bleiben. Turnstile steht VOR dem Lade-Knopf, weil der Zimmer-Abruf den Token braucht.
+  bleiben. Turnstile steht VOR dem Lade-Knopf, weil der Zimmer-Abruf den Token braucht. Enter im
+  Link-Feld loest "Zimmer laden" aus, nicht das Absenden: Der Absende-Knopf in Schritt 2 ist auch
+  versteckt der Standard-Knopf des Formulars, und Enter fuehrte zu "Bitte ein Zimmer auswaehlen",
+  bevor es Zimmer gab. Solange Schritt 2 zu ist, leitet der Submit-Handler auf den Lade-Knopf um.
 - **Preisstreuung offen zeigen** (seit 21.09.2026): Deal-Tags je Land (`deals`), beide Ausgangspreise
   bei Streuung (`samples`, `baselineSamples`), "Fund bestaetigt" / rot "nicht stabil"
   (`confirmation`), optionales Feld "Preis, den du gerade siehst" (`userPrice`). Stream-Typ
