@@ -310,6 +310,12 @@
   .msg-ok { color: var(--accent-dark); }
   .msg-muted { color: var(--muted); }
   .result-table th[scope="row"] { font-weight: 600; }
+  .deal-tags { display: block; margin-top: 3px; }
+  .deal-tag {
+    display: inline-block; font-size: 11px; font-weight: 700; line-height: 1.2; padding: 2px 7px; margin: 0 4px 2px 0;
+    border-radius: 999px; background: var(--warn-bg); color: var(--warn-text); border: 1px solid var(--warn-border);
+  }
+  .row-note { display: block; font-size: 11.5px; font-weight: 500; color: var(--muted); margin-top: 2px; }
   .result-actions { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin-bottom: 14px; }
   .result-link { color: var(--accent-dark); font-weight: 700; }
   .result-share {
@@ -467,6 +473,11 @@
             <option value="unsicher" selected data-i18n="idx_cancel_unsure">Weiß ich nicht</option>
           </select>
           <p class="hint" style="margin-top:6px;" data-i18n="idx_form_hint_cancel">Kostenlos stornierbare Tarife sind oft teurer – so vergleichen wir in jedem Land den passenden Tarif.</p>
+        </div>
+        <div class="full">
+          <label for="user-price" data-i18n="idx_form_label_userprice">Preis, den du gerade siehst (optional, €)</label>
+          <input type="text" id="user-price" name="user-price" inputmode="decimal" placeholder="z. B. 1.240,00" data-i18n-placeholder="idx_form_placeholder_userprice" maxlength="12" autocomplete="off">
+          <p class="hint" data-i18n="idx_form_hint_userprice">Booking zeigt je Sitzung leicht unterschiedliche Preise. Trag ein, was du in deinem Browser siehst – wir rechnen gegen den niedrigeren von beiden.</p>
         </div>
         <div class="full" id="countries">
           <button type="button" class="countries-toggle" aria-expanded="false" aria-controls="countries-panel" data-i18n="idx_countries_toggle">Nur bestimmte Länder prüfen (z. B. die, in denen dein VPN Server hat)</button>

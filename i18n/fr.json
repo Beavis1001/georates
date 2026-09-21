@@ -383,5 +383,22 @@
  "idx_pwa_close": "Fermer",
  "idx_cancel_partial": "Partiellement remboursable",
  "common_stand_sep2026": "Mise à jour : septembre 2026",
- "err_daily_budget_reached": "Le quota de vérifications du jour est épuisé : chacune nous coûte du trafic réel. Ça reprend demain."
+ "err_daily_budget_reached": "Le quota de vérifications du jour est épuisé : chacune nous coûte du trafic réel. Ça reprend demain.",
+ "idx_form_label_userprice": "Prix que vous voyez actuellement (facultatif, €)",
+ "idx_form_placeholder_userprice": "p. ex. 1 240,00",
+ "idx_form_hint_userprice": "Booking affiche des prix légèrement différents selon la session. Saisissez ce que vous voyez dans votre navigateur : nous comparons au plus bas des deux.",
+ "err_invalid_price": "Le prix saisi n'est pas un nombre ; uniquement le montant, p. ex. 1240,00.",
+ "idx_deal_mobile": "Tarif mobile",
+ "idx_deal_online_payment": "Remise paiement en ligne",
+ "idx_deal_genius": "Genius",
+ "idx_deal_early": "Réservation anticipée",
+ "idx_deal_last_minute": "Offre dernière minute",
+ "idx_deal_secret": "Offre secrète",
+ "idx_deal_deal": "Offre",
+ "idx_res_samples": "deux consultations : {prices}",
+ "idx_res_baseline_two": "Booking a affiché en {baseline} des prix différents sur deux consultations ({prices}, écart de {pct} %). Nous comparons au plus bas.",
+ "idx_res_userprice": "Notre prix pour votre pays : {ours}. Vous voyez {yours}. Nous comparons au plus bas : {used}.",
+ "idx_res_confirmed": "Trouvaille confirmée : {country} restait moins cher lors d'une seconde consultation ({before} % → {after} %).",
+ "idx_res_unstable": "Écart non stable : lors d'une seconde consultation, {country} n'était plus aussi bon marché ({before} % → {after} %). Probablement une loterie de session, pas un prix pays.",
+ "idx_res_spread_note": "Booking attribue les prix par session (offres, moyen de paiement, appareil). C'est pourquoi nous consultons votre pays deux fois, confirmons les trouvailles une fois et affichons les badges d'offre détectés."
 }

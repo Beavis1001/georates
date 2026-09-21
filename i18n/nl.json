@@ -383,5 +383,22 @@
  "idx_pwa_close": "Sluiten",
  "idx_cancel_partial": "Gedeeltelijk terugbetaalbaar",
  "common_stand_sep2026": "Stand: september 2026",
- "err_daily_budget_reached": "Het dagelijkse quotum aan checks is op – elke check kost ons echt dataverkeer. Morgen gaat het verder."
+ "err_daily_budget_reached": "Het dagelijkse quotum aan checks is op – elke check kost ons echt dataverkeer. Morgen gaat het verder.",
+ "idx_form_label_userprice": "Prijs die je nu ziet (optioneel, €)",
+ "idx_form_placeholder_userprice": "bijv. 1.240,00",
+ "idx_form_hint_userprice": "Booking toont per sessie licht verschillende prijzen. Vul in wat je in je browser ziet – we vergelijken met de laagste van de twee.",
+ "err_invalid_price": "De ingevulde prijs is geen getal – alleen het bedrag, bijv. 1.240,00.",
+ "idx_deal_mobile": "Mobiel tarief",
+ "idx_deal_online_payment": "Korting online betaling",
+ "idx_deal_genius": "Genius",
+ "idx_deal_early": "Vroegboek",
+ "idx_deal_last_minute": "Last-minute deal",
+ "idx_deal_secret": "Geheime deal",
+ "idx_deal_deal": "Deal",
+ "idx_res_samples": "twee opvragingen: {prices}",
+ "idx_res_baseline_two": "Booking toonde in {baseline} bij twee opvragingen verschillende prijzen ({prices}, {pct} % uit elkaar). We vergelijken met de laagste.",
+ "idx_res_userprice": "Onze prijs voor jouw land: {ours}. Jij ziet {yours}. We vergelijken met de laagste: {used}.",
+ "idx_res_confirmed": "Vondst bevestigd: {country} was bij een tweede opvraging nog steeds goedkoper ({before} % → {after} %).",
+ "idx_res_unstable": "Verschil niet stabiel: bij een tweede opvraging was {country} niet meer zo goedkoop ({before} % → {after} %). Waarschijnlijk een sessie-loterij, geen landprijs.",
+ "idx_res_spread_note": "Booking wijst prijzen per sessie toe (deals, betaalwijze, apparaat). Daarom halen we je land twee keer op, bevestigen we vondsten één keer en tonen we herkende deal-labels."
 }
