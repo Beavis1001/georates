@@ -217,6 +217,16 @@
     };
     if (el.manualEntry) el.manualEntry.addEventListener('click', function (e) { e.preventDefault(); zurManuellenEingabe(); });
 
+    // Enter im Link-Feld laedt die Zimmer. Ohne das schickte der Browser das Formular ab
+    // (implizites Absenden ueber den versteckten Absende-Knopf in Schritt 2), und der Nutzer
+    // bekam am 21.09.2026 "Bitte ein Zimmer auswaehlen", obwohl noch gar keine Zimmer da waren.
+    // Link einfuegen, Enter, Zimmer sehen - das ist der erwartete Ablauf.
+    el.link.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' || e.isComposing) return;
+      e.preventDefault();
+      if (!el.loadBtn.disabled) el.loadBtn.click();
+    });
+
     el.loadBtn.addEventListener('click', async function () {
       // Wer neu laedt, faengt neu an: Ein Fehler aus einem frueheren Absendeversuch gehoert
       // nicht mehr auf den Schirm, egal wie dieser Abruf ausgeht.
@@ -436,6 +446,9 @@
         userPrice: el.userPrice ? el.userPrice.value.trim() : '',
       };
       if (!data.link) { el.link.focus(); return; }
+      // Schritt 2 ist noch zu, also gibt es noch nichts zu pruefen: Ein Absenden an dieser Stelle
+      // (Enter in einem Feld von Schritt 1) meint "Zimmer laden", nicht "Preis pruefen".
+      if (el.step2 && el.step2.hidden) { el.loadBtn.click(); return; }
       // Frueher brach der Code hier stumm ab, wenn kein Zimmer gewaehlt war - besonders nach
       // "Zimmer laden" ohne Auswahl sah es aus, als sei der Knopf kaputt.
       if (!data.room) {
