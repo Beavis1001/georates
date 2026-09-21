@@ -15,7 +15,8 @@ Ruft die Preis-API im Repo `georates-price-api` (Vercel) auf. Betreiber: Christo
 
 | Datei | Aufgabe |
 |---|---|
-| `index.html` | Startseite: Formular, Ergebnis, Best-of, Ein-Klick-Abschnitt. Nur Markup und CSS, KEIN Inline-JS |
+| `index.html` | Startseite: Formular in zwei Schritten, Ergebnis, Best-of, Ein-Klick-Abschnitt. Nur Markup und CSS, KEIN Inline-JS |
+| `logo.png`, `logo@2x.png`, `favicon*.png`, `favicon.ico`, `icon-*.png`, `apple-touch-icon.png` | Bildmarke und Wortmarke (seit 21.09.2026). Icons sind aus der hochaufgeloesten Bildmarke eng beschnitten gerendert; Favicon randlos, maskable und Apple mit weissem Grund und Rand |
 | `app.js` | Gesamte Logik der Startseite: Zimmer laden, Link-Pruefung, Preis-Check mit Stream, Ergebnis, Laenderauswahl, Permalink, Best-of, Share-Target/Bookmarklet |
 | `pwa.js` | Service-Worker-Registrierung und Installations-Hinweis, auf allen Seiten |
 | `i18n.js` | Laufzeit + deutsches Woerterbuch inline; `i18n/<code>.json` fuer en, es, fr, it, nl werden nachgeladen |
@@ -60,6 +61,16 @@ Die API laesst sich lokal nicht mitstarten. Zum Testen von `app.js` die Aufrufe 
 
 - **Ein Formular, nicht zwei.** Die Kopie am Seitenende wurde durch einen Aufruf ersetzt; Nav-CTA und
   Aufruf zeigen auf `#suche`.
+- **Formular in zwei Schritten** (seit 21.09.2026): Schritt 1 = Link, Turnstile, "Zimmer laden".
+  Schritt 2 (`#step2`, Zimmer, Verpflegung, Storno, Nutzerpreis, Laenderauswahl, Absenden) bleibt
+  `hidden`, bis Zimmer geladen sind oder "Oder Zimmernamen selbst eintragen" (`#manual-entry`)
+  geklickt wurde. Der Ausweg zur Handeingabe muss auch nach einem fehlgeschlagenen Abruf sichtbar
+  bleiben. Turnstile steht VOR dem Lade-Knopf, weil der Zimmer-Abruf den Token braucht.
+- **Preisstreuung offen zeigen** (seit 21.09.2026): Deal-Tags je Land (`deals`), beide Ausgangspreise
+  bei Streuung (`samples`, `baselineSamples`), "Fund bestaetigt" / rot "nicht stabil"
+  (`confirmation`), optionales Feld "Preis, den du gerade siehst" (`userPrice`). Stream-Typ
+  `update` ersetzt die Zeile eines Landes in der Live-Tabelle, statt sie anzuhaengen. Prozentwerte
+  ueber `pctText()` lokalisieren (2,2 statt 2.2).
 - **Verpflegung steht auf "Egal".** "Fruehstueck" als Standard erzeugte "kein Preis"-Faelle. Nach
   "Zimmer laden" ist das erste Zimmer sofort ausgewaehlt und Verpflegung/Storno werden mit den
   Optionen befuellt, die es fuer dieses Zimmer wirklich gibt; dafuer muss ein `change`-Event
@@ -74,7 +85,10 @@ Die API laesst sich lokal nicht mitstarten. Zum Testen von `app.js` die Aufrufe 
   `app.js` ist nur der Rueckfall.
 - **Footer-Links zu den Launch-Plattformen sind Textlinks**, keine Bilder. Bedingung fuer den
   kostenlosen Eintrag dort, aber ohne Requests an fremde Server.
-- **Mobil:** unter 760 px Hamburger-Menue, Beispielkarte hinter der Ueberschrift, SVG-Anleitung
+- **Farb-Tokens folgen dem Logo** (`tokens.css`: `--navy-dark #011d3a`, `--accent #028659`); dieselben
+  Werte stehen als `theme-color` in allen Seiten und im Manifest. Keine Hex-Farben in HTML/JS
+  hartkodieren, immer Tokens.
+- **Mobil:** unter 760 px Hamburger-Menue, Wortmarke 28 px, Beispielkarte hinter der Ueberschrift, SVG-Anleitung
   ausgeblendet (Schrift skalierte auf ~7 px). Kein horizontales Scrollen bei 390 px.
 
 ## Rechtstexte
