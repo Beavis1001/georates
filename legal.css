@@ -15,6 +15,7 @@ header.nav {
 .nav-inner { max-width: 780px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
 .logo { font-weight: 800; font-size: 19px; color: var(--navy-dark); text-decoration: none; }
 .logo span { color: var(--accent); }
+.logo img { display: block; height: 34px; width: auto; }
 .back-link { font-size: 14px; font-weight: 600; color: var(--navy); text-decoration: none; }
 main { max-width: 780px; margin: 0 auto; padding: 56px 24px 80px; }
 h1 { font-size: 30px; font-weight: 800; color: var(--navy-dark); margin-bottom: 6px; letter-spacing: -0.5px; }

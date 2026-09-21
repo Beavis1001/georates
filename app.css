@@ -21,6 +21,7 @@ header.nav {
 }
 .logo { font-weight: 800; font-size: 20px; color: var(--navy-dark); text-decoration: none; letter-spacing: -0.5px; }
 .logo span { color: var(--accent); }
+.logo img { display: block; height: 34px; width: auto; }
 .back-link { font-size: 14px; font-weight: 600; color: var(--navy); text-decoration: none; }
 
 .page-header {

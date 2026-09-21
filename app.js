@@ -68,6 +68,7 @@
   function lang() { return (typeof window.currentLang === 'function') ? window.currentLang() : 'de'; }
   function locale() { return ({ de: 'de-DE', en: 'en-GB', es: 'es-ES', fr: 'fr-FR', it: 'it-IT', nl: 'nl-NL' })[lang()] || 'de-DE'; }
 
+  function pctText(v) { return v === null || v === undefined ? '–' : Number(v).toLocaleString(locale(), { maximumFractionDigits: 1 }); }
   function euro(val) {
     return val.toLocaleString(locale(), { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
   }
@@ -81,6 +82,8 @@
   var BOARD_KEYS = { uebernachtung: 'idx_board_room_only', fruehstueck: 'idx_board_breakfast', halbpension: 'idx_board_half', vollpension: 'idx_board_full', allinclusive: 'idx_board_allinclusive', egal: 'idx_board_any' };
   var CANCEL_KEYS = { ja: 'idx_cancel_yes', teilweise: 'idx_cancel_partial', nein: 'idx_cancel_no', unsicher: 'idx_cancel_unsure' };
   var CANCEL_FALLBACK = { ja: 'Kostenlos stornierbar', teilweise: 'Teilweise erstattbar', nein: 'Nicht kostenlos stornierbar' };
+  var DEAL_KEYS = { mobile: 'idx_deal_mobile', online_payment: 'idx_deal_online_payment', genius: 'idx_deal_genius', early: 'idx_deal_early', last_minute: 'idx_deal_last_minute', secret: 'idx_deal_secret', deal: 'idx_deal_deal' };
+  function dealLabel(k) { return DEAL_KEYS[k] ? t(DEAL_KEYS[k]) : k; }
   function boardLabel(v) { return BOARD_KEYS[v] ? t(BOARD_KEYS[v]) : v; }
   function cancelLabel(v) { var s = CANCEL_KEYS[v] ? t(CANCEL_KEYS[v]) : v; return s === CANCEL_KEYS[v] ? (CANCEL_FALLBACK[v] || v) : s; }
   function hatReisedaten(link) { return /[?&](checkin|checkout)=/i.test(link || '') || /[?&]checkin_year=/i.test(link || ''); }
@@ -172,6 +175,11 @@
     el.roomSelect.addEventListener('change', function () {
       if (!el.roomSelect.value) return;
       el.room.value = el.roomSelect.value;
+      // Eine alte Fehlermeldung "Bitte ein Zimmer auswaehlen" steht in einem ANDEREN Feld als
+      // die Meldungen des Zimmer-Laders (request-msg gegen load-rooms-msg) und blieb deshalb
+      // stehen, bis der Nutzer erneut absendet - auch wenn laengst ein Zimmer gewaehlt war.
+      // Sobald eines gewaehlt ist, ist der Grund weg, also auch die Meldung.
+      setMsg(el.msg, '');
       var room = loadedRooms.find(function (r) { return r.name === el.roomSelect.value; }) || {};
       if (room.boards && room.boards.length) {
         el.board.innerHTML = room.boards.map(function (v) { return '<option value="' + escHtml(v) + '">' + escHtml(boardLabel(v)) + '</option>'; }).join('')
@@ -190,15 +198,29 @@
       }
     });
 
+    // Schritt 2 (Zimmer, Verpflegung, Storno, Laender, Absenden) ist versteckt, bis Zimmer geladen
+    // sind oder jemand ausdruecklich von Hand eintragen will. Vorher standen alle Felder von Anfang
+    // an da und der Lade-Knopf war ein Nebenweg; die meisten "Zimmer nicht gefunden"-Laeufe kamen
+    // von frei getippten Namen - jeder davon kostet rund 30 MB Proxy-Traffic.
+    var zeigeSchritt2 = function () {
+      if (!el.step2) return;
+      el.step2.hidden = false;
+      if (el.step2Hint) el.step2Hint.hidden = true;
+    };
     var zurManuellenEingabe = function () {
+      zeigeSchritt2();
       el.roomSelect.style.display = 'none';
       el.room.style.display = 'block';
       el.room.focus();
       el.board.innerHTML = boardDefault;
       el.cancel.innerHTML = cancelDefault;
     };
+    if (el.manualEntry) el.manualEntry.addEventListener('click', function (e) { e.preventDefault(); zurManuellenEingabe(); });
 
     el.loadBtn.addEventListener('click', async function () {
+      // Wer neu laedt, faengt neu an: Ein Fehler aus einem frueheren Absendeversuch gehoert
+      // nicht mehr auf den Schirm, egal wie dieser Abruf ausgeht.
+      setMsg(el.msg, '');
       var link = el.link.value.trim();
       if (!link) { setMsg(el.loadMsg, t('idx_load_rooms_need_link'), 'error'); return; }
       if (!PRICE_API_READY) { setMsg(el.loadMsg, t('idx_load_rooms_inactive')); return; }
@@ -230,6 +252,8 @@
           var key = json && json.reason && ('err_' + json.reason);
           setMsg(el.loadMsg, (key && t(key) !== key) ? t(key)
             : hatReisedaten(link) ? t('idx_load_rooms_fail_with_dates') : t('idx_load_rooms_fail_no_dates'), 'error');
+          // Schlaegt das Laden fehl, darf der Weg zur Handeingabe nicht verschwinden.
+          if (el.step2Hint) el.step2Hint.hidden = false;
           return;
         }
         // Backend kann Objekte {name,boards,cancels} ODER (Fallback) reine Strings liefern.
@@ -240,6 +264,7 @@
         // und eine Fehlerquelle, weil man ihn versehentlich wieder auswaehlen und damit ohne
         // Zimmer abschicken konnte. Aendern geht weiterhin jederzeit ueber das Dropdown.
         el.roomSelect.innerHTML = loadedRooms.map(function (r) { return '<option>' + escHtml(r.name) + '</option>'; }).join('');
+        zeigeSchritt2();
         el.roomSelect.style.display = 'block';
         el.room.style.display = 'none';
         el.room.value = '';
@@ -254,6 +279,7 @@
         el.roomSelect.focus();
       } catch (err) {
         setMsg(el.loadMsg, t('idx_load_rooms_timeout'), 'error');
+        if (el.step2Hint) el.step2Hint.hidden = false;
       } finally {
         el.loadBtn.disabled = false;
         el.loadBtn.removeAttribute('aria-busy');
@@ -268,7 +294,17 @@
     var rows = results.map(function (r) {
       var isBest = bestCountry && r.country === bestCountry;
       var priceText = r.priceEuro !== null && r.priceEuro !== undefined ? euro(r.priceEuro) : '–';
-      return '<tr class="' + (isBest ? 'best-row' : '') + '"><th scope="row">' + escHtml(countryName(r.country)) + '</th><td>' + escHtml(localPrice(r)) + '</td><td>' + escHtml(priceText) + '</td></tr>';
+      // Deal-Plaketten und Stichproben unter dem Laendernamen: Der Grund eines niedrigeren
+      // Preises (Online-Zahlung, Mobile Rate ...) und ob zwei Abrufe verschiedene Preise zeigten.
+      var extra = '';
+      if (r.deals && r.deals.length) {
+        extra += '<span class="deal-tags">' + r.deals.map(function (d) { return '<span class="deal-tag">' + escHtml(dealLabel(d)) + '</span>'; }).join('') + '</span>';
+      }
+      var samples = (r.samples || []).filter(function (v) { return v !== null && v !== undefined; });
+      if (samples.length >= 2 && r.spreadPct > 0) {
+        extra += '<span class="row-note">' + escHtml(t('idx_res_samples', { prices: samples.map(euro).join(' / ') })) + '</span>';
+      }
+      return '<tr class="' + (isBest ? 'best-row' : '') + '"><th scope="row">' + escHtml(countryName(r.country)) + extra + '</th><td>' + escHtml(localPrice(r)) + '</td><td>' + escHtml(priceText) + '</td></tr>';
     }).join('');
     return '<table class="result-table"><caption class="sr-only">' + escHtml(t('idx_table_caption')) + '</caption><thead><tr><th scope="col">' + escHtml(t('idx_th_country')) + '</th><th scope="col">' + escHtml(t('idx_th_local')) + '</th><th scope="col">' + escHtml(t('idx_th_euro')) + '</th></tr></thead><tbody>' + rows + '</tbody></table>';
   }
@@ -360,6 +396,20 @@
       html += '<div class="form-msg msg-ok">' + escHtml(t('idx_res_none', { baseline: baselineName, threshold: threshold })) + '</div>';
     }
     if (json.convertedCurrency && threshold > 1) html += '<div class="result-partial-note">' + escHtml(t('idx_res_converted_note', { threshold: threshold })) + '</div>';
+    // Preisstreuung offen benennen: zwei Abrufe im Ausgangsland, verschiedene Preise -> wir
+    // rechnen gegen den niedrigeren. Das ist die Antwort auf "ihr rechnet den Ausgangspreis hoch".
+    var bs = (json.baselineSamples || []).filter(function (v) { return v !== null && v !== undefined; });
+    if (bs.length >= 2 && json.baselineSpreadPct > 0) {
+      html += '<div class="result-partial-note">' + escHtml(t('idx_res_baseline_two', { baseline: baselineName, prices: bs.map(euro).join(' / '), pct: pctText(json.baselineSpreadPct) })) + '</div>';
+    }
+    if (json.userPriceEuro && json.userPriceDiffers && baselineRow && baselineRow.priceEuro !== null) {
+      html += '<div class="result-partial-note">' + escHtml(t('idx_res_userprice', { ours: euro(baselineRow.priceEuro), yours: euro(json.userPriceEuro), used: euro(json.baselineUsedEuro) })) + '</div>';
+    }
+    if (json.confirmation && json.confirmation.done) {
+      var c = json.confirmation;
+      html += '<div class="result-partial-note' + (c.stable ? '' : ' msg-error') + '">' + escHtml(t(c.stable ? 'idx_res_confirmed' : 'idx_res_unstable', { country: countryName(c.country), before: pctText(c.savingsBeforePct), after: pctText(c.savingsAfterPct) })) + '</div>';
+    }
+    html += '<div class="result-partial-note">' + escHtml(t('idx_res_spread_note')) + '</div>';
     if (json.partial) html += '<div class="result-partial-note">' + escHtml(t('idx_res_partial')) + '</div>';
     if (json.fromCache) html += '<div class="result-partial-note">' + escHtml(t('idx_res_cache')) + '</div>';
     if (json.countries && json.countries.length && json.countries.length < FIXED_COUNTRIES.length) html += '<div class="result-partial-note">' + escHtml(t('idx_res_selection')) + '</div>';
@@ -383,6 +433,7 @@
         room: (el.roomSelect.style.display !== 'none' ? el.roomSelect.value : el.room.value).trim(),
         board: el.board.value,
         cancel: el.cancel.value,
+        userPrice: el.userPrice ? el.userPrice.value.trim() : '',
       };
       if (!data.link) { el.link.focus(); return; }
       // Frueher brach der Code hier stumm ab, wenn kein Zimmer gewaehlt war - besonders nach
@@ -424,6 +475,7 @@
         // ab, waehrend der Check serverseitig noch laeuft.
         var timeout = setTimeout(function () { controller.abort(); }, 190000);
         var body = { link: data.link, room: data.room, board: data.board, cancel: data.cancel, turnstileToken: token, stream: true };
+        if (data.userPrice) body.userPrice = data.userPrice;
         var countries = selection();
         if (countries) body.countries = countries;
         var res = await fetch(PRICE_API_URL, {
@@ -455,6 +507,12 @@
               try { evt = JSON.parse(line); } catch (err2) { continue; }
               if (evt.type === 'meta') { live.total = evt.totalCountries; renderLiveTable(el.panel, live); }
               else if (evt.type === 'country') { live.results.push(evt.result); renderLiveTable(el.panel, live); }
+              else if (evt.type === 'update') {
+                // Bestaetigungsabruf: die Zeile des Landes wird ersetzt, nicht angehaengt.
+                var idx = live.results.findIndex(function (x) { return x.country === evt.result.country; });
+                if (idx >= 0) live.results[idx] = evt.result; else live.results.push(evt.result);
+                renderLiveTable(el.panel, live);
+              }
               else if (evt.type === 'summary') { json = evt; }
             }
           }
@@ -560,7 +618,10 @@
       loadBtn: document.getElementById('load-rooms'), loadMsg: document.getElementById('load-rooms-msg'),
       roomSelect: document.getElementById('room-select'), room: document.getElementById('room'),
       board: document.getElementById('board'), cancel: document.getElementById('cancel'),
+      userPrice: document.getElementById('user-price'),
       msg: document.getElementById('request-msg'), panel: document.getElementById('result-panel'),
+      step2: document.getElementById('step2'), step2Hint: document.getElementById('step2-hint'),
+      manualEntry: document.getElementById('manual-entry'),
     };
     var pruefen = ueberwacheLinkFeld(el.link, el.linkWarn);
     var selection = setupCountryPicker(document.getElementById('countries'));
