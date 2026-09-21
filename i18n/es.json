@@ -383,5 +383,7 @@
  "idx_pwa_close": "Cerrar",
  "idx_cancel_partial": "Parcialmente reembolsable",
  "common_stand_sep2026": "Actualizado: septiembre de 2026",
- "err_daily_budget_reached": "La cuota de comprobaciones de hoy está agotada: cada una nos cuesta tráfico real. Mañana continúa."
+ "err_daily_budget_reached": "La cuota de comprobaciones de hoy está agotada: cada una nos cuesta tráfico real. Mañana continúa.",
+ "idx_step2_hint": "Habitación, régimen y cancelación aparecen tras la carga, con las opciones que este hotel realmente ofrece.",
+ "idx_manual_entry": "O escribe tú el nombre de la habitación"
 }

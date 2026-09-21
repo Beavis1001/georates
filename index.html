@@ -152,6 +152,15 @@
   @media (prefers-reduced-motion: reduce) { .btn-spinner { animation-duration: 2.4s; } }
   .load-rooms-msg { display: block; margin-top: 8px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
   .load-rooms-msg a { color: var(--accent-dark); font-weight: 700; }
+  /* Schritt 2 (Zimmer, Verpflegung, Storno, Laender, Absenden) ist ein Block im Formular und
+     bleibt versteckt, bis Zimmer geladen sind oder die Handeingabe gewaehlt wurde. */
+  .step2[hidden] { display: none; }
+  .step2 { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
+  .step2-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .step2-grid .full, .step2-grid button[type="submit"] { grid-column: 1 / -1; }
+  .step2-hint { margin: 10px 0 0; font-size: 12.5px; color: var(--muted); font-weight: 500; text-transform: none; letter-spacing: normal; }
+  .step2-hint a { color: var(--navy); font-weight: 600; margin-left: 6px; }
+  .request-form .cf-turnstile { margin: 10px 0 2px; }
   /* Hinweis direkt am Link-Feld. Bewusst auffällig (gelber Kasten), aber nicht rot: Der Link
      ist nicht falsch, er ist nur unvollständig – und der Check läuft trotzdem. */
   .link-warn {
@@ -281,7 +290,7 @@
   @media (max-width: 760px) {
     h1 { font-size: 29px; }
     .steps, .trust-grid, .tool-grid { grid-template-columns: 1fr; }
-    .request-form { grid-template-columns: 1fr; }
+    .request-form, .step2-grid { grid-template-columns: 1fr; }
     .nav-links { display: none; position: absolute; left: 0; right: 0; top: 100%; flex-direction: column; gap: 0;
       background: #fff; border-bottom: 1px solid var(--border); padding: 6px 0; }
     .nav-links.is-open { display: flex; }
@@ -449,9 +458,21 @@
           <input type="url" id="link" name="link" placeholder="https://www.booking.com/hotel/..." required autocomplete="off" inputmode="url">
           <p class="hint" data-i18n="idx_form_hint_link">Bitte die komplette Adresse aus der Adresszeile einfügen, nicht nur den sichtbaren Teil.</p>
           <p class="link-warn" id="link-warn" role="status" aria-live="polite"></p>
+          <!-- Sicherheitspruefung gehoert VOR das Zimmer-Laden: Der Abruf braucht den Turnstile-Token. -->
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAD5R3U1E9Flp_-6V"></div>
           <button type="button" class="load-rooms-btn" id="load-rooms" data-i18n="idx_load_rooms_btn">Zimmer von Booking laden</button>
           <span class="load-rooms-msg" id="load-rooms-msg" role="status" aria-live="polite"></span>
+          <!-- Zimmer, Verpflegung und Storno erscheinen erst nach dem Laden (dann mit den Optionen,
+               die es fuer das Hotel wirklich gibt) oder ueber diesen Ausweg fuer die Handeingabe.
+               Frueher standen alle Felder von Anfang an da, und der Knopf war ein Nebenweg - die
+               meisten Fehlschlaege kamen von frei getippten Zimmernamen. -->
+          <p class="step2-hint" id="step2-hint">
+            <span data-i18n="idx_step2_hint">Zimmer, Verpflegung und Storno erscheinen nach dem Laden.</span>
+            <a href="#" id="manual-entry" data-i18n="idx_manual_entry">Oder Zimmernamen selbst eintragen</a>
+          </p>
         </div>
+        <div class="full step2" id="step2" hidden>
+        <div class="request-form step2-grid">
         <div>
           <label for="room" data-i18n="idx_form_label_room">Bevorzugtes Zimmer</label>
           <select id="room-select" name="room-select" style="display:none;" aria-label="Zimmer auswählen"></select>
@@ -489,10 +510,9 @@
             </div>
           </div>
         </div>
-        <div class="full">
-          <div class="cf-turnstile" data-sitekey="0x4AAAAAAD5R3U1E9Flp_-6V"></div>
-        </div>
         <button type="submit" data-i18n="idx_form_submit">Preis automatisch prüfen</button>
+        </div>
+        </div>
       </form>
       <div class="form-msg" id="request-msg" role="status" aria-live="polite"></div>
       <div class="result-panel" id="result-panel" style="display:none;" role="region" aria-live="polite" aria-label="Ergebnis"></div>

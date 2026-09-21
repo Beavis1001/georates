@@ -195,13 +195,24 @@
       }
     });
 
+    // Schritt 2 (Zimmer, Verpflegung, Storno, Laender, Absenden) ist versteckt, bis Zimmer geladen
+    // sind oder jemand ausdruecklich von Hand eintragen will. Vorher standen alle Felder von Anfang
+    // an da und der Lade-Knopf war ein Nebenweg; die meisten "Zimmer nicht gefunden"-Laeufe kamen
+    // von frei getippten Namen - jeder davon kostet rund 30 MB Proxy-Traffic.
+    var zeigeSchritt2 = function () {
+      if (!el.step2) return;
+      el.step2.hidden = false;
+      if (el.step2Hint) el.step2Hint.hidden = true;
+    };
     var zurManuellenEingabe = function () {
+      zeigeSchritt2();
       el.roomSelect.style.display = 'none';
       el.room.style.display = 'block';
       el.room.focus();
       el.board.innerHTML = boardDefault;
       el.cancel.innerHTML = cancelDefault;
     };
+    if (el.manualEntry) el.manualEntry.addEventListener('click', function (e) { e.preventDefault(); zurManuellenEingabe(); });
 
     el.loadBtn.addEventListener('click', async function () {
       // Wer neu laedt, faengt neu an: Ein Fehler aus einem frueheren Absendeversuch gehoert
@@ -238,6 +249,8 @@
           var key = json && json.reason && ('err_' + json.reason);
           setMsg(el.loadMsg, (key && t(key) !== key) ? t(key)
             : hatReisedaten(link) ? t('idx_load_rooms_fail_with_dates') : t('idx_load_rooms_fail_no_dates'), 'error');
+          // Schlaegt das Laden fehl, darf der Weg zur Handeingabe nicht verschwinden.
+          if (el.step2Hint) el.step2Hint.hidden = false;
           return;
         }
         // Backend kann Objekte {name,boards,cancels} ODER (Fallback) reine Strings liefern.
@@ -248,6 +261,7 @@
         // und eine Fehlerquelle, weil man ihn versehentlich wieder auswaehlen und damit ohne
         // Zimmer abschicken konnte. Aendern geht weiterhin jederzeit ueber das Dropdown.
         el.roomSelect.innerHTML = loadedRooms.map(function (r) { return '<option>' + escHtml(r.name) + '</option>'; }).join('');
+        zeigeSchritt2();
         el.roomSelect.style.display = 'block';
         el.room.style.display = 'none';
         el.room.value = '';
@@ -262,6 +276,7 @@
         el.roomSelect.focus();
       } catch (err) {
         setMsg(el.loadMsg, t('idx_load_rooms_timeout'), 'error');
+        if (el.step2Hint) el.step2Hint.hidden = false;
       } finally {
         el.loadBtn.disabled = false;
         el.loadBtn.removeAttribute('aria-busy');
@@ -569,6 +584,8 @@
       roomSelect: document.getElementById('room-select'), room: document.getElementById('room'),
       board: document.getElementById('board'), cancel: document.getElementById('cancel'),
       msg: document.getElementById('request-msg'), panel: document.getElementById('result-panel'),
+      step2: document.getElementById('step2'), step2Hint: document.getElementById('step2-hint'),
+      manualEntry: document.getElementById('manual-entry'),
     };
     var pruefen = ueberwacheLinkFeld(el.link, el.linkWarn);
     var selection = setupCountryPicker(document.getElementById('countries'));
