@@ -426,6 +426,12 @@
       var m = json.mobile;
       if (m.relevant) {
         html += '<div class="result-savings result-mobile">' + escHtml(t(m.beatsBestCountry ? 'idx_res_mobile_best' : 'idx_res_mobile_saving', { pct: pctText(m.savingsPct), price: euro(m.priceEuro), baseline: baselineName })) + '</div>';
+        // Vorn, aber nicht in jeder Handy-Sitzung gleich (24.09.2026: 175 / 188 EUR): gerechnet wird
+        // vorsichtig mit dem hoeheren, der bessere Preis wird trotzdem genannt.
+        if (m.schwankt && m.bestSeenEuro !== null && m.bestSeenEuro !== undefined && m.bestSeenEuro < m.priceEuro) {
+          var mu = (m.samples || []).filter(function (v) { return v !== null && v !== undefined; });
+          html += '<div class="result-partial-note">' + escHtml(t('idx_res_mobile_upto', { prices: mu.map(euro).join(' / '), best: euro(m.bestSeenEuro) })) + '</div>';
+        }
         html += '<div class="result-partial-note">' + escHtml(t('idx_res_mobile_how')) + '</div>';
       } else if (m.schwankt && m.bestSeenSavingsPct > 0) {
         // Rabatt kam nur in einem Teil der Handy-Sitzungen (24.09.2026: 188 / 209 EUR). Nicht als
@@ -452,7 +458,12 @@
     }
     if (json.confirmation && json.confirmation.done) {
       var c = json.confirmation;
-      html += '<div class="result-partial-note' + (c.stable ? '' : ' msg-error') + '">' + escHtml(t(c.stable ? 'idx_res_confirmed' : 'idx_res_unstable', { country: countryName(c.country), before: pctText(c.savingsBeforePct), after: pctText(c.savingsAfterPct) })) + '</div>';
+      // Hat nach der Bestaetigung ein ANDERES Land die Nase vorn, gehoert der Nachher-Wert zu diesem
+      // Land. Frueher hiess es "Japan nicht mehr so guenstig (8,3 % -> 6,5 %)", obwohl die 6,5 %
+      // Vietnam waren (echter Lauf 24.09.2026).
+      var neuesLand = !c.stable && json.best && json.best.country && json.best.country !== c.country;
+      var cKey = c.stable ? 'idx_res_confirmed' : (neuesLand ? 'idx_res_unstable_other' : 'idx_res_unstable');
+      html += '<div class="result-partial-note' + (c.stable ? '' : ' msg-error') + '">' + escHtml(t(cKey, { country: countryName(c.country), newcountry: neuesLand ? countryName(json.best.country) : '', before: pctText(c.savingsBeforePct), after: pctText(c.savingsAfterPct) })) + '</div>';
     }
     html += '<div class="result-partial-note">' + escHtml(t('idx_res_spread_note')) + '</div>';
     if (json.partial) html += '<div class="result-partial-note">' + escHtml(t('idx_res_partial')) + '</div>';

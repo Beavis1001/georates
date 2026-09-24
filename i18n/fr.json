@@ -400,6 +400,7 @@
  "idx_res_userprice": "Notre prix pour votre pays : {ours}. Vous voyez {yours}. Nous comparons au plus bas : {used}.",
  "idx_res_confirmed": "Trouvaille confirmée : {country} restait moins cher lors d'une seconde consultation ({before} % → {after} %).",
  "idx_res_unstable": "Écart non stable : lors d'une seconde consultation, {country} n'était plus aussi bon marché ({before} % → {after} %). Probablement une loterie de session, pas un prix pays.",
+ "idx_res_unstable_other": "Écart non stable : lors d'une seconde consultation, {country} n'était plus en tête (d'abord {before} %). Le meilleur pays est désormais {newcountry} avec {after} %.",
  "idx_res_spread_note": "Booking attribue les prix par session (offres, moyen de paiement, appareil). C'est pourquoi nous consultons votre pays deux fois, confirmons les trouvailles une fois et affichons les badges d'offre détectés.",
  "idx_row_mobile": "Smartphone",
  "idx_res_mobile_saving": "Environ {pct} % moins cher sur smartphone : {price} au lieu du prix ordinateur via {baseline}, sans VPN.",
@@ -409,6 +410,7 @@
  "idx_res_mobile_confirmed": "Prix smartphone confirmé : toujours moins cher à une deuxième consultation ({before} % → {after} %).",
  "idx_res_mobile_unstable": "Avantage smartphone non stable : disparu à la deuxième consultation ({before} % → {after} %). Probablement une loterie de session.",
  "idx_res_mobile_varies": "Booking n'a pas accordé la remise smartphone à chaque session ({prices}). Avec un peu de chance, env. {pct} % moins cher que sur ordinateur depuis {baseline} – vérifie sur ton téléphone.",
+ "idx_res_mobile_upto": "Toutes les sessions mobiles n'ont pas eu le même prix ({prices}). Avec un peu de chance, même {best}.",
  "idx_step2_hint": "Chambre, formule et annulation apparaissent après le chargement, avec les options réellement proposées par cet hôtel.",
  "idx_manual_entry": "Ou saisir le nom de la chambre vous-même"
 }
