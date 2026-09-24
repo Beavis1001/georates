@@ -1,5 +1,5 @@
 /* GeoRates Service Worker – App-Shell-Cache für Offline-Nutzung & Installierbarkeit */
-const CACHE = 'georates-v13';
+const CACHE = 'georates-v14';
 const ASSETS = [
   '/', '/index.html', '/budget.html', '/gruppenkosten.html', '/packliste.html', '/ratgeber.html',
   '/tokens.css', '/app.css', '/legal.css', '/i18n.js', '/app.js', '/pwa.js',

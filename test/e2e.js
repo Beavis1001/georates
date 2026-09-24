@@ -152,7 +152,7 @@ async function streuung(browser, base) {
   const jp = { country: 'JP', priceEuro: 1150, priceLocal: 190000, currency: 'JPY', deals: ['mobile'] };
   // Smartphone-Zeile (API-Experiment MOBILE_CHECK): 1.080 gegen 1.200 = 10 %, schlaegt Japan (1.150).
   const mobil = { country: 'DE', device: 'Android/Smartphone', mobile: true, priceEuro: 1080, priceLocal: 1080, currency: 'EUR', deals: ['mobile'] };
-  const mobilBewertet = Object.assign({}, mobil, { samples: [1080, 1080], spreadPct: 0, savingsPct: 10, relevant: true, implausible: false, beatsBestCountry: true, confirmation: { done: true, savingsBeforePct: 10, savingsAfterPct: 10, stable: true } });
+  const mobilBewertet = Object.assign({}, mobil, { samples: [1000, 1080], spreadPct: 8, schwankt: true, bestSeenEuro: 1000, bestSeenSavingsPct: 16.7, savingsPct: 10, relevant: true, implausible: false, beatsBestCountry: true, confirmation: { done: true, savingsBeforePct: 10, savingsAfterPct: 10, stable: true } });
   const summary = { type: 'summary', success: true, results: [de, coUpd, jp], best: jp, savingsPct: 9, relevantSaving: true, relevantThresholdPct: 3, convertedCurrency: true, recommendVpnCountry: null, baselineCountry: 'DE',
     baselineUsedEuro: 1200, userPriceEuro: 1200, userPriceDiffers: true, baselineSamples: [1292.06, 1264], baselineSpreadPct: 2.2, mobile: mobilBewertet,
     confirmation: { done: true, country: 'CO', savingsBeforePct: 29.6, savingsAfterPct: 9, stable: false }, partial: false, resultId: 'abcDEF123456', countries: ['DE', 'CO', 'JP'] };
@@ -174,7 +174,8 @@ async function streuung(browser, base) {
   ok('Deal-Tag Mobile Rate', txt.includes('Mobile Rate'));
   ok('Mehrere Ausgangspreise mit lokalisiertem Prozent', /mehreren Abrufen verschiedene Preise/.test(txt) && txt.includes('2,2 %'));
   ok('Nutzerpreis-Hinweis', txt.includes('Du siehst 1.200,00 €'));
-  ok('Nicht stabil fuer Kolumbien', /nicht stabil/.test(txt) && txt.includes('Kolumbien'));
+  ok('Nicht stabil fuer Kolumbien, neues bestes Land genannt', /nicht stabil/.test(txt) && txt.includes('Kolumbien nicht mehr vorn') && txt.includes('Bestes Land ist jetzt Japan'));
+  ok('Handy vorn, aber schwankend: besserer Preis genannt', txt.includes('Mit etwas Glück sogar 1.000,00 €'));
   ok('Streuungshinweis', txt.includes('pro Sitzung'));
   ok('Zeilen-Notiz mit Abrufen', txt.includes('Abrufe: 1.292,06 € / 1.264,00 €') && !txt.includes('zwei Abrufe'));
   ok('Streuung: keine JS-Fehler', errors.length === 0, errors.join(' | '));
