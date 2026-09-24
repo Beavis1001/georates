@@ -4,7 +4,8 @@
 //  2. Alle Sprachdateien haben dieselben Schluessel wie Deutsch (nichts vergessen, nichts verwaist).
 //  3. Kein HTML laedt Skripte, Bilder oder Styles von fremden Hosts ausser den erlaubten -
 //     die Datenschutzerklaerung verspricht, dass beim Seitenaufruf keine Daten an Dritte gehen.
-//  4. Kein Inline-Skript auf der Startseite (die CSP dort erlaubt keines).
+//  4. Kein Inline-Skript auf keiner Seite und kein 'unsafe-inline' in einer CSP.
+//  6. Alle eigenen Skripte sind syntaktisch sauber (Chromium-Rechner eingeschlossen).
 //  5. Leck-Check wie im API-Repo: keine echten Booking-Links mit Tracking-Parametern.
 //
 // Aufruf: node test/check.js   (Exit-Code 1 bei Fehlern)
@@ -51,15 +52,16 @@ for (const f of htmls) {
   const hosts = [...html.matchAll(/<(?:script|img|link|iframe|source)[^>]*?(?:src|href)="(https?:\/\/[^/"]+)/gi)].map((x) => new URL(x[1]).hostname);
   const fremd = [...new Set(hosts)].filter((h) => !ERLAUBTE_HOSTS.includes(h));
   if (fremd.length) fehl(`${f}: laedt Ressourcen von fremden Hosts: ${fremd.join(', ')}`);
-  // 4. Inline-Skripte auf der Startseite
-  if (f === 'index.html') {
-    const inline = [...html.matchAll(/<script(?![^>]*\bsrc=)(?![^>]*type="application\/ld\+json")[^>]*>/gi)];
-    if (inline.length) fehl('index.html: Inline-Skript gefunden, die CSP erlaubt keines');
-    else ok('index.html: keine Inline-Skripte');
-  }
+  // 4. Inline-Skripte: auf keiner Seite. Seit dem 21.09.2026 haben alle Seiten dieselbe strenge
+  //    CSP (script-src 'self'), ein Inline-Skript wuerde der Browser stumm blockieren.
+  const inline = [...html.matchAll(/<script(?![^>]*\bsrc=)(?![^>]*type="application\/ld\+json")[^>]*>/gi)];
+  if (inline.length) fehl(`${f}: Inline-Skript gefunden, die CSP erlaubt keines`);
+  const cspInline = /Content-Security-Policy[^>]*script-src[^;"]*'unsafe-inline'/i.test(html);
+  if (cspInline) fehl(`${f}: CSP erlaubt 'unsafe-inline' fuer Skripte`);
+  if (!inline.length && !cspInline) ok(`${f}: keine Inline-Skripte, strenge CSP`);
   jsQuellen.push([f, html]);
 }
-for (const f of ['app.js', 'pwa.js', 'sw.js', 'i18n.js']) jsQuellen.push([f, fs.readFileSync(path.join(root, f), 'utf8')]);
+for (const f of ['app.js', 'pwa.js', 'sw.js', 'i18n.js', 'budget.js', 'packliste.js', 'gruppenkosten.js']) jsQuellen.push([f, fs.readFileSync(path.join(root, f), 'utf8')]);
 
 // 5. Leck-Check (Muster aus georates-price-api/test/leck-check.js)
 const MUSTER = [
@@ -73,14 +75,17 @@ for (const [f, text] of jsQuellen) {
   });
 }
 
-// app.js muss syntaktisch sauber sein und keine Schluessel benutzen, die es nicht gibt.
-try {
-  new vm.Script(fs.readFileSync(path.join(root, 'app.js'), 'utf8'));
-  const appKeys = [...fs.readFileSync(path.join(root, 'app.js'), 'utf8').matchAll(/\bt\('([a-z0-9_]+)'/g)].map((x) => x[1]);
-  const fehltApp = [...new Set(appKeys)].filter((k) => !k.endsWith('_') && !(k in de)); // 'err_' + reason wird dynamisch gebaut
-  if (fehltApp.length) fehl('app.js benutzt unbekannte Schluessel: ' + fehltApp.join(', '));
-  else ok(`app.js: ${new Set(appKeys).size} Schluessel bekannt`);
-} catch (e) { fehl('app.js parst nicht: ' + e.message); }
+// Eigene Skripte muessen syntaktisch sauber sein und keine Schluessel benutzen, die es nicht gibt.
+for (const f of ['app.js', 'budget.js', 'packliste.js', 'gruppenkosten.js', 'pwa.js', 'sw.js']) {
+  try {
+    const js = fs.readFileSync(path.join(root, f), 'utf8');
+    new vm.Script(js);
+    const keys = [...js.matchAll(/\bt\('([a-z0-9_]+)'/g)].map((x) => x[1]);
+    const fehltJs = [...new Set(keys)].filter((k) => !k.endsWith('_') && !(k in de)); // 'err_' + reason wird dynamisch gebaut
+    if (fehltJs.length) fehl(`${f} benutzt unbekannte Schluessel: ${fehltJs.join(', ')}`);
+    else ok(`${f}: ${new Set(keys).size} Schluessel bekannt`);
+  } catch (e) { fehl(`${f} parst nicht: ${e.message}`); }
+}
 
 console.log(fehler ? `\n${fehler} FEHLER` : '\nalles sauber');
 process.exit(fehler ? 1 : 0);

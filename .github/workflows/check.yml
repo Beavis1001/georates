@@ -1,5 +1,8 @@
-# Laeuft bei jedem Push und Pull Request: i18n-Vollstaendigkeit, fremde Hosts, Inline-Skripte,
-# Leck-Check. Rot heisst: nicht mergen, bevor das geklaert ist.
+# Laeuft bei jedem Push und Pull Request. Rot heisst: nicht mergen, bevor das geklaert ist.
+#   check: i18n-Vollstaendigkeit, fremde Hosts, Inline-Skripte, CSP, Syntax, Leck-Check (ohne Browser)
+#   e2e:   Startseite und Rechner im echten Chromium mit gemockter API (test/e2e.js), kein Netz nach
+#          aussen und kein Booking-Abruf. Seit 21.09.2026, nachdem ein Formularfehler (Enter im
+#          Link-Feld) am Text-Check vorbei live ging.
 name: Check
 on:
   push:
@@ -13,3 +16,16 @@ jobs:
         with:
           node-version: 20
       - run: node test/check.js
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+        working-directory: test
+      - run: npx playwright install --with-deps chromium
+        working-directory: test
+      - run: node e2e.js
+        working-directory: test

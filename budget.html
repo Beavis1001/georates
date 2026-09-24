@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
 <meta name="description" content="Kostenloser Reisebudget-Rechner: Plane Flug, Unterkunft, Verpflegung und Aktivitäten für deine Reise und behalte deine Ausgaben im Griff.">
 <link rel="canonical" href="https://georates.tech/budget.html">
 <title data-i18n-title="budget_title">Reisebudget-Rechner – GeoRates</title>
@@ -114,66 +114,7 @@
 </footer>
 
 <script src="i18n.js"></script>
-<script>
-  const PRESETS = {
-    guenstig:  { unterkunft: 30,  verpflegung: 20, transport: 8,  aktivitaeten: 10, sonstiges: 5  },
-    mittel:    { unterkunft: 70,  verpflegung: 35, transport: 15, aktivitaeten: 20, sonstiges: 10 },
-    luxus:     { unterkunft: 180, verpflegung: 70, transport: 30, aktivitaeten: 50, sonstiges: 25 },
-  };
-  const FIELD_IDS = ['unterkunft', 'verpflegung', 'transport', 'aktivitaeten', 'sonstiges'];
-
-  function applyPreset() {
-    const preset = document.getElementById('preset').value;
-    if (preset === 'custom' || !PRESETS[preset]) return;
-    const values = PRESETS[preset];
-    FIELD_IDS.forEach(id => { document.getElementById(id).value = values[id]; });
-  }
-
-  function computeBudget(input) {
-    const unterkunftGesamt = input.unterkunft * input.naechte;
-    const proPersonProTag = input.verpflegung + input.transport + input.aktivitaeten + input.sonstiges;
-    const verpflegungGesamt = input.verpflegung * input.personen * input.naechte;
-    const transportGesamt = input.transport * input.personen * input.naechte;
-    const aktivitaetenGesamt = input.aktivitaeten * input.personen * input.naechte;
-    const sonstigesGesamt = input.sonstiges * input.personen * input.naechte;
-    const gesamt = unterkunftGesamt + verpflegungGesamt + transportGesamt + aktivitaetenGesamt + sonstigesGesamt;
-    return {
-      unterkunftGesamt, verpflegungGesamt, transportGesamt, aktivitaetenGesamt, sonstigesGesamt,
-      gesamt,
-      proPerson: gesamt / input.personen,
-      proTag: gesamt / input.naechte,
-    };
-  }
-
-  function formatEUR(n) {
-    return n.toLocaleString('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
-  }
-
-  function calculate() {
-    const input = {
-      personen: parseFloat(document.getElementById('personen').value) || 1,
-      naechte: parseFloat(document.getElementById('naechte').value) || 1,
-      unterkunft: parseFloat(document.getElementById('unterkunft').value) || 0,
-      verpflegung: parseFloat(document.getElementById('verpflegung').value) || 0,
-      transport: parseFloat(document.getElementById('transport').value) || 0,
-      aktivitaeten: parseFloat(document.getElementById('aktivitaeten').value) || 0,
-      sonstiges: parseFloat(document.getElementById('sonstiges').value) || 0,
-    };
-    const r = computeBudget(input);
-    document.getElementById('r-unterkunft').textContent = formatEUR(r.unterkunftGesamt);
-    document.getElementById('r-verpflegung').textContent = formatEUR(r.verpflegungGesamt);
-    document.getElementById('r-transport').textContent = formatEUR(r.transportGesamt);
-    document.getElementById('r-aktivitaeten').textContent = formatEUR(r.aktivitaetenGesamt);
-    document.getElementById('r-sonstiges').textContent = formatEUR(r.sonstigesGesamt);
-    document.getElementById('r-gesamt').textContent = formatEUR(r.gesamt);
-    document.getElementById('r-pro-person').textContent = formatEUR(r.proPerson);
-    document.getElementById('r-pro-tag').textContent = formatEUR(r.proTag);
-    document.getElementById('result-panel').style.display = 'block';
-  }
-
-  document.getElementById('preset').addEventListener('change', applyPreset);
-  document.getElementById('calc-btn').addEventListener('click', calculate);
-</script>
+<script src="budget.js"></script>
 <script src="pwa.js" defer></script>
 </body>
 </html>

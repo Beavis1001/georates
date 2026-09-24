@@ -21,26 +21,31 @@ Ruft die Preis-API im Repo `georates-price-api` (Vercel) auf. Betreiber: Christo
 | `pwa.js` | Service-Worker-Registrierung und Installations-Hinweis, auf allen Seiten |
 | `i18n.js` | Laufzeit + deutsches Woerterbuch inline; `i18n/<code>.json` fuer en, es, fr, it, nl werden nachgeladen |
 | `tokens.css` | Einzige Quelle der Farb- und Schrift-Tokens; `app.css` (Tools), `legal.css` (Rechtstexte, Ratgeber) bauen darauf |
-| `budget.html`, `packliste.html`, `gruppenkosten.html` | Rechner, laufen komplett im Browser (noch mit Inline-JS) |
+| `budget.html`, `packliste.html`, `gruppenkosten.html` + `budget.js`, `packliste.js`, `gruppenkosten.js` | Rechner, laufen komplett im Browser; Logik seit 21.09.2026 ausgelagert, dieselbe strenge CSP wie die Startseite |
 | `sw.js`, `manifest.webmanifest` | PWA; Manifest hat `share_target` fuer Booking-Links aus dem Teilen-Menue |
-| `test/check.js` | i18n-Vollstaendigkeit, fremde Hosts, Inline-Skripte, Leck-Check |
+| `test/check.js` | i18n-Vollstaendigkeit, fremde Hosts, Inline-Skripte und CSP auf allen Seiten, Syntax, Leck-Check |
+| `test/e2e.js` | Playwright im echten Chromium mit gemockter API: Zwei-Schritte-Formular, Stream, Streuung, Enter-Verhalten, Rechner. `test/package.json` nur dafuer |
 
 ## Befehle
 
 ```bash
 node test/check.js                       # vor jedem Push; laeuft auch als GitHub Action
+cd test && npm install && npx playwright install chromium && node e2e.js   # E2E, ebenfalls Action
 python3 -m http.server 8765              # lokal ansehen; fetch() auf i18n/*.json braucht http, nicht file://
 ```
 
-Die API laesst sich lokal nicht mitstarten. Zum Testen von `app.js` die Aufrufe an
-`georates-price-api.vercel.app` mit Playwright `page.route` mocken (Antwortformate: JSON fuer
-`rooms`, NDJSON-Zeilen `meta`, `country`, `summary` fuer den Preis-Check).
+Die API laesst sich lokal nicht mitstarten. `test/e2e.js` mockt die Aufrufe an
+`georates-price-api.vercel.app` und Turnstile mit Playwright `page.route` (Antwortformate: JSON fuer
+`rooms`, NDJSON-Zeilen `meta`, `country`, `update`, `summary` fuer den Preis-Check) und startet einen
+eigenen kleinen Server. Neue Ablaufregeln im Formular gehoeren dort als Pruefung hinein; der
+Text-Check sieht sie nicht, so ging am 21.09.2026 der Enter-Fehler live.
 
 ## Regeln, die nicht verhandelbar sind
 
-1. **Kein Inline-JavaScript in `index.html`.** Die Content-Security-Policy dort erlaubt nur
-   `self` und `challenges.cloudflare.com`. Neue Logik gehoert in `app.js`; ein Inline-`<script>`
-   laesst den Check rot werden und den Browser das Skript blockieren. Externe Skripte, Bilder oder
+1. **Kein Inline-JavaScript, auf keiner Seite.** Jede Seite traegt eine Content-Security-Policy
+   mit `script-src 'self'` (die Startseite zusaetzlich `challenges.cloudflare.com`). Neue Logik
+   gehoert in eine eigene `.js`-Datei; ein Inline-`<script>` oder ein `'unsafe-inline'` in der CSP
+   laesst den Check rot werden und den Browser das Skript stumm blockieren. Externe Skripte, Bilder oder
    Styles von fremden Hosts sind ebenfalls tabu: Die Datenschutzerklaerung verspricht, dass beim
    Seitenaufruf keine Daten an Dritte gehen. Genau daran sind die Footer-Badges gescheitert.
 2. **Jeder sichtbare Text laeuft ueber i18n.** Statischer Text bekommt `data-i18n="<key>"` (oder
