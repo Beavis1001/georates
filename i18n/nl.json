@@ -395,8 +395,8 @@
  "idx_deal_last_minute": "Last-minute deal",
  "idx_deal_secret": "Geheime deal",
  "idx_deal_deal": "Deal",
- "idx_res_samples": "twee opvragingen: {prices}",
- "idx_res_baseline_two": "Booking toonde in {baseline} bij twee opvragingen verschillende prijzen ({prices}, {pct} % uit elkaar). We vergelijken met de laagste.",
+ "idx_res_samples": "opvragingen: {prices}",
+ "idx_res_baseline_two": "Booking toonde in {baseline} bij meerdere opvragingen verschillende prijzen ({prices}, {pct} % uit elkaar). We vergelijken met de laagste.",
  "idx_res_userprice": "Onze prijs voor jouw land: {ours}. Jij ziet {yours}. We vergelijken met de laagste: {used}.",
  "idx_res_confirmed": "Vondst bevestigd: {country} was bij een tweede opvraging nog steeds goedkoper ({before} % → {after} %).",
  "idx_res_unstable": "Verschil niet stabiel: bij een tweede opvraging was {country} niet meer zo goedkoop ({before} % → {after} %). Waarschijnlijk een sessie-loterij, geen landprijs.",
@@ -408,6 +408,7 @@
  "idx_res_mobile_none": "Op een smartphone geen lagere prijs ({price}).",
  "idx_res_mobile_confirmed": "Smartphoneprijs bevestigd: bij een tweede ophaling nog steeds goedkoper ({before} % → {after} %).",
  "idx_res_mobile_unstable": "Smartphonevoordeel niet stabiel: bij de tweede ophaling verdwenen ({before} % → {after} %). Waarschijnlijk een sessieloterij.",
+ "idx_res_mobile_varies": "Booking gaf de smartphonekorting niet in elke sessie ({prices}). Met wat geluk ca. {pct} % goedkoper dan op de computer via {baseline} – kijk gewoon op je telefoon.",
  "idx_step2_hint": "Kamer, verzorging en annulering verschijnen na het laden – met de opties die dit hotel echt aanbiedt.",
  "idx_manual_entry": "Of typ de kamernaam zelf"
 }

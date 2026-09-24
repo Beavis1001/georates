@@ -395,8 +395,8 @@
  "idx_deal_last_minute": "Last-minute deal",
  "idx_deal_secret": "Secret deal",
  "idx_deal_deal": "Deal",
- "idx_res_samples": "two fetches: {prices}",
- "idx_res_baseline_two": "Booking showed different prices in {baseline} on two fetches ({prices}, {pct} % apart). We compare against the lower one.",
+ "idx_res_samples": "fetches: {prices}",
+ "idx_res_baseline_two": "Booking showed different prices in {baseline} on several fetches ({prices}, {pct} % apart). We compare against the lowest.",
  "idx_res_userprice": "Our price for your home country: {ours}. You see {yours}. We compare against the lower: {used}.",
  "idx_res_confirmed": "Find confirmed: {country} was still cheaper on a second fetch ({before} % → {after} %).",
  "idx_res_unstable": "Difference not stable: on a second fetch {country} was no longer that cheap ({before} % → {after} %). Probably a session lottery, not a country price.",
@@ -408,6 +408,7 @@
  "idx_res_mobile_none": "No cheaper price on a smartphone ({price}).",
  "idx_res_mobile_confirmed": "Smartphone price confirmed: still cheaper on a second fetch ({before} % → {after} %).",
  "idx_res_mobile_unstable": "Smartphone advantage not stable: gone on the second fetch ({before} % → {after} %). Probably a session lottery.",
+ "idx_res_mobile_varies": "Booking didn't give the smartphone discount in every session ({prices}). With some luck about {pct} % cheaper than on a computer via {baseline} – just check on your phone.",
  "idx_step2_hint": "Room, board and cancellation appear after loading – with the options this hotel actually offers.",
  "idx_manual_entry": "Or type the room name yourself"
 }
