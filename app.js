@@ -68,6 +68,11 @@
   function lang() { return (typeof window.currentLang === 'function') ? window.currentLang() : 'de'; }
   function locale() { return ({ de: 'de-DE', en: 'en-GB', es: 'es-ES', fr: 'fr-FR', it: 'it-IT', nl: 'nl-NL' })[lang()] || 'de-DE'; }
 
+  // "2026-09-24" -> "24.09.2026" (bzw. Landesformat). API und Best-of liefern ISO-Daten.
+  function datumText(d) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(d || '')) return d || '';
+    try { return new Date(d + 'T12:00:00Z').toLocaleDateString(locale(), { day: '2-digit', month: '2-digit', year: 'numeric' }); } catch (e) { return d; }
+  }
   function pctText(v) { return v === null || v === undefined ? '–' : Number(v).toLocaleString(locale(), { maximumFractionDigits: 1 }); }
   function euro(val) {
     return val.toLocaleString(locale(), { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
@@ -398,11 +403,14 @@
 
     var baselineName = countryName(json.baselineCountry) || json.baselineCountry || '';
     var baselineRow = json.results.find(function (r) { return r.country === json.baselineCountry; });
+    var laenderMitPreis = json.results.map(function (r) { return r.priceEuro; }).filter(function (v) { return typeof v === 'number'; });
+    var eigenerPreisBester = !!(json.userPriceEuro && json.baselineUsedEuro === json.userPriceEuro && laenderMitPreis.length
+      && Math.min.apply(null, laenderMitPreis) > json.userPriceEuro && !json.recommendVpnCountry && !relevantSaving);
     var baselineMissing = !baselineRow || baselineRow.priceEuro === null;
     var isRealUrl = function (u) { return u && u.indexOf('YOUR_') !== 0; };
 
     if (json.fromPermalink) {
-      html += '<div class="result-partial-note">' + escHtml(t('idx_res_permalink_note', { date: json.datum || '', hotel: json.hotelName || '', room: json.room || '' })) + '</div>';
+      html += '<div class="result-partial-note">' + escHtml(t('idx_res_permalink_note', { date: datumText(json.datum), hotel: json.hotelName || '', room: json.room || '' })) + '</div>';
     }
     if (baselineMissing) {
       html += '<div class="form-msg msg-error">' + escHtml(t('idx_res_baseline_missing', { baseline: baselineName })) + '</div>';
@@ -416,6 +424,11 @@
       html += '<div class="result-instructions"><h4>' + escHtml(t('idx_res_steps_title')) + '</h4><ol>' + steps + '</ol></div>';
     } else if (relevantSaving && json.savingsPct != null) {
       html += '<div class="form-msg msg-ok">' + escHtml(t('idx_res_small_saving', { country: countryName(json.best.country), pct: pctText(json.savingsPct), baseline: baselineName })) + '</div>';
+    } else if (eigenerPreisBester) {
+      // Der eingetragene Preis schlaegt jedes Land (24.09.2026: 6.538 EUR gegen ab 6.784 EUR; der
+      // Unterschied war ein "Booking.com bezahlt"-Zuschuss nur in der Sitzung des Nutzers). Dann ist
+      // die Botschaft "bleib genau dort", nicht "Abweichungen unter 3 % zaehlen wir nicht".
+      html += '<div class="form-msg msg-ok">' + escHtml(t('idx_res_userprice_best', { yours: euro(json.userPriceEuro), count: laenderMitPreis.length, min: euro(Math.min.apply(null, laenderMitPreis)) })) + '</div>';
     } else {
       html += '<div class="form-msg msg-ok">' + escHtml(t('idx_res_none', { baseline: baselineName, threshold: threshold })) + '</div>';
     }
@@ -446,7 +459,7 @@
         html += '<div class="result-partial-note' + (m.confirmation.stable ? '' : ' msg-error') + '">' + escHtml(t(m.confirmation.stable ? 'idx_res_mobile_confirmed' : 'idx_res_mobile_unstable', { before: pctText(m.confirmation.savingsBeforePct), after: pctText(m.confirmation.savingsAfterPct) })) + '</div>';
       }
     }
-    if (json.convertedCurrency && threshold > 1) html += '<div class="result-partial-note">' + escHtml(t('idx_res_converted_note', { threshold: threshold })) + '</div>';
+    if (json.convertedCurrency && threshold > 1 && !eigenerPreisBester) html += '<div class="result-partial-note">' + escHtml(t('idx_res_converted_note', { threshold: threshold })) + '</div>';
     // Preisstreuung offen benennen: mehrere Abrufe im Ausgangsland, verschiedene Preise -> wir
     // rechnen gegen den niedrigsten. Das ist die Antwort auf "ihr rechnet den Ausgangspreis hoch".
     var bs = (json.baselineSamples || []).filter(function (v) { return v !== null && v !== undefined; });
@@ -634,7 +647,7 @@
       if (!eintraege || !eintraege.length) { box.innerHTML = '<p class="empty">' + escHtml(t('idx_bestof_empty')) + '</p>'; return; }
       box.innerHTML = eintraege.map(function (e) {
         var open = e.resultId ? ' <a href="?r=' + escHtml(e.resultId) + '">' + escHtml(t('idx_bestof_open')) + '</a>' : '';
-        return '<div class="bestof-row"><div class="bestof-hotel"><strong>' + escHtml(e.hotel || '–') + '</strong><span class="bestof-meta">' + escHtml(countryName(e.hotelLand)) + ' · ' + escHtml(t('idx_bestof_via', { country: countryName(e.land) })) + ' · ' + escHtml(e.datum || '') + open + '</span></div>'
+        return '<div class="bestof-row"><div class="bestof-hotel"><strong>' + escHtml(e.hotel || '–') + '</strong><span class="bestof-meta">' + escHtml(countryName(e.hotelLand)) + ' · ' + escHtml(t('idx_bestof_via', { country: countryName(e.land) })) + ' · ' + escHtml(datumText(e.datum)) + open + '</span></div>'
           + '<div class="bestof-saving">−' + escHtml(String(e.pct).replace('.', lang() === 'en' ? '.' : ',')) + ' %<span>' + escHtml(euro(e.euro)) + '</span></div></div>';
       }).join('');
     };

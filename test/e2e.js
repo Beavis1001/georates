@@ -206,6 +206,26 @@ async function handySchwankt(browser, base) {
   await ctx.close();
 }
 
+// ---- 2c. Eigener Preis schlaegt alle Laender (24.09.2026: "Booking.com bezahlt" nur beim Nutzer) --
+async function eigenerPreisBester(browser, base) {
+  const de = { country: 'DE', priceEuro: 6997.88, priceLocal: 6997.88, currency: 'EUR', samples: [6997.88, 6997.88], spreadPct: 0, deals: [] };
+  const ar = { country: 'AR', priceEuro: 6783.83, priceLocal: 11723982.2, currency: 'ARS', deals: [] };
+  const us = { country: 'US', priceEuro: 7648.82, priceLocal: 8717.9, currency: 'USD', deals: [] };
+  const summary = { type: 'summary', success: true, results: [de, ar, us], best: ar, savingsPct: -3.8, relevantSaving: false, relevantThresholdPct: 3, convertedCurrency: true, recommendVpnCountry: null, baselineCountry: 'DE',
+    baselineUsedEuro: 6538, userPriceEuro: 6538, userPriceDiffers: true, baselineSamples: [6997.88, 6997.88], baselineSpreadPct: 0, confirmation: null, partial: false, resultId: 'abcDEF777777', countries: ['DE', 'AR', 'US'] };
+  const { page, ctx, errors } = await neueSeite(browser, { preisAntwort: () => ndjson([{ type: 'meta', baselineCountry: 'DE', totalCountries: 3 }].concat([de, ar, us].map((x) => ({ type: 'country', result: x }))).concat([summary])) });
+  await page.goto(base, { waitUntil: 'load' }); await page.waitForTimeout(300);
+  await page.fill('#link', LINK); await page.click('#manual-entry'); await page.fill('#room', 'Doppelzimmer'); await page.fill('#user-price', '6.538,00');
+  await page.click('#request-form button[type="submit"]');
+  await page.waitForSelector('#result-panel .result-partial-note', { timeout: 8000 }); await page.waitForTimeout(200);
+  const txt = await page.textContent('#result-panel');
+  ok('Eigener Preis: "guenstiger als alle 3 Laender (ab 6.783,83 €)"', txt.includes('Dein Preis (6.538,00 €) ist günstiger als alle 3 Länder (ab 6.783,83 €)'));
+  ok('Eigener Preis: kein "unter 3 % zaehlen wir nicht"', !/zählen wir bewusst nicht/.test(txt));
+  ok('Eigener Preis: kein Umrechnungs-Schwellenhinweis', !/Schwelle von 3 %/.test(txt));
+  ok('Eigener Preis: keine JS-Fehler', errors.length === 0, errors.join(' | '));
+  await ctx.close();
+}
+
 // ---- 3. Enter im Link-Feld laedt Zimmer (Anlass dieses Tests, 21.09.2026) ---------------------
 async function enterLaedtZimmer(browser, base) {
   const { page, ctx, errors, calls } = await neueSeite(browser, { preisAntwort: () => ndjson([{ type: 'summary', success: false, reason: 'error' }]) });
@@ -260,7 +280,7 @@ async function rechner(browser, base) {
   const { srv, base } = await startServer();
   const browser = await chromium.launch();
   try {
-    for (const suite of [zweiSchritte, streuung, handySchwankt, enterLaedtZimmer, rechner]) {
+    for (const suite of [zweiSchritte, streuung, handySchwankt, eigenerPreisBester, enterLaedtZimmer, rechner]) {
       console.log('\n== ' + suite.name);
       await suite(browser, base);
     }
