@@ -323,6 +323,7 @@
     "idx_res_samples": "Abrufe: {prices}",
     "idx_res_baseline_two": "Booking zeigte in {baseline} bei mehreren Abrufen verschiedene Preise ({prices}, {pct} % auseinander). Wir rechnen gegen den niedrigsten.",
     "idx_res_userprice": "Unser Preis für dein Ausgangsland: {ours}. Du siehst {yours}. Gerechnet wird gegen den niedrigeren: {used}.",
+    "idx_res_userprice_best": "Dein Preis ({yours}) ist günstiger als alle {count} Länder (ab {min}). Booking gibt einzelnen Sitzungen eigene Rabatte, etwa „Booking.com bezahlt“ bei Online-Zahlung. Buch am besten genau in diesem Browserfenster, bevor der Preis wieder verschwindet.",
     "idx_res_confirmed": "Fund bestätigt: {country} lag bei einem zweiten Abruf weiterhin günstiger ({before} % → {after} %).",
     "idx_res_unstable": "Unterschied nicht stabil: Bei einem zweiten Abruf war {country} nicht mehr so günstig ({before} % → {after} %). Das war vermutlich ein Sitzungs-Los, kein Landespreis.",
     "idx_res_unstable_other": "Unterschied nicht stabil: Bei einem zweiten Abruf lag {country} nicht mehr vorn (zuerst {before} %). Bestes Land ist jetzt {newcountry} mit {after} %.",

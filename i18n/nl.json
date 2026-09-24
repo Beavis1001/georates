@@ -398,6 +398,7 @@
  "idx_res_samples": "opvragingen: {prices}",
  "idx_res_baseline_two": "Booking toonde in {baseline} bij meerdere opvragingen verschillende prijzen ({prices}, {pct} % uit elkaar). We vergelijken met de laagste.",
  "idx_res_userprice": "Onze prijs voor jouw land: {ours}. Jij ziet {yours}. We vergelijken met de laagste: {used}.",
+ "idx_res_userprice_best": "Jouw prijs ({yours}) is goedkoper dan alle {count} landen (vanaf {min}). Booking geeft losse sessies eigen kortingen, zoals „Booking.com betaalt” bij online betalen. Boek het liefst in precies dit browservenster voordat de prijs weer verdwijnt.",
  "idx_res_confirmed": "Vondst bevestigd: {country} was bij een tweede opvraging nog steeds goedkoper ({before} % → {after} %).",
  "idx_res_unstable": "Verschil niet stabiel: bij een tweede opvraging was {country} niet meer zo goedkoop ({before} % → {after} %). Waarschijnlijk een sessie-loterij, geen landprijs.",
  "idx_res_unstable_other": "Verschil niet stabiel: bij een tweede opvraging lag {country} niet meer voor (eerst {before} %). Het beste land is nu {newcountry} met {after} %.",
