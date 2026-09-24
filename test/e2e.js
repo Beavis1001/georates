@@ -167,12 +167,36 @@ async function streuung(browser, base) {
   ok('Smartphone-Preis bestaetigt', /Smartphone-Preis bestätigt/.test(txt));
   ok('Deal-Tag Online-Zahlung', txt.includes('Rabatt für Online-Zahlung'));
   ok('Deal-Tag Mobile Rate', txt.includes('Mobile Rate'));
-  ok('Zwei Ausgangspreise mit lokalisiertem Prozent', /zwei Abrufen verschiedene Preise/.test(txt) && txt.includes('2,2 %'));
+  ok('Mehrere Ausgangspreise mit lokalisiertem Prozent', /mehreren Abrufen verschiedene Preise/.test(txt) && txt.includes('2,2 %'));
   ok('Nutzerpreis-Hinweis', txt.includes('Du siehst 1.200,00 €'));
   ok('Nicht stabil fuer Kolumbien', /nicht stabil/.test(txt) && txt.includes('Kolumbien'));
   ok('Streuungshinweis', txt.includes('pro Sitzung'));
-  ok('Zeilen-Notiz mit zwei Abrufen', txt.includes('zwei Abrufe: 1.292,06 € / 1.264,00 €'));
+  ok('Zeilen-Notiz mit Abrufen', txt.includes('Abrufe: 1.292,06 € / 1.264,00 €') && !txt.includes('zwei Abrufe'));
   ok('Streuung: keine JS-Fehler', errors.length === 0, errors.join(' | '));
+  await ctx.close();
+}
+
+// ---- 2b. Handy-Rabatt nicht in jeder Sitzung (echter Lauf 24.09.2026, Zahlen nachgestellt) ----
+async function handySchwankt(browser, base) {
+  const de = { country: 'DE', priceEuro: 194.56, priceLocal: 194.56, currency: 'EUR', samples: [209.1, 209.1, 194.56], spreadPct: 7.5, deals: ['deal'] };
+  const inn = { country: 'IN', priceEuro: 187.38, priceLocal: 20446.07, currency: 'INR', deals: ['online_payment'] };
+  const mobil = { country: 'DE', device: 'Android/Smartphone', mobile: true, priceEuro: 209, priceLocal: 209, currency: 'EUR', samples: [188, 209], spreadPct: 11.2, deals: ['mobile'],
+    savingsPct: -7.4, relevant: false, implausible: false, beatsBestCountry: false, schwankt: true, bestSeenEuro: 188, bestSeenSavingsPct: 3.4,
+    confirmation: { done: true, savingsBeforePct: 10.1, savingsAfterPct: -7.4, stable: false } };
+  const summary = { type: 'summary', success: true, results: [de, inn], best: inn, savingsPct: 3.7, relevantSaving: true, relevantThresholdPct: 3, convertedCurrency: true, recommendVpnCountry: null, baselineCountry: 'DE',
+    baselineUsedEuro: 194.56, baselineSamples: [209.1, 209.1, 194.56], baselineSpreadPct: 7.5, mobile: mobil,
+    confirmation: { done: true, country: 'IN', savingsBeforePct: 10.4, savingsAfterPct: 3.7, stable: true }, partial: false, resultId: 'abcDEF654321', countries: ['DE', 'IN'] };
+  const { page, ctx, errors } = await neueSeite(browser, { preisAntwort: () => ndjson([{ type: 'meta', baselineCountry: 'DE', totalCountries: 2 }].concat([de, inn].map((x) => ({ type: 'country', result: x }))).concat([{ type: 'mobile', result: mobil }, summary])) });
+  await page.goto(base, { waitUntil: 'load' }); await page.waitForTimeout(300);
+  await page.fill('#link', LINK); await page.click('#manual-entry'); await page.fill('#room', 'Doppelzimmer');
+  await page.click('#request-form button[type="submit"]');
+  await page.waitForSelector('#result-panel .result-partial-note', { timeout: 8000 }); await page.waitForTimeout(200);
+  const txt = await page.textContent('#result-panel');
+  ok('Handy-Zeile zeigt Preis statt "–"', (await page.textContent('.mobile-row')).includes('209,00 €'));
+  ok('Hinweis: Rabatt nicht in jeder Sitzung, beide Preise, 3,4 %', /nicht in jeder Sitzung/.test(txt) && txt.includes('188,00 € / 209,00 €') && txt.includes('3,4 %'));
+  ok('kein roter "nicht stabil"-Hinweis fuer das Handy daneben', !/Smartphone-Vorteil nicht stabil/.test(txt));
+  ok('Prozent in der Zusammenfassung lokalisiert (3,7 statt 3.7)', txt.includes('3,7 %') && !txt.includes('3.7 %'));
+  ok('Handy schwankt: keine JS-Fehler', errors.length === 0, errors.join(' | '));
   await ctx.close();
 }
 
@@ -230,7 +254,7 @@ async function rechner(browser, base) {
   const { srv, base } = await startServer();
   const browser = await chromium.launch();
   try {
-    for (const suite of [zweiSchritte, streuung, enterLaedtZimmer, rechner]) {
+    for (const suite of [zweiSchritte, streuung, handySchwankt, enterLaedtZimmer, rechner]) {
       console.log('\n== ' + suite.name);
       await suite(browser, base);
     }

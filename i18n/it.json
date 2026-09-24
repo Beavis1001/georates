@@ -395,8 +395,8 @@
  "idx_deal_last_minute": "Offerta last minute",
  "idx_deal_secret": "Offerta segreta",
  "idx_deal_deal": "Offerta",
- "idx_res_samples": "due consultazioni: {prices}",
- "idx_res_baseline_two": "Booking ha mostrato in {baseline} prezzi diversi in due consultazioni ({prices}, {pct} % di differenza). Confrontiamo con il più basso.",
+ "idx_res_samples": "consultazioni: {prices}",
+ "idx_res_baseline_two": "Booking ha mostrato in {baseline} prezzi diversi in più consultazioni ({prices}, {pct} % di differenza). Confrontiamo con il più basso.",
  "idx_res_userprice": "Il nostro prezzo per il tuo paese: {ours}. Tu vedi {yours}. Confrontiamo con il più basso: {used}.",
  "idx_res_confirmed": "Ritrovamento confermato: {country} era ancora più economico a una seconda consultazione ({before} % → {after} %).",
  "idx_res_unstable": "Differenza non stabile: a una seconda consultazione {country} non era più così economico ({before} % → {after} %). Probabilmente una lotteria di sessione, non un prezzo paese.",
@@ -408,6 +408,7 @@
  "idx_res_mobile_none": "Su smartphone nessun prezzo più basso ({price}).",
  "idx_res_mobile_confirmed": "Prezzo smartphone confermato: ancora più basso a una seconda lettura ({before} % → {after} %).",
  "idx_res_mobile_unstable": "Vantaggio smartphone non stabile: sparito alla seconda lettura ({before} % → {after} %). Probabilmente una lotteria di sessione.",
+ "idx_res_mobile_varies": "Booking non ha concesso lo sconto smartphone in ogni sessione ({prices}). Con un po' di fortuna circa {pct} % in meno rispetto al computer da {baseline}: controlla sul telefono.",
  "idx_step2_hint": "Camera, trattamento e cancellazione compaiono dopo il caricamento, con le opzioni che questo hotel offre davvero.",
  "idx_manual_entry": "Oppure inserisci tu il nome della camera"
 }

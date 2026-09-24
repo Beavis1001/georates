@@ -408,14 +408,14 @@
       html += '<div class="form-msg msg-error">' + escHtml(t('idx_res_baseline_missing', { baseline: baselineName })) + '</div>';
     } else if (json.recommendVpnCountry) {
       var cn = countryName(json.recommendVpnCountry);
-      html += '<div class="result-savings">' + escHtml(t('idx_res_savings', { country: cn, pct: json.savingsPct, baseline: baselineName })) + '</div>';
+      html += '<div class="result-savings">' + escHtml(t('idx_res_savings', { country: cn, pct: pctText(json.savingsPct), baseline: baselineName })) + '</div>';
       var vpnStep = t('idx_res_step_vpn', { country: escHtml(cn) })
         + (isRealUrl(VPN_AFFILIATE_URL) ? ' (<a href="' + escHtml(VPN_AFFILIATE_URL) + '" target="_blank" rel="noopener sponsored">' + escHtml(t('idx_res_step_vpn_link')) + '</a>)' : '');
       var steps = '<li>' + vpnStep + '</li><li>' + t('idx_res_step_logout') + '</li><li>' + t('idx_res_step_reload') + '</li><li>' + t('idx_res_step_currency') + '</li>';
       if (isRealUrl(REVOLUT_AFFILIATE_URL)) steps += '<li>' + t('idx_res_step_revolut', { url: escHtml(REVOLUT_AFFILIATE_URL) }) + '</li>';
       html += '<div class="result-instructions"><h4>' + escHtml(t('idx_res_steps_title')) + '</h4><ol>' + steps + '</ol></div>';
     } else if (relevantSaving && json.savingsPct != null) {
-      html += '<div class="form-msg msg-ok">' + escHtml(t('idx_res_small_saving', { country: countryName(json.best.country), pct: json.savingsPct, baseline: baselineName })) + '</div>';
+      html += '<div class="form-msg msg-ok">' + escHtml(t('idx_res_small_saving', { country: countryName(json.best.country), pct: pctText(json.savingsPct), baseline: baselineName })) + '</div>';
     } else {
       html += '<div class="form-msg msg-ok">' + escHtml(t('idx_res_none', { baseline: baselineName, threshold: threshold })) + '</div>';
     }
@@ -427,16 +427,22 @@
       if (m.relevant) {
         html += '<div class="result-savings result-mobile">' + escHtml(t(m.beatsBestCountry ? 'idx_res_mobile_best' : 'idx_res_mobile_saving', { pct: pctText(m.savingsPct), price: euro(m.priceEuro), baseline: baselineName })) + '</div>';
         html += '<div class="result-partial-note">' + escHtml(t('idx_res_mobile_how')) + '</div>';
+      } else if (m.schwankt && m.bestSeenSavingsPct > 0) {
+        // Rabatt kam nur in einem Teil der Handy-Sitzungen (24.09.2026: 188 / 209 EUR). Nicht als
+        // Fund verkaufen, aber auch nicht verschweigen - auf dem eigenen Handy nachsehen lohnt sich.
+        var ms = (m.samples || []).filter(function (v) { return v !== null && v !== undefined; });
+        html += '<div class="result-partial-note">' + escHtml(t('idx_res_mobile_varies', { prices: ms.map(euro).join(' / '), pct: pctText(m.bestSeenSavingsPct), baseline: baselineName })) + '</div>';
+        html += '<div class="result-partial-note">' + escHtml(t('idx_res_mobile_how')) + '</div>';
       } else {
         html += '<div class="result-partial-note">' + escHtml(t('idx_res_mobile_none', { price: euro(m.priceEuro) })) + '</div>';
       }
-      if (m.confirmation && m.confirmation.done) {
+      if (m.confirmation && m.confirmation.done && !(m.schwankt && !m.confirmation.stable)) {
         html += '<div class="result-partial-note' + (m.confirmation.stable ? '' : ' msg-error') + '">' + escHtml(t(m.confirmation.stable ? 'idx_res_mobile_confirmed' : 'idx_res_mobile_unstable', { before: pctText(m.confirmation.savingsBeforePct), after: pctText(m.confirmation.savingsAfterPct) })) + '</div>';
       }
     }
     if (json.convertedCurrency && threshold > 1) html += '<div class="result-partial-note">' + escHtml(t('idx_res_converted_note', { threshold: threshold })) + '</div>';
-    // Preisstreuung offen benennen: zwei Abrufe im Ausgangsland, verschiedene Preise -> wir
-    // rechnen gegen den niedrigeren. Das ist die Antwort auf "ihr rechnet den Ausgangspreis hoch".
+    // Preisstreuung offen benennen: mehrere Abrufe im Ausgangsland, verschiedene Preise -> wir
+    // rechnen gegen den niedrigsten. Das ist die Antwort auf "ihr rechnet den Ausgangspreis hoch".
     var bs = (json.baselineSamples || []).filter(function (v) { return v !== null && v !== undefined; });
     if (bs.length >= 2 && json.baselineSpreadPct > 0) {
       html += '<div class="result-partial-note">' + escHtml(t('idx_res_baseline_two', { baseline: baselineName, prices: bs.map(euro).join(' / '), pct: pctText(json.baselineSpreadPct) })) + '</div>';
