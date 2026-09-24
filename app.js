@@ -300,22 +300,36 @@
   }
 
   // ---- Ergebnis-Darstellung -------------------------------------------------------------------
-  function tableHtml(results, bestCountry) {
+  // Deal-Plaketten und Stichproben unter dem Namen einer Zeile (Land oder Smartphone).
+  function rowExtra(r) {
+    var extra = '';
+    if (r.deals && r.deals.length) {
+      extra += '<span class="deal-tags">' + r.deals.map(function (d) { return '<span class="deal-tag">' + escHtml(dealLabel(d)) + '</span>'; }).join('') + '</span>';
+    }
+    var samples = (r.samples || []).filter(function (v) { return v !== null && v !== undefined; });
+    if (samples.length >= 2 && r.spreadPct > 0) {
+      extra += '<span class="row-note">' + escHtml(t('idx_res_samples', { prices: samples.map(euro).join(' / ') })) + '</span>';
+    }
+    return extra;
+  }
+  // Smartphone-Zeile (Experiment MOBILE_CHECK der API, seit 21.09.2026): dasselbe Zimmer im
+  // Ausgangsland, aber mit Handy-Profil abgerufen. Steht direkt unter dem Ausgangsland, mit
+  // Plakette "Smartphone" statt als eigenes Land - es ist ein Geraete-, kein Laendereffekt.
+  function mobileRowHtml(m) {
+    if (!m) return '';
+    var priceText = m.priceEuro !== null && m.priceEuro !== undefined ? euro(m.priceEuro) : '–';
+    return '<tr class="mobile-row"><th scope="row">' + escHtml(countryName(m.country)) + ' <span class="deal-tag device-tag">' + escHtml(t('idx_row_mobile')) + '</span>' + rowExtra(m) + '</th><td>' + escHtml(m.priceEuro !== null && m.priceEuro !== undefined ? localPrice(m) : '–') + '</td><td>' + escHtml(priceText) + '</td></tr>';
+  }
+  function tableHtml(results, bestCountry, mobile) {
     var rows = results.map(function (r) {
       var isBest = bestCountry && r.country === bestCountry;
       var priceText = r.priceEuro !== null && r.priceEuro !== undefined ? euro(r.priceEuro) : '–';
-      // Deal-Plaketten und Stichproben unter dem Laendernamen: Der Grund eines niedrigeren
-      // Preises (Online-Zahlung, Mobile Rate ...) und ob zwei Abrufe verschiedene Preise zeigten.
-      var extra = '';
-      if (r.deals && r.deals.length) {
-        extra += '<span class="deal-tags">' + r.deals.map(function (d) { return '<span class="deal-tag">' + escHtml(dealLabel(d)) + '</span>'; }).join('') + '</span>';
-      }
-      var samples = (r.samples || []).filter(function (v) { return v !== null && v !== undefined; });
-      if (samples.length >= 2 && r.spreadPct > 0) {
-        extra += '<span class="row-note">' + escHtml(t('idx_res_samples', { prices: samples.map(euro).join(' / ') })) + '</span>';
-      }
-      return '<tr class="' + (isBest ? 'best-row' : '') + '"><th scope="row">' + escHtml(countryName(r.country)) + extra + '</th><td>' + escHtml(localPrice(r)) + '</td><td>' + escHtml(priceText) + '</td></tr>';
+      var row = '<tr class="' + (isBest ? 'best-row' : '') + '"><th scope="row">' + escHtml(countryName(r.country)) + rowExtra(r) + '</th><td>' + escHtml(localPrice(r)) + '</td><td>' + escHtml(priceText) + '</td></tr>';
+      // Smartphone-Zeile direkt unter dem Land, in dem sie abgerufen wurde.
+      if (mobile && mobile.country === r.country) row += mobileRowHtml(mobile);
+      return row;
     }).join('');
+    if (mobile && !results.some(function (r) { return r.country === mobile.country; })) rows += mobileRowHtml(mobile);
     return '<table class="result-table"><caption class="sr-only">' + escHtml(t('idx_table_caption')) + '</caption><thead><tr><th scope="col">' + escHtml(t('idx_th_country')) + '</th><th scope="col">' + escHtml(t('idx_th_local')) + '</th><th scope="col">' + escHtml(t('idx_th_euro')) + '</th></tr></thead><tbody>' + rows + '</tbody></table>';
   }
 
@@ -324,7 +338,7 @@
   // aendern kann. Gezeigt werden nur die nackten Zahlen und der Fortschritt.
   function renderLiveTable(panel, live) {
     panel.style.display = 'block';
-    panel.innerHTML = tableHtml(live.results, null)
+    panel.innerHTML = tableHtml(live.results, null, live.mobile || null)
       + '<div class="form-msg" style="color:var(--muted);">' + escHtml(t('idx_live_progress', { done: live.results.length, total: live.total || '?' })) + '</div>';
   }
 
@@ -371,7 +385,7 @@
     // Zeile als "beste" hervorgehoben - sonst sieht es aus, als haette der Check etwas gefunden.
     var relevantSaving = json.relevantSaving === true;
     var threshold = json.relevantThresholdPct != null ? json.relevantThresholdPct : 1;
-    var html = tableHtml(json.results, relevantSaving && json.best ? json.best.country : null)
+    var html = tableHtml(json.results, relevantSaving && json.best ? json.best.country : null, json.mobile || null)
       + '<p class="result-partial-note">' + escHtml(t('idx_res_local_note')) + '</p>';
     var actions = [];
     if (hotelLink && /^https?:\/\//i.test(hotelLink)) {
@@ -404,6 +418,21 @@
       html += '<div class="form-msg msg-ok">' + escHtml(t('idx_res_small_saving', { country: countryName(json.best.country), pct: json.savingsPct, baseline: baselineName })) + '</div>';
     } else {
       html += '<div class="form-msg msg-ok">' + escHtml(t('idx_res_none', { baseline: baselineName, threshold: threshold })) + '</div>';
+    }
+    // Smartphone-Preis (summary.mobile): eigener Hinweis, weil der Weg dahin ein anderer ist als
+    // beim Laenderpreis - kein VPN, sondern Handy-Browser oder Booking-App. Schlaegt das Handy alle
+    // Laender, steht das ausdruecklich da; die VPN-Anleitung darueber bleibt trotzdem stehen.
+    if (json.mobile && json.mobile.priceEuro !== null && json.mobile.priceEuro !== undefined && !baselineMissing) {
+      var m = json.mobile;
+      if (m.relevant) {
+        html += '<div class="result-savings result-mobile">' + escHtml(t(m.beatsBestCountry ? 'idx_res_mobile_best' : 'idx_res_mobile_saving', { pct: pctText(m.savingsPct), price: euro(m.priceEuro), baseline: baselineName })) + '</div>';
+        html += '<div class="result-partial-note">' + escHtml(t('idx_res_mobile_how')) + '</div>';
+      } else {
+        html += '<div class="result-partial-note">' + escHtml(t('idx_res_mobile_none', { price: euro(m.priceEuro) })) + '</div>';
+      }
+      if (m.confirmation && m.confirmation.done) {
+        html += '<div class="result-partial-note' + (m.confirmation.stable ? '' : ' msg-error') + '">' + escHtml(t(m.confirmation.stable ? 'idx_res_mobile_confirmed' : 'idx_res_mobile_unstable', { before: pctText(m.confirmation.savingsBeforePct), after: pctText(m.confirmation.savingsAfterPct) })) + '</div>';
+      }
     }
     if (json.convertedCurrency && threshold > 1) html += '<div class="result-partial-note">' + escHtml(t('idx_res_converted_note', { threshold: threshold })) + '</div>';
     // Preisstreuung offen benennen: zwei Abrufe im Ausgangsland, verschiedene Preise -> wir
@@ -526,6 +555,7 @@
                 if (idx >= 0) live.results[idx] = evt.result; else live.results.push(evt.result);
                 renderLiveTable(el.panel, live);
               }
+              else if (evt.type === 'mobile') { live.mobile = evt.result; renderLiveTable(el.panel, live); }
               else if (evt.type === 'summary') { json = evt; }
             }
           }

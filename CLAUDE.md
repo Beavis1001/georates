@@ -79,6 +79,11 @@ Text-Check sieht sie nicht, so ging am 21.09.2026 der Enter-Fehler live.
   (`confirmation`), optionales Feld "Preis, den du gerade siehst" (`userPrice`). Stream-Typ
   `update` ersetzt die Zeile eines Landes in der Live-Tabelle, statt sie anzuhaengen. Prozentwerte
   ueber `pctText()` lokalisieren (2,2 statt 2.2).
+- **Smartphone-Zeile** (seit 21.09.2026, nur wenn die API mit `MOBILE_CHECK=1` laeuft): Stream-Typ
+  `mobile` und `summary.mobile` tragen denselben Abruf mit Handy-Profil. Sie steht als eigene Zeile
+  mit Plakette "Smartphone" direkt unter dem Ausgangsland, NICHT in `results` (Geraet ist kein
+  Land) und bekommt einen eigenen Hinweis ohne VPN-Schritt (`idx_res_mobile_*`). Ohne Flag kommt
+  nichts davon, das Frontend muss beides koennen.
 - **Verpflegung steht auf "Egal".** "Fruehstueck" als Standard erzeugte "kein Preis"-Faelle. Nach
   "Zimmer laden" ist das erste Zimmer sofort ausgewaehlt und Verpflegung/Storno werden mit den
   Optionen befuellt, die es fuer dieses Zimmer wirklich gibt; dafuer muss ein `change`-Event

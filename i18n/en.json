@@ -401,6 +401,13 @@
  "idx_res_confirmed": "Find confirmed: {country} was still cheaper on a second fetch ({before} % → {after} %).",
  "idx_res_unstable": "Difference not stable: on a second fetch {country} was no longer that cheap ({before} % → {after} %). Probably a session lottery, not a country price.",
  "idx_res_spread_note": "Booking assigns prices per session (deals, payment method, device). That is why we fetch the home country twice, confirm finds once and show detected deal badges.",
+ "idx_row_mobile": "Smartphone",
+ "idx_res_mobile_saving": "About {pct} % cheaper on a smartphone: {price} instead of the desktop price via {baseline} – no VPN needed.",
+ "idx_res_mobile_best": "The smartphone beats every country: about {pct} % cheaper ({price}) than on a computer via {baseline} – with no VPN at all.",
+ "idx_res_mobile_how": "How to get it: open the hotel link on your phone in the browser or the Booking app, check while logged out, then book. We have not measured mobile rate and country price combined.",
+ "idx_res_mobile_none": "No cheaper price on a smartphone ({price}).",
+ "idx_res_mobile_confirmed": "Smartphone price confirmed: still cheaper on a second fetch ({before} % → {after} %).",
+ "idx_res_mobile_unstable": "Smartphone advantage not stable: gone on the second fetch ({before} % → {after} %). Probably a session lottery.",
  "idx_step2_hint": "Room, board and cancellation appear after loading – with the options this hotel actually offers.",
  "idx_manual_entry": "Or type the room name yourself"
 }

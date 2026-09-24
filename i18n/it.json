@@ -401,6 +401,13 @@
  "idx_res_confirmed": "Ritrovamento confermato: {country} era ancora più economico a una seconda consultazione ({before} % → {after} %).",
  "idx_res_unstable": "Differenza non stabile: a una seconda consultazione {country} non era più così economico ({before} % → {after} %). Probabilmente una lotteria di sessione, non un prezzo paese.",
  "idx_res_spread_note": "Booking assegna i prezzi per sessione (offerte, metodo di pagamento, dispositivo). Per questo consultiamo il tuo paese due volte, confermiamo i ritrovamenti una volta e mostriamo le etichette offerta riconosciute.",
+ "idx_row_mobile": "Smartphone",
+ "idx_res_mobile_saving": "Su smartphone circa {pct} % in meno: {price} invece del prezzo da computer via {baseline}, senza VPN.",
+ "idx_res_mobile_best": "Lo smartphone batte tutti i paesi: circa {pct} % in meno ({price}) rispetto al computer via {baseline}, senza alcuna VPN.",
+ "idx_res_mobile_how": "Come ottenerlo: apri il link dell’hotel sul telefono, nel browser o nell’app Booking, controlla senza accedere, poi prenota. Tariffa mobile e prezzo paese insieme non li abbiamo misurati.",
+ "idx_res_mobile_none": "Su smartphone nessun prezzo più basso ({price}).",
+ "idx_res_mobile_confirmed": "Prezzo smartphone confermato: ancora più basso a una seconda lettura ({before} % → {after} %).",
+ "idx_res_mobile_unstable": "Vantaggio smartphone non stabile: sparito alla seconda lettura ({before} % → {after} %). Probabilmente una lotteria di sessione.",
  "idx_step2_hint": "Camera, trattamento e cancellazione compaiono dopo il caricamento, con le opzioni che questo hotel offre davvero.",
  "idx_manual_entry": "Oppure inserisci tu il nome della camera"
 }
