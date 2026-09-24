@@ -209,7 +209,7 @@ async function handySchwankt(browser, base) {
 // ---- 2c. Eigener Preis schlaegt alle Laender (24.09.2026: "Booking.com bezahlt" nur beim Nutzer) --
 async function eigenerPreisBester(browser, base) {
   const de = { country: 'DE', priceEuro: 6997.88, priceLocal: 6997.88, currency: 'EUR', samples: [6997.88, 6997.88], spreadPct: 0, deals: [] };
-  const ar = { country: 'AR', priceEuro: 6783.83, priceLocal: 11723982.2, currency: 'ARS', deals: [] };
+  const ar = { country: 'AR', priceEuro: 6783.83, priceLocal: 11723982.2, currency: 'ARS', deals: ['genius_hint'] };
   const us = { country: 'US', priceEuro: 7648.82, priceLocal: 8717.9, currency: 'USD', deals: [] };
   const summary = { type: 'summary', success: true, results: [de, ar, us], best: ar, savingsPct: -3.8, relevantSaving: false, relevantThresholdPct: 3, convertedCurrency: true, recommendVpnCountry: null, baselineCountry: 'DE',
     baselineUsedEuro: 6538, userPriceEuro: 6538, userPriceDiffers: true, baselineSamples: [6997.88, 6997.88], baselineSpreadPct: 0, confirmation: null, partial: false, resultId: 'abcDEF777777', countries: ['DE', 'AR', 'US'] };
@@ -222,6 +222,7 @@ async function eigenerPreisBester(browser, base) {
   ok('Eigener Preis: "guenstiger als alle 3 Laender (ab 6.783,83 €)"', txt.includes('Dein Preis (6.538,00 €) ist günstiger als alle 3 Länder (ab 6.783,83 €)'));
   ok('Eigener Preis: kein "unter 3 % zaehlen wir nicht"', !/zählen wir bewusst nicht/.test(txt));
   ok('Eigener Preis: kein Umrechnungs-Schwellenhinweis', !/Schwelle von 3 %/.test(txt));
+  ok('Genius-Plakette und Hinweis mit Land', txt.includes('Genius möglich') && txt.includes('möglichen Genius-Rabatt an (Argentinien)'));
   ok('Eigener Preis: keine JS-Fehler', errors.length === 0, errors.join(' | '));
   await ctx.close();
 }

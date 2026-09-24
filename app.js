@@ -87,7 +87,7 @@
   var BOARD_KEYS = { uebernachtung: 'idx_board_room_only', fruehstueck: 'idx_board_breakfast', halbpension: 'idx_board_half', vollpension: 'idx_board_full', allinclusive: 'idx_board_allinclusive', egal: 'idx_board_any' };
   var CANCEL_KEYS = { ja: 'idx_cancel_yes', teilweise: 'idx_cancel_partial', nein: 'idx_cancel_no', unsicher: 'idx_cancel_unsure' };
   var CANCEL_FALLBACK = { ja: 'Kostenlos stornierbar', teilweise: 'Teilweise erstattbar', nein: 'Nicht kostenlos stornierbar' };
-  var DEAL_KEYS = { mobile: 'idx_deal_mobile', online_payment: 'idx_deal_online_payment', genius: 'idx_deal_genius', early: 'idx_deal_early', last_minute: 'idx_deal_last_minute', secret: 'idx_deal_secret', deal: 'idx_deal_deal' };
+  var DEAL_KEYS = { mobile: 'idx_deal_mobile', online_payment: 'idx_deal_online_payment', genius: 'idx_deal_genius', genius_hint: 'idx_deal_genius_hint', early: 'idx_deal_early', last_minute: 'idx_deal_last_minute', secret: 'idx_deal_secret', deal: 'idx_deal_deal' };
   function dealLabel(k) { return DEAL_KEYS[k] ? t(DEAL_KEYS[k]) : k; }
   function boardLabel(v) { return BOARD_KEYS[v] ? t(BOARD_KEYS[v]) : v; }
   function cancelLabel(v) { var s = CANCEL_KEYS[v] ? t(CANCEL_KEYS[v]) : v; return s === CANCEL_KEYS[v] ? (CANCEL_FALLBACK[v] || v) : s; }
@@ -458,6 +458,16 @@
       if (m.confirmation && m.confirmation.done && !(m.schwankt && !m.confirmation.stable)) {
         html += '<div class="result-partial-note' + (m.confirmation.stable ? '' : ' msg-error') + '">' + escHtml(t(m.confirmation.stable ? 'idx_res_mobile_confirmed' : 'idx_res_mobile_unstable', { before: pctText(m.confirmation.savingsBeforePct), after: pctText(m.confirmation.savingsAfterPct) })) + '</div>';
       }
+    }
+    // Genius wird erst eingeloggt im Checkout abgezogen und nicht in jedem Land (24.09.2026, Rodos
+    // Park: US-Sitzung mit, deutsche ohne - Endpreis -9,6 %). Das Tool sieht nur die Ankuendigung;
+    // die soll der Nutzer wenigstens erfahren, samt dem Rat, den Checkout zu vergleichen.
+    var geniusLaender = json.results.concat(json.mobile ? [json.mobile] : []).filter(function (r) { return (r.deals || []).indexOf('genius_hint') >= 0; })
+      .map(function (r) { return r.country; }).filter(function (c, i, a) { return c && a.indexOf(c) === i; });
+    if (geniusLaender.length) {
+      var alleMitPreis = json.results.filter(function (r) { return typeof r.priceEuro === 'number'; }).length;
+      var gl = geniusLaender.length >= alleMitPreis ? t('idx_res_genius_all') : geniusLaender.slice(0, 6).map(countryName).join(', ') + (geniusLaender.length > 6 ? ' …' : '');
+      html += '<div class="result-partial-note">' + escHtml(t('idx_res_genius_hint', { countries: gl })) + '</div>';
     }
     if (json.convertedCurrency && threshold > 1 && !eigenerPreisBester) html += '<div class="result-partial-note">' + escHtml(t('idx_res_converted_note', { threshold: threshold })) + '</div>';
     // Preisstreuung offen benennen: mehrere Abrufe im Ausgangsland, verschiedene Preise -> wir
