@@ -38,7 +38,12 @@ const ok = (name, cond, info) => { if (!cond) fehler++; console.log((cond ? 'OK 
 // Erfundene Daten. Der Link traegt Reisedaten, damit die Formularpruefung den "echten" Fall sieht.
 const LINK = 'https://www.booking.com/hotel/de/beispiel.de.html?checkin=2027-03-01&checkout=2027-03-03'; // leck-check-ok: erfundenes Hotel
 const CORS = { 'access-control-allow-origin': '*' };
-const TURNSTILE_STUB = 'window.turnstile={reset(){}};document.addEventListener("DOMContentLoaded",()=>{const f=document.getElementById("request-form");const i=document.createElement("input");i.type="hidden";i.name="cf-turnstile-response";i.value="tok";f.appendChild(i);});';
+// Der Stub legt den Token als verstecktes Feld ins Formular. Das echte Skript ist mit
+// "async defer" eingebunden, kann also NACH DOMContentLoaded laufen - dann feuert ein Listener auf
+// dieses Ereignis nie mehr, der Token fehlt, "Zimmer laden" bricht mit "Sicherheitspruefung"
+// ab. Genau so ist der e2e-Job am 24.09.2026 auf main einmal rot geworden, waehrend derselbe
+// Stand sechs Minuten vorher gruen war. Deshalb: sofort einfuegen, wenn das DOM schon steht.
+const TURNSTILE_STUB = 'window.turnstile={reset(){}};(function(){const add=()=>{const f=document.getElementById("request-form");if(!f||f.querySelector("[name=cf-turnstile-response]"))return;const i=document.createElement("input");i.type="hidden";i.name="cf-turnstile-response";i.value="tok";f.appendChild(i);};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",add);else add();})();';
 const ROOMS = { success: true, rooms: [{ name: 'Doppelzimmer <Meerblick>', boards: ['uebernachtung', 'fruehstueck'], cancels: ['ja', 'nein'] }, { name: 'Suite', boards: [], cancels: [] }], baselineCountry: 'DE' };
 function ndjson(zeilen) { return zeilen.map((z) => JSON.stringify(z)).join('\n') + '\n'; }
 
