@@ -70,7 +70,7 @@
       "idx_step1_title": "Hotel-Link & Zimmer angeben",
       "idx_step1_text": "Du fügst den Booking.com-Link zu deinem Hotel ein und wählst dein bevorzugtes Zimmer sowie die gewünschte Verpflegung.",
       "idx_step2_title": "Wir prüfen deinen Preis automatisch",
-      "idx_step2_text": "Aus 15 Länder-Sitzungen lesen wir den Preis für exakt dieses Zimmer und diese Verpflegung – steuer- und gebühreninklusiv, ohne Genius-Rabatt, in einer Minute.",
+      "idx_step2_text": "Aus 15 Länder-Sitzungen lesen wir den Preis für exakt dieses Zimmer und diese Verpflegung – steuer- und gebühreninklusiv, mit Genius-Rabatt (bekommt jedes Booking-Konto), in einer Minute.",
       "idx_step3_title": "Du buchst direkt",
       "idx_step3_text": "Die eigentliche Buchung läuft ganz normal über Booking.com – wir zeigen dir nur den besten Weg dorthin.",
       "idx_tools_label": "Kostenlos & ohne Anmeldung",
