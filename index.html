@@ -84,6 +84,9 @@
 
   /* Decorative comparison mockup */
   .hero-visual { display: flex; justify-content: center; }
+  a.mock-card { display: block; color: inherit; text-decoration: none; }
+  a.mock-card.echt { cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
+  a.mock-card.echt:hover, a.mock-card.echt:focus-visible { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(0,0,0,.28); }
   .mock-card {
     background: #fff; color: var(--text); border-radius: 18px; padding: 24px; width: 300px;
     box-shadow: 0 24px 60px rgba(6,20,32,0.35); transform: rotate(2deg);
@@ -424,14 +427,16 @@
       </p>
       <p class="hero-counter" id="search-counter" hidden></p>
     </div>
-    <div class="hero-visual" aria-hidden="true">
-      <div class="mock-card">
-        <div class="mock-card-title" data-i18n="idx_mock_title">BEISPIEL · DOPPELZIMMER MIT MEERBLICK, FRÜHSTÜCK</div>
-        <div class="mock-row"><span data-i18n="idx_mock_start_label">Ausgangspreis</span><span class="old-price">1.240 €</span></div>
-        <div class="mock-arrow" data-i18n="idx_mock_arrow">↓ 160 € gespart</div>
-        <div class="mock-row best"><span data-i18n="idx_mock_best_label">Bester gefundener Preis</span><span>1.080 €</span></div>
-        <span class="mock-badge" data-i18n="idx_mock_badge">≈13 % günstiger</span>
-      </div>
+    <div class="hero-visual">
+      <!-- Beispiel als Rueckfall; app.js ersetzt den Inhalt durch den groessten echten Fund aus dem
+           Best-of und macht die Karte zum Link auf #funde (seit 25.09.2026). -->
+      <a class="mock-card" id="hero-card" href="#funde" tabindex="-1" aria-hidden="true">
+        <div class="mock-card-title" id="hero-card-title" data-i18n="idx_mock_title">BEISPIEL · DOPPELZIMMER MIT MEERBLICK, FRÜHSTÜCK</div>
+        <div class="mock-row"><span id="hero-card-start-label" data-i18n="idx_mock_start_label">Ausgangspreis</span><span class="old-price" id="hero-card-start">1.240 €</span></div>
+        <div class="mock-arrow" id="hero-card-arrow" data-i18n="idx_mock_arrow">↓ 160 € gespart</div>
+        <div class="mock-row best"><span id="hero-card-best-label" data-i18n="idx_mock_best_label">Bester gefundener Preis</span><span id="hero-card-best">1.080 €</span></div>
+        <span class="mock-badge" id="hero-card-badge" data-i18n="idx_mock_badge">≈13 % günstiger</span>
+      </a>
     </div>
   </div>
 </section>

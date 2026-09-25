@@ -80,6 +80,7 @@ async function zweiSchritte(browser, base) {
   ok('Link aus ?link= uebernommen', (await page.inputValue('#link')) === LINK);
   ok('Adresszeile bereinigt', !(await page.evaluate(() => location.search)).includes('link='));
   ok('Best-of gerendert', (await page.textContent('#bestof-list')).includes('Beispiel Hof'));
+  ok('Hero-Karte zeigt groessten echten Fund und verlinkt auf #funde', (await page.textContent('#hero-card')).includes('Beispiel Hof') && (await page.textContent('#hero-card')).includes('9,1') && (await page.getAttribute('#hero-card', 'href')) === '#funde');
   ok('Zaehler sichtbar: "Bereits 1.234 Preis-Checks"', (await page.textContent('#search-counter')).includes('Bereits 1.234 Preis-Checks') && !(await page.getAttribute('#search-counter', 'hidden') !== null));
   ok('Bookmarklet href gesetzt', (await page.getAttribute('#bookmarklet', 'href')).startsWith('javascript:'));
   ok('Verpflegung-Standard = egal', (await page.inputValue('#board')) === 'egal');
