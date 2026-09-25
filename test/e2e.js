@@ -72,7 +72,7 @@ async function zweiSchritte(browser, base) {
   const summary = { type: 'summary', success: true, results, best: results[1], savingsPct: 11, relevantSaving: true, relevantThresholdPct: 3, convertedCurrency: true, recommendVpnCountry: 'CO', baselineCountry: 'DE', partial: false, resultId: 'abcDEF123456', countries: ['DE', 'CO', 'JP', 'US'] };
   const { page, ctx, errors, calls } = await neueSeite(browser, {
     preisAntwort: () => ndjson([{ type: 'meta', baselineCountry: 'DE', totalCountries: 4 }].concat(results.map((x) => ({ type: 'country', result: x }))).concat([summary])),
-    bestOf: { success: true, eintraege: [{ hotel: 'Beispiel Hof', hotelLand: 'DE', land: 'JP', pct: 9.1, euro: 53.54, datum: '2026-09-18', resultId: 'abcDEF123456' }] },
+    bestOf: { success: true, eintraege: [{ hotel: 'Beispiel Hof', hotelLand: 'DE', land: 'JP', pct: 9.1, euro: 53.54, datum: '2026-09-18', resultId: 'abcDEF123456' }], suchenGesamt: 1234 },
     permalink: Object.assign({}, summary, { type: undefined, fromPermalink: true, hotelName: 'Beispiel Hof', room: 'Suite', datum: '2026-09-18' }),
   });
   await page.goto(base + '?link=' + encodeURIComponent(LINK), { waitUntil: 'load' });
@@ -80,6 +80,7 @@ async function zweiSchritte(browser, base) {
   ok('Link aus ?link= uebernommen', (await page.inputValue('#link')) === LINK);
   ok('Adresszeile bereinigt', !(await page.evaluate(() => location.search)).includes('link='));
   ok('Best-of gerendert', (await page.textContent('#bestof-list')).includes('Beispiel Hof'));
+  ok('Zaehler sichtbar: "Bereits 1.234 Preis-Checks"', (await page.textContent('#search-counter')).includes('Bereits 1.234 Preis-Checks') && !(await page.getAttribute('#search-counter', 'hidden') !== null));
   ok('Bookmarklet href gesetzt', (await page.getAttribute('#bookmarklet', 'href')).startsWith('javascript:'));
   ok('Verpflegung-Standard = egal', (await page.inputValue('#board')) === 'egal');
   ok('Schritt 2 anfangs versteckt', !(await page.isVisible('#step2')));

@@ -30,6 +30,7 @@
       "idx_hero_eyebrow": "Automatischer Buchungs-Check für Booking.com",
       "idx_hero_h1": "Für dein Wunschzimmer den fairen Gesamtpreis sichern.",
       "idx_hero_sub": "Füg den Booking.com-Link zu deinem Hotel ein, wähl dein Zimmer – wir prüfen automatisch aus 15 Ländern, ob es für exakt dieses Zimmer und diese Verpflegung einen günstigeren, steuer- und gebühreninklusiven Gesamtpreis gibt.",
+      "idx_hero_counter": "Bereits {n} Preis-Checks durchgeführt",
       "idx_mock_title": "BEISPIEL · DOPPELZIMMER MIT MEERBLICK, FRÜHSTÜCK",
       "idx_mock_start_label": "Ausgangspreis",
       "idx_mock_arrow": "↓ 160 € gespart",

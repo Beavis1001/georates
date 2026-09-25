@@ -14,6 +14,7 @@
  "idx_hero_eyebrow": "Automatic booking check for Booking.com",
  "idx_hero_h1": "Secure the fair total price for your dream room.",
  "idx_hero_sub": "Paste the Booking.com link to your hotel, pick your room – we automatically check from 15 countries whether exactly this room and board type is available at a cheaper total price, taxes and fees included.",
+ "idx_hero_counter": "{n} price checks run so far",
  "idx_mock_title": "EXAMPLE · DOUBLE ROOM WITH SEA VIEW, BREAKFAST",
  "idx_mock_start_label": "Starting price",
  "idx_mock_arrow": "↓ €160 saved",

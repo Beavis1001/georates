@@ -662,11 +662,22 @@
       }).join('');
     };
     var daten = null;
+    // Gesamtzahl der Preis-Checks (seit 25.09.2026) kommt mit der Best-of-Antwort, ohne eigenen Abruf.
+    // Die API startet bei der Zahl aus dem Log (212), nicht bei null.
+    var suchen = null;
+    var zeigeZaehler = function () {
+      var el = document.getElementById('search-counter');
+      if (!el || !(suchen > 0)) return;
+      el.textContent = t('idx_hero_counter', { n: Number(suchen).toLocaleString(locale()) });
+      el.hidden = false;
+    };
     fetch(BESTOF_API_URL).then(function (r) { return r.ok ? r.json() : null; }).then(function (json) {
       daten = json && json.eintraege;
+      suchen = json && json.suchenGesamt;
       render(daten);
+      zeigeZaehler();
     }).catch(function () { render(null); });
-    window.addEventListener('georates:langchange', function () { render(daten); });
+    window.addEventListener('georates:langchange', function () { render(daten); zeigeZaehler(); });
   }
 
   // ---- Bookmarklet ----------------------------------------------------------------------------
