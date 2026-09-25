@@ -671,13 +671,35 @@
       el.textContent = t('idx_hero_counter', { n: Number(suchen).toLocaleString(locale()) });
       el.hidden = false;
     };
+    // Karte oben: statt des erfundenen Beispiels der groesste echte Fund, als Link zur Liste
+    // (Wunsch des Betreibers, 25.09.2026). Ohne Daten bleibt das Beispiel stehen. Aeltere
+    // API-Antworten ohne basisEuro: Ausgangspreis aus Ersparnis und Prozent zurueckrechnen.
+    var zeigeHeroFund = function () {
+      var e = daten && daten[0];
+      var card = document.getElementById('hero-card');
+      if (!card || !e || !(e.pct > 0) || !(e.euro > 0)) return;
+      var basis = e.basisEuro > 0 ? e.basisEuro : Math.round(e.euro * 10000 / e.pct) / 100;
+      var set = function (id, text) { var el = document.getElementById(id); if (el) { el.removeAttribute('data-i18n'); el.textContent = text; } };
+      set('hero-card-title', t('idx_mock_real_title', { hotel: e.hotel || '' }));
+      set('hero-card-start-label', t('idx_mock_real_start', { country: countryName(e.baseline || 'DE') }));
+      set('hero-card-start', euro(basis));
+      set('hero-card-arrow', t('idx_mock_real_arrow', { euro: euro(e.euro) }));
+      set('hero-card-best-label', t('idx_mock_real_best', { country: countryName(e.land) }));
+      set('hero-card-best', euro(Math.round((basis - e.euro) * 100) / 100));
+      set('hero-card-badge', t('idx_mock_real_badge', { pct: pctText(e.pct) }));
+      card.classList.add('echt');
+      card.removeAttribute('aria-hidden');
+      card.removeAttribute('tabindex');
+      card.setAttribute('aria-label', t('idx_mock_real_aria'));
+    };
     fetch(BESTOF_API_URL).then(function (r) { return r.ok ? r.json() : null; }).then(function (json) {
       daten = json && json.eintraege;
       suchen = json && json.suchenGesamt;
       render(daten);
       zeigeZaehler();
+      zeigeHeroFund();
     }).catch(function () { render(null); });
-    window.addEventListener('georates:langchange', function () { render(daten); zeigeZaehler(); });
+    window.addEventListener('georates:langchange', function () { render(daten); zeigeZaehler(); zeigeHeroFund(); });
   }
 
   // ---- Bookmarklet ----------------------------------------------------------------------------
