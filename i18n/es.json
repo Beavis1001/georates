@@ -14,6 +14,7 @@
  "idx_hero_eyebrow": "Comprobación automática de reservas para Booking.com",
  "idx_hero_h1": "Consigue el precio total justo para la habitación que quieres.",
  "idx_hero_sub": "Pega el enlace de Booking.com de tu hotel, elige tu habitación: comprobamos automáticamente desde 15 países si exactamente esa habitación y ese régimen tienen un precio total más bajo, impuestos y tasas incluidos.",
+ "idx_hero_counter": "Ya se han realizado {n} comprobaciones de precio",
  "idx_mock_title": "EJEMPLO · HABITACIÓN DOBLE CON VISTA AL MAR, DESAYUNO",
  "idx_mock_start_label": "Precio de partida",
  "idx_mock_arrow": "↓ 160 € ahorrados",
