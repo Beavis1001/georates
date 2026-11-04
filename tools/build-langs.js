@@ -36,9 +36,12 @@ const SPRACHEN = ['de', 'en', 'es', 'fr', 'it', 'nl'];
 // Seiten, die es in allen Sprachen gibt.
 const SEITEN = ['index.html', 'budget.html', 'gruppenkosten.html', 'packliste.html', 'ratgeber.html'];
 
-// Seiten, die es nur auf Deutsch als Adresse gibt (Rechtstexte).
+// Seiten, die es nur auf Deutsch als Adresse gibt (Rechtstexte und SEO-Ratgeber).
 // Links darauf zeigen aus jeder Sprachfassung auf die deutsche Datei im Wurzelverzeichnis.
-const NUR_DEUTSCH = ['impressum.html', 'datenschutz.html', 'agb.html'];
+// Die drei Ratgeber bleiben bewusst ohne Sprachordner: es gibt keine Uebersetzung,
+// eine erzeugte /en/-Adresse waere deutsch unter englischer URL (04.11.2026).
+const GUIDE_DE = ['booking-laenderpreise.html', 'hotel-vpn-guenstiger-buchen.html', 'booking-aus-japan-buchen.html'];
+const NUR_DEUTSCH = ['impressum.html', 'datenschutz.html', 'agb.html'].concat(GUIDE_DE);
 
 // Welcher i18n-Schluessel liefert Beschreibung und og-Texte je Seite.
 const META = {
@@ -348,7 +351,7 @@ function sitemap() {
       '    <loc>' + BASIS + '/' + seite + '</loc>\n' +
       '    <lastmod>' + heute + '</lastmod>\n' +
       '    <changefreq>monthly</changefreq>\n' +
-      '    <priority>' + (seite === 'ratgeber.html' ? '0.8' : '0.3') + '</priority>\n' +
+      '    <priority>' + (GUIDE_DE.indexOf(seite) !== -1 ? '0.7' : '0.3') + '</priority>\n' +
       '  </url>'
     );
   }

@@ -168,7 +168,7 @@ async function zweiSchritte(browser, base) {
   ok('Mobil: Menue klappt auf', await page.isVisible('#nav-links a[href="ratgeber.html"]'));
   ok('Mobil: SVG-Anleitung versteckt', !(await page.isVisible('.guide-diagram')));
   ok('Mobil: kein horizontales Scrollen', !(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)));
-  for (const p of ['ratgeber.html', 'datenschutz.html', 'impressum.html', 'agb.html']) {
+  for (const p of ['ratgeber.html', 'datenschutz.html', 'impressum.html', 'agb.html', 'booking-laenderpreise.html', 'hotel-vpn-guenstiger-buchen.html', 'booking-aus-japan-buchen.html']) {
     await page.goto(base + p, { waitUntil: 'load' }); await page.waitForTimeout(150);
   }
   ok('Zwei Schritte: keine JS-Fehler', errors.length === 0, errors.join(' | '));
