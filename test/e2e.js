@@ -148,6 +148,15 @@ async function zweiSchritte(browser, base) {
   ok('EN: Adresse schlaegt gespeicherte Sprache', (await page.getAttribute('html', 'lang')) === 'en');
   ok('EN: Logo bleibt in der Sprache', (await page.getAttribute('a.logo', 'href')) === '/en/');
 
+  // Ratgeber: die einzige Inhaltsseite - sie muss uebersetzt ankommen, samt strukturierter Daten.
+  await page.goto(base + 'en/ratgeber.html', { waitUntil: 'load' }); await page.waitForTimeout(600);
+  ok('EN-Ratgeber: lang-Attribut', (await page.getAttribute('html', 'lang')) === 'en');
+  ok('EN-Ratgeber: Ueberschrift uebersetzt', (await page.textContent('h1')).includes('Hotel prices by country'));
+  const ld = JSON.parse(await page.textContent('script[data-i18n-ld="faq"]'));
+  ok('EN-Ratgeber: FAQ-Auszeichnung in Landessprache',
+    ld.mainEntity.length === 4 && ld.mainEntity[0].name.startsWith('Are hotels'), ld.mainEntity[0] && ld.mainEntity[0].name);
+  ok('EN-Ratgeber: FAQ-Text ohne HTML', !JSON.stringify(ld).includes('<strong>'));
+
   await page.goto(base, { waitUntil: 'load' });
   await page.evaluate(() => localStorage.setItem('georates_lang', 'de'));
 

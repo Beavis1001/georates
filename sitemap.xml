@@ -55,6 +55,19 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://georates.tech/ratgeber.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://georates.tech/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://georates.tech/en/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://georates.tech/es/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://georates.tech/fr/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://georates.tech/it/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://georates.tech/nl/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://georates.tech/ratgeber.html"/>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://georates.tech/en/</loc>
     <xhtml:link rel="alternate" hreflang="de" href="https://georates.tech/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://georates.tech/en/"/>
@@ -102,6 +115,19 @@
     <xhtml:link rel="alternate" hreflang="it" href="https://georates.tech/it/packliste.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://georates.tech/nl/packliste.html"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://georates.tech/packliste.html"/>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://georates.tech/en/ratgeber.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://georates.tech/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://georates.tech/en/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://georates.tech/es/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://georates.tech/fr/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://georates.tech/it/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://georates.tech/nl/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://georates.tech/ratgeber.html"/>
     <lastmod>2026-11-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -159,6 +185,19 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://georates.tech/es/ratgeber.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://georates.tech/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://georates.tech/en/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://georates.tech/es/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://georates.tech/fr/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://georates.tech/it/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://georates.tech/nl/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://georates.tech/ratgeber.html"/>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://georates.tech/fr/</loc>
     <xhtml:link rel="alternate" hreflang="de" href="https://georates.tech/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://georates.tech/en/"/>
@@ -206,6 +245,19 @@
     <xhtml:link rel="alternate" hreflang="it" href="https://georates.tech/it/packliste.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://georates.tech/nl/packliste.html"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://georates.tech/packliste.html"/>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://georates.tech/fr/ratgeber.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://georates.tech/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://georates.tech/en/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://georates.tech/es/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://georates.tech/fr/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://georates.tech/it/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://georates.tech/nl/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://georates.tech/ratgeber.html"/>
     <lastmod>2026-11-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -263,6 +315,19 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://georates.tech/it/ratgeber.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://georates.tech/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://georates.tech/en/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://georates.tech/es/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://georates.tech/fr/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://georates.tech/it/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://georates.tech/nl/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://georates.tech/ratgeber.html"/>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://georates.tech/nl/</loc>
     <xhtml:link rel="alternate" hreflang="de" href="https://georates.tech/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://georates.tech/en/"/>
@@ -315,6 +380,19 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://georates.tech/nl/ratgeber.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://georates.tech/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://georates.tech/en/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://georates.tech/es/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://georates.tech/fr/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://georates.tech/it/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://georates.tech/nl/ratgeber.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://georates.tech/ratgeber.html"/>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://georates.tech/impressum.html</loc>
     <lastmod>2026-11-04</lastmod>
     <changefreq>monthly</changefreq>
@@ -331,11 +409,5 @@
     <lastmod>2026-11-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://georates.tech/ratgeber.html</loc>
-    <lastmod>2026-11-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
 </urlset>

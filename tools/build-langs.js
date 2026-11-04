@@ -34,19 +34,24 @@ const QUELLSPRACHE = 'de';
 const SPRACHEN = ['de', 'en', 'es', 'fr', 'it', 'nl'];
 
 // Seiten, die es in allen Sprachen gibt.
-const SEITEN = ['index.html', 'budget.html', 'gruppenkosten.html', 'packliste.html'];
+const SEITEN = ['index.html', 'budget.html', 'gruppenkosten.html', 'packliste.html', 'ratgeber.html'];
 
-// Seiten, die es nur auf Deutsch als Adresse gibt (Rechtstexte, Ratgeber).
+// Seiten, die es nur auf Deutsch als Adresse gibt (Rechtstexte).
 // Links darauf zeigen aus jeder Sprachfassung auf die deutsche Datei im Wurzelverzeichnis.
-const NUR_DEUTSCH = ['impressum.html', 'datenschutz.html', 'agb.html', 'ratgeber.html'];
+const NUR_DEUTSCH = ['impressum.html', 'datenschutz.html', 'agb.html'];
 
 // Welcher i18n-Schluessel liefert Beschreibung und og-Texte je Seite.
 const META = {
   'index.html':         { desc: 'idx_meta_desc',    ogTitle: 'idx_og_title', ogDesc: 'idx_og_desc' },
   'budget.html':        { desc: 'budget_meta_desc', ogTitle: 'budget_title', ogDesc: 'budget_meta_desc' },
   'gruppenkosten.html': { desc: 'gk_meta_desc',     ogTitle: 'gk_title',     ogDesc: 'gk_meta_desc' },
-  'packliste.html':     { desc: 'pl_meta_desc',     ogTitle: 'pl_title',     ogDesc: 'pl_meta_desc' }
+  'packliste.html':     { desc: 'pl_meta_desc',     ogTitle: 'pl_title',     ogDesc: 'pl_meta_desc' },
+  'ratgeber.html':      { desc: 'rat_meta_desc',    ogTitle: 'rat_og_title', ogDesc: 'rat_og_desc' }
 };
+
+// Die FAQ-Fragen des Ratgebers, in der Reihenfolge, in der sie auf der Seite stehen.
+const FAQ_PAARE = [['rat_faq1_q', 'rat_faq1_a'], ['rat_faq2_q', 'rat_faq2_a'],
+                   ['rat_faq3_q', 'rat_faq3_a'], ['rat_faq4_q', 'rat_faq4_a']];
 
 /* ---------------------------------------------------------------- Woerterbuecher */
 
@@ -105,6 +110,49 @@ function inhaltsBereich(html, tagName, nachOeffnung) {
 
 function escAttr(s) {
   return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Strukturierte Daten duerfen kein HTML enthalten und sollen wortgleich mit dem
+// sichtbaren Text sein - sonst beanstandet Google die FAQ-Auszeichnung.
+function ohneHtml(s) {
+  return String(s)
+    .replace(/<[^>]+>/g, '')
+    .replace(/&rarr;/g, '→').replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+    .replace(/\s+/g, ' ').trim();
+}
+
+// Article- und FAQPage-Block des Ratgebers aus den Schluesseln derselben Sprache bauen.
+function strukturierteDaten(html, code, seite, dict, deDict) {
+  if (seite !== 'ratgeber.html') return html;
+  const t = (k) => (dict[k] !== undefined ? dict[k] : deDict[k]);
+  const adresse = adresseFuer(code, seite);
+
+  const article = {
+    '@context': 'https://schema.org', '@type': 'Article',
+    headline: ohneHtml(t('rat_h1')),
+    description: ohneHtml(t('rat_og_desc')),
+    inLanguage: code,
+    author: { '@type': 'Organization', name: 'GeoRates' },
+    publisher: { '@type': 'Organization', name: 'GeoRates' },
+    mainEntityOfPage: adresse
+  };
+  const faq = {
+    '@context': 'https://schema.org', '@type': 'FAQPage',
+    mainEntity: FAQ_PAARE.map(([f, a]) => ({
+      '@type': 'Question', name: ohneHtml(t(f)),
+      acceptedAnswer: { '@type': 'Answer', text: ohneHtml(t(a)) }
+    }))
+  };
+
+  const setzen = (name, objekt) => {
+    const re = new RegExp('(<script type="application/ld\\+json" data-i18n-ld="' + name + '">)[\\s\\S]*?(</script>)');
+    if (!re.test(html)) throw new Error(seite + ': ld+json-Block "' + name + '" nicht gefunden');
+    html = html.replace(re, (m, auf, zu) => auf + '\n' + JSON.stringify(objekt) + '\n' + zu);
+  };
+  setzen('article', article);
+  setzen('faq', faq);
+  return html;
 }
 
 /* ------------------------------------------------------------- Uebersetzen */
@@ -323,13 +371,14 @@ function baue() {
     const quelle = fs.readFileSync(path.join(root, seite), 'utf8');
 
     // Deutsch: nur der Kopf wird gepflegt (hreflang, canonical, og) - Text bleibt wie er ist.
-    dateien.set(seite, kopfSetzen(quelle, QUELLSPRACHE, seite, de, de));
+    dateien.set(seite, strukturierteDaten(kopfSetzen(quelle, QUELLSPRACHE, seite, de, de), QUELLSPRACHE, seite, de, de));
 
     for (const code of SPRACHEN) {
       if (code === QUELLSPRACHE) continue;
       const { html, fehlend } = uebersetze(quelle, woerter[code], de, seite, code);
       if (fehlend.length) warnungen.push(code + '/' + seite + ': ohne Uebersetzung -> ' + fehlend.join(', '));
-      dateien.set(path.join(code, seite), pfadeUmschreiben(kopfSetzen(html, code, seite, woerter[code], de), code));
+      const mitKopf = strukturierteDaten(kopfSetzen(html, code, seite, woerter[code], de), code, seite, woerter[code], de);
+      dateien.set(path.join(code, seite), pfadeUmschreiben(mitKopf, code));
     }
   }
 

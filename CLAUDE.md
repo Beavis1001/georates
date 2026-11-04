@@ -63,12 +63,15 @@ Text-Check sieht sie nicht, so ging am 21.09.2026 der Enter-Fehler live.
 6. **Service-Worker-Cache versionieren.** Neue oder umbenannte Dateien in `ASSETS` eintragen und
    `CACHE` in `sw.js` hochzaehlen, sonst liefern installierte Apps alte Dateien aus.
 7. **Sprachfassungen nach jeder Textaenderung neu erzeugen.** `index.html`, `budget.html`,
-   `gruppenkosten.html` und `packliste.html` sind die Quelle; `/en/`, `/es/`, `/fr/`, `/it/`,
+   `gruppenkosten.html`, `packliste.html` und `ratgeber.html` sind die Quelle; `/en/`, `/es/`, `/fr/`, `/it/`,
    `/nl/` und `sitemap.xml` werden daraus von `tools/build-langs.js` erzeugt und mit eingecheckt
    (GitHub Pages liefert das Repo direkt aus, es gibt weiterhin keinen Build beim Deployen).
    Wer eine Quelldatei oder eine Sprachdatei anfasst und das Erzeugen vergisst, laesst
    `test/check.js` rot werden. **Die erzeugten Dateien nie von Hand bearbeiten** - die Aenderung
-   waere beim naechsten Lauf weg. Grund fuer die Adressen: bis 11/2026 gab es nur
+   waere beim naechsten Lauf weg. Die beiden `ld+json`-Bloecke im Ratgeber werden ebenfalls
+   erzeugt (aus den `rat_*`-Schluesseln), damit die FAQ-Auszeichnung wortgleich mit dem
+   sichtbaren Text und in derselben Sprache ist - Google beanstandet sonst die Auszeichnung.
+   Grund fuer die Adressen: bis 11/2026 gab es nur
    `georates.tech/` mit `lang="de"`; ausserhalb des deutschsprachigen Raums war die Seite
    fuer Suchmaschinen schlicht nicht vorhanden.
 
