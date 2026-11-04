@@ -29,6 +29,7 @@ Ruft die Preis-API im Repo `georates-price-api` (Vercel) auf. Betreiber: Christo
 ## Befehle
 
 ```bash
+node tools/build-langs.js                # Sprachfassungen /en /es /fr /it /nl + sitemap.xml erzeugen
 node test/check.js                       # vor jedem Push; laeuft auch als GitHub Action
 cd test && npm install && npx playwright install chromium && node e2e.js   # E2E, ebenfalls Action
 python3 -m http.server 8765              # lokal ansehen; fetch() auf i18n/*.json braucht http, nicht file://
@@ -61,6 +62,15 @@ Text-Check sieht sie nicht, so ging am 21.09.2026 der Enter-Fehler live.
    Zimmer-Abruf; ein Frontend ohne Token bekommt `bot_check_failed`.
 6. **Service-Worker-Cache versionieren.** Neue oder umbenannte Dateien in `ASSETS` eintragen und
    `CACHE` in `sw.js` hochzaehlen, sonst liefern installierte Apps alte Dateien aus.
+7. **Sprachfassungen nach jeder Textaenderung neu erzeugen.** `index.html`, `budget.html`,
+   `gruppenkosten.html` und `packliste.html` sind die Quelle; `/en/`, `/es/`, `/fr/`, `/it/`,
+   `/nl/` und `sitemap.xml` werden daraus von `tools/build-langs.js` erzeugt und mit eingecheckt
+   (GitHub Pages liefert das Repo direkt aus, es gibt weiterhin keinen Build beim Deployen).
+   Wer eine Quelldatei oder eine Sprachdatei anfasst und das Erzeugen vergisst, laesst
+   `test/check.js` rot werden. **Die erzeugten Dateien nie von Hand bearbeiten** - die Aenderung
+   waere beim naechsten Lauf weg. Grund fuer die Adressen: bis 11/2026 gab es nur
+   `georates.tech/` mit `lang="de"`; ausserhalb des deutschsprachigen Raums war die Seite
+   fuer Suchmaschinen schlicht nicht vorhanden.
 
 ## Fachliche Entscheidungen, die man kennen muss
 
