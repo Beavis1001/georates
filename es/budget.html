@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-prerendered="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
+<meta name="description" content="Calculadora de presupuesto de viaje gratuita: planifica vuelos, alojamiento, comidas y actividades, y controla tus gastos.">
+<link rel="canonical" href="https://georates.tech/es/budget.html">
+<!-- hreflang:start (erzeugt von tools/build-langs.js - nicht von Hand aendern) -->
+<link rel="alternate" hreflang="de" href="https://georates.tech/budget.html">
+<link rel="alternate" hreflang="en" href="https://georates.tech/en/budget.html">
+<link rel="alternate" hreflang="es" href="https://georates.tech/es/budget.html">
+<link rel="alternate" hreflang="fr" href="https://georates.tech/fr/budget.html">
+<link rel="alternate" hreflang="it" href="https://georates.tech/it/budget.html">
+<link rel="alternate" hreflang="nl" href="https://georates.tech/nl/budget.html">
+<link rel="alternate" hreflang="x-default" href="https://georates.tech/budget.html">
+<!-- hreflang:ende -->
+<meta property="og:title" content="Calculadora de presupuesto de viaje – GeoRates">
+<meta property="og:description" content="Calculadora de presupuesto de viaje gratuita: planifica vuelos, alojamiento, comidas y actividades, y controla tus gastos.">
+<meta property="og:url" content="https://georates.tech/es/budget.html">
+<meta property="og:locale" content="es">
+<title data-i18n-title="budget_title">Calculadora de presupuesto de viaje – GeoRates</title>
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#011d3a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GeoRates">
+
+<link rel="stylesheet" href="/tokens.css">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="/es/"><img src="/logo.png" srcset="/logo.png 1x, /logo@2x.png 2x" alt="GeoRates" width="125" height="34"></a>
+    <a class="back-link" href="/es/" data-i18n="common_back_home">← Volver al inicio</a>
+  </div>
+</header>
+
+<div class="page-header">
+  <h1 data-i18n="budget_h1">Calculadora de presupuesto de viaje</h1>
+  <p data-i18n="budget_sub">Estima tu presupuesto de viaje en segundos – elige una categoría o ajusta todos los valores tú mismo.</p>
+</div>
+
+<main class="tool">
+  <div class="panel">
+    <h2 data-i18n="budget_panel1_h2">Datos del viaje</h2>
+    <div class="field-row">
+      <div class="field">
+        <label for="preset" data-i18n="budget_label_preset">Estilo de viaje</label>
+        <select id="preset">
+          <option value="guenstig" data-i18n="budget_opt_cheap">Económico (hostal/bajo presupuesto)</option>
+          <option value="mittel" selected data-i18n="budget_opt_mid">Medio (hotel estándar)</option>
+          <option value="luxus" data-i18n="budget_opt_luxury">Lujo</option>
+          <option value="custom" data-i18n="budget_opt_custom">Valores propios</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="personen" data-i18n="budget_label_personen">Número de personas</label>
+        <input type="number" id="personen" min="1" value="2">
+      </div>
+      <div class="field">
+        <label for="naechte" data-i18n="budget_label_naechte">Número de noches</label>
+        <input type="number" id="naechte" min="1" value="7">
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2 data-i18n="budget_panel2_h2">Costes (editables)</h2>
+    <div class="field-row">
+      <div class="field">
+        <label for="unterkunft" data-i18n="budget_label_unterkunft">Alojamiento por noche (total, €)</label>
+        <input type="number" id="unterkunft" min="0" value="70">
+      </div>
+      <div class="field">
+        <label for="verpflegung" data-i18n="budget_label_verpflegung">Comida por persona/día (€)</label>
+        <input type="number" id="verpflegung" min="0" value="35">
+      </div>
+      <div class="field">
+        <label for="transport" data-i18n="budget_label_transport">Transporte local por persona/día (€)</label>
+        <input type="number" id="transport" min="0" value="15">
+      </div>
+      <div class="field">
+        <label for="aktivitaeten" data-i18n="budget_label_aktivitaeten">Actividades por persona/día (€)</label>
+        <input type="number" id="aktivitaeten" min="0" value="20">
+      </div>
+      <div class="field">
+        <label for="sonstiges" data-i18n="budget_label_sonstiges">Otros por persona/día (€)</label>
+        <input type="number" id="sonstiges" min="0" value="10">
+      </div>
+    </div>
+    <button class="btn" id="calc-btn" type="button" data-i18n="budget_btn_calc">Calcular presupuesto</button>
+    <p class="hint" data-i18n="budget_hint">Los valores son orientativos – ajústalos libremente a tu destino.</p>
+  </div>
+
+  <div class="panel" id="result-panel" style="display:none;">
+    <h2 data-i18n="budget_result_h2">Presupuesto estimado</h2>
+    <div class="result-row"><span data-i18n="budget_r_unterkunft">Alojamiento (total)</span><span id="r-unterkunft">–</span></div>
+    <div class="result-row"><span data-i18n="budget_r_verpflegung">Comida (total)</span><span id="r-verpflegung">–</span></div>
+    <div class="result-row"><span data-i18n="budget_r_transport">Transporte local (total)</span><span id="r-transport">–</span></div>
+    <div class="result-row"><span data-i18n="budget_r_aktivitaeten">Actividades (total)</span><span id="r-aktivitaeten">–</span></div>
+    <div class="result-row"><span data-i18n="budget_r_sonstiges">Otros (total)</span><span id="r-sonstiges">–</span></div>
+    <div class="result-row total"><span data-i18n="budget_r_gesamt">Presupuesto total</span><span id="r-gesamt">–</span></div>
+    <div class="result-row"><span class="muted" data-i18n="budget_r_pro_person">Por persona</span><span class="muted" id="r-pro-person">–</span></div>
+    <div class="result-row"><span class="muted" data-i18n="budget_r_pro_tag">Por día (grupo)</span><span class="muted" id="r-pro-tag">–</span></div>
+  </div>
+
+  <div class="cta-box">
+    <p data-i18n="common_cta_text">¿Ya has elegido el hotel para tu viaje? Comprobamos el precio total en Booking.com por ti.</p>
+    <a class="btn" href="/es/#suche" data-i18n="common_cta_button">Buscar hotel</a>
+  </div>
+  <div class="panel">
+    <h2>Wofür ist der Reisebudget-Rechner gut?</h2>
+    <p>Mit dem kostenlosen Reisebudget-Rechner planst du in Sekunden, was deine Reise ungefähr kostet. Du gibst Reisestil, Personenzahl und Nächte an und passt die Kosten für Unterkunft, Verpflegung, Transport und Aktivitäten bei Bedarf selbst an. So siehst du sofort das Gesamtbudget sowie die Kosten pro Person und pro Tag.</p>
+    <p>Praktisch ist das vor allem, um verschiedene Reiseziele oder Reisestile zu vergleichen und Überraschungen zu vermeiden. Tipp: Bei der Unterkunft lohnt sich zusätzlich ein Preisvergleich – mit dem <a href="/es/">GeoRates Hotelpreis-Check</a> siehst du, ob dasselbe Hotel aus einem anderen Land günstiger ist.</p>
+  </div>
+</main>
+
+<footer>
+  <a href="/es/">GeoRates</a> · <a href="/impressum.html" data-i18n="common_impressum">Aviso legal</a> ·
+  <a href="/datenschutz.html" data-i18n="common_datenschutz">Política de privacidad</a> · <a href="/agb.html" data-i18n="common_agb">Condiciones de uso</a>
+</footer>
+
+<script src="/i18n.js"></script>
+<script src="/budget.js"></script>
+<script src="/pwa.js" defer></script>
+</body>
+</html>
