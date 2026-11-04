@@ -22,7 +22,7 @@ Ruft die Preis-API im Repo `georates-price-api` (Vercel) auf. Betreiber: Christo
 | `i18n.js` | Laufzeit + deutsches Woerterbuch inline; `i18n/<code>.json` fuer en, es, fr, it, nl werden nachgeladen |
 | `tokens.css` | Einzige Quelle der Farb- und Schrift-Tokens; `app.css` (Tools), `legal.css` (Rechtstexte, Ratgeber) bauen darauf |
 | `budget.html`, `packliste.html`, `gruppenkosten.html` + `budget.js`, `packliste.js`, `gruppenkosten.js` | Rechner, laufen komplett im Browser; Logik seit 21.09.2026 ausgelagert, dieselbe strenge CSP wie die Startseite |
-| `booking-laenderpreise.html`, `hotel-vpn-guenstiger-buchen.html`, `booking-aus-japan-buchen.html` | Deutschsprachige SEO-Ratgeber, nur Deutsch (`NUR_DEUTSCH` in `tools/build-langs.js`). Zahlen aus dem eigenen Log, Stand 04.11.2026 |
+| `booking-laenderpreise.html`, `hotel-vpn-guenstiger-buchen.html`, `booking-aus-japan-buchen.html`, `booking-indien.html`, `booking-usa.html`, `booking-laender-ranking.html` | Deutschsprachige SEO-Ratgeber, nur Deutsch (`NUR_DEUTSCH`). Laenderseiten und Ranking ab 19.09.2026; der Ueberblick und Japan nennen zusaetzlich das gesamte Log ab 16.09. |
 | `sw.js`, `manifest.webmanifest` | PWA; Manifest hat `share_target` fuer Booking-Links aus dem Teilen-Menue |
 | `test/check.js` | i18n-Vollstaendigkeit, fremde Hosts, Inline-Skripte und CSP auf allen Seiten, Syntax, Leck-Check |
 | `test/e2e.js` | Playwright im echten Chromium mit gemockter API: Zwei-Schritte-Formular, Stream, Streuung, Enter-Verhalten, Rechner. `test/package.json` nur dafuer |

@@ -40,7 +40,7 @@ const SEITEN = ['index.html', 'budget.html', 'gruppenkosten.html', 'packliste.ht
 // Links darauf zeigen aus jeder Sprachfassung auf die deutsche Datei im Wurzelverzeichnis.
 // Die drei Ratgeber bleiben bewusst ohne Sprachordner: es gibt keine Uebersetzung,
 // eine erzeugte /en/-Adresse waere deutsch unter englischer URL (04.11.2026).
-const GUIDE_DE = ['booking-laenderpreise.html', 'hotel-vpn-guenstiger-buchen.html', 'booking-aus-japan-buchen.html'];
+const GUIDE_DE = ['booking-laenderpreise.html', 'hotel-vpn-guenstiger-buchen.html', 'booking-aus-japan-buchen.html', 'booking-indien.html', 'booking-usa.html', 'booking-laender-ranking.html'];
 const NUR_DEUTSCH = ['impressum.html', 'datenschutz.html', 'agb.html'].concat(GUIDE_DE);
 
 // Welcher i18n-Schluessel liefert Beschreibung und og-Texte je Seite.

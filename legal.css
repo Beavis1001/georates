@@ -27,6 +27,9 @@ ul, ol { margin: 0 0 14px; padding-left: 22px; }
 li { margin-bottom: 6px; }
 a { color: var(--navy); }
 table { width: 100%; border-collapse: collapse; margin: 0 0 4px; font-size: 14.5px; }
+.table-scroll { overflow-x: auto; max-width: 100%; margin: 0 0 4px; }
+.table-scroll table { width: max-content; min-width: 100%; margin-bottom: 0; }
+.table-scroll th, .table-scroll td { white-space: nowrap; }
 th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
 th { color: var(--navy-dark); font-weight: 700; }
 caption { caption-side: bottom; text-align: left; color: var(--muted); font-size: 13px; padding: 8px 0 18px; }

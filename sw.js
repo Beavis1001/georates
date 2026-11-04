@@ -1,8 +1,9 @@
 /* GeoRates Service Worker – App-Shell-Cache für Offline-Nutzung & Installierbarkeit */
-const CACHE = 'georates-v23';
+const CACHE = 'georates-v24';
 const ASSETS = [
   '/', '/index.html', '/budget.html', '/gruppenkosten.html', '/packliste.html', '/ratgeber.html',
   '/booking-laenderpreise.html', '/hotel-vpn-guenstiger-buchen.html', '/booking-aus-japan-buchen.html',
+  '/booking-indien.html', '/booking-usa.html', '/booking-laender-ranking.html',
   '/tokens.css', '/app.css', '/legal.css', '/i18n.js', '/app.js', '/pwa.js',
   '/budget.js', '/packliste.js', '/gruppenkosten.js',
   '/i18n/en.json', '/i18n/es.json', '/i18n/fr.json', '/i18n/it.json', '/i18n/nl.json',
