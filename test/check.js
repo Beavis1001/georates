@@ -87,5 +87,17 @@ for (const f of ['app.js', 'budget.js', 'packliste.js', 'gruppenkosten.js', 'pwa
   } catch (e) { fehl(`${f} parst nicht: ${e.message}`); }
 }
 
+// Die Sprachfassungen unter /en/, /es/, /fr/, /it/ und /nl/ werden erzeugt und mit eingecheckt.
+// Wer index.html oder eine Sprachdatei aendert und das Erzeugen vergisst, hinterlaesst sonst
+// Seiten mit altem Text - hier faellt das auf, bevor es live geht.
+try {
+  const { execFileSync } = require('child_process');
+  execFileSync(process.execPath, [path.join(root, 'tools', 'build-langs.js'), '--check'], { stdio: 'pipe' });
+  ok('Sprachfassungen (/en, /es, /fr, /it, /nl) sind aktuell');
+} catch (e) {
+  const ausgabe = (e.stdout ? e.stdout.toString() : '') + (e.stderr ? e.stderr.toString() : '');
+  fehl('Sprachfassungen veraltet - "node tools/build-langs.js" laufen lassen und mit einchecken:\n' + ausgabe.trim());
+}
+
 console.log(fehler ? `\n${fehler} FEHLER` : '\nalles sauber');
 process.exit(fehler ? 1 : 0);

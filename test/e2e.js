@@ -22,7 +22,9 @@ function startServer() {
   return new Promise((resolve) => {
     const srv = http.createServer((req, res) => {
       let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-      if (p === '/') p = '/index.html';
+      // Verzeichnisse liefern ihre index.html - so wie GitHub Pages es tut. Noetig seit
+      // es die Sprachfassungen unter /en/, /es/ usw. gibt.
+      if (p.endsWith('/')) p += 'index.html';
       const datei = path.join(ROOT, p);
       if (!datei.startsWith(ROOT) || !fs.existsSync(datei) || fs.statSync(datei).isDirectory()) { res.writeHead(404); return res.end(); }
       res.writeHead(200, { 'Content-Type': MIME[path.extname(datei)] || 'application/octet-stream' });
@@ -125,10 +127,28 @@ async function zweiSchritte(browser, base) {
   await page.waitForSelector('#result-panel .result-savings', { timeout: 5000 });
   ok('Permalink rendert Ergebnis', (await page.textContent('#result-panel')).includes('Beispiel Hof'));
 
-  // Sprachwechsel
-  await page.selectOption('#lang-switch', 'en'); await page.waitForTimeout(600);
+  // Sprachwechsel: fuehrt seit den Sprachadressen auf /en/ statt nur den Text zu tauschen.
+  await page.goto(base, { waitUntil: 'load' });
+  await Promise.all([
+    page.waitForURL((u) => u.pathname === '/en/', { timeout: 5000 }),
+    page.selectOption('#lang-switch', 'en')
+  ]);
+  await page.waitForTimeout(600);
+  ok('EN: eigene Adresse /en/', new URL(page.url()).pathname === '/en/');
+  ok('EN: lang-Attribut', (await page.getAttribute('html', 'lang')) === 'en');
+  ok('EN: Titel uebersetzt', (await page.title()).includes('Your automatic booking check'));
+  ok('EN: Beschreibung uebersetzt',
+    (await page.getAttribute('meta[name="description"]', 'content')).startsWith('GeoRates compares'));
   ok('EN: Knopf "Load rooms"', (await page.textContent('#load-rooms')).includes('Load rooms'));
   ok('EN: Laender-Chips uebersetzt', (await page.textContent('.countries-list')).includes('Germany'));
+
+  // Die Adresse schlaegt den gespeicherten Wert: /en/ bleibt Englisch, auch mit "de" im Speicher.
+  await page.evaluate(() => localStorage.setItem('georates_lang', 'de'));
+  await page.goto(base + 'en/', { waitUntil: 'load' }); await page.waitForTimeout(600);
+  ok('EN: Adresse schlaegt gespeicherte Sprache', (await page.getAttribute('html', 'lang')) === 'en');
+  ok('EN: Logo bleibt in der Sprache', (await page.getAttribute('a.logo', 'href')) === '/en/');
+
+  await page.goto(base, { waitUntil: 'load' });
   await page.evaluate(() => localStorage.setItem('georates_lang', 'de'));
 
   // Mobil
