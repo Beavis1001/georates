@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" data-i18n-prerendered="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
+<meta name="description" content="Packing list generator for your trip: create a tailored packing list in seconds – by trip type, length and destination. Free, no sign-up.">
+<link rel="canonical" href="https://georates.tech/en/packliste.html">
+<!-- hreflang:start (erzeugt von tools/build-langs.js - nicht von Hand aendern) -->
+<link rel="alternate" hreflang="de" href="https://georates.tech/packliste.html">
+<link rel="alternate" hreflang="en" href="https://georates.tech/en/packliste.html">
+<link rel="alternate" hreflang="es" href="https://georates.tech/es/packliste.html">
+<link rel="alternate" hreflang="fr" href="https://georates.tech/fr/packliste.html">
+<link rel="alternate" hreflang="it" href="https://georates.tech/it/packliste.html">
+<link rel="alternate" hreflang="nl" href="https://georates.tech/nl/packliste.html">
+<link rel="alternate" hreflang="x-default" href="https://georates.tech/packliste.html">
+<!-- hreflang:ende -->
+<meta property="og:title" content="Packing List Generator – GeoRates">
+<meta property="og:description" content="Packing list generator for your trip: create a tailored packing list in seconds – by trip type, length and destination. Free, no sign-up.">
+<meta property="og:url" content="https://georates.tech/en/packliste.html">
+<meta property="og:locale" content="en">
+<title data-i18n-title="pl_title">Packing List Generator – GeoRates</title>
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#011d3a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GeoRates">
+
+<link rel="stylesheet" href="/tokens.css">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="/en/"><img src="/logo.png" srcset="/logo.png 1x, /logo@2x.png 2x" alt="GeoRates" width="125" height="34"></a>
+    <a class="back-link" href="/en/" data-i18n="common_back_home">← Back to homepage</a>
+  </div>
+</header>
+
+<div class="page-header">
+  <h1 data-i18n="pl_h1">Packing List Generator</h1>
+  <p data-i18n="pl_sub">Answer a few questions about your trip – we'll create a matching checklist.</p>
+</div>
+
+<main class="tool">
+  <div class="panel">
+    <h2 data-i18n="pl_panel1_h2">Your trip</h2>
+    <div class="field-row">
+      <div class="field">
+        <label for="art" data-i18n="pl_label_art">Trip type</label>
+        <select id="art">
+          <option value="strand" data-i18n="pl_opt_beach">Beach & swimming</option>
+          <option value="stadt" selected data-i18n="pl_opt_city">City trip</option>
+          <option value="wandern" data-i18n="pl_opt_hiking">Hiking & nature</option>
+          <option value="business" data-i18n="pl_opt_business">Business trip</option>
+          <option value="winter" data-i18n="pl_opt_winter">Winter/ski</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="tage" data-i18n="pl_label_tage">Number of days</label>
+        <input type="number" id="tage" min="1" value="7">
+      </div>
+      <div class="field">
+        <label for="klima" data-i18n="pl_label_klima">Climate</label>
+        <select id="klima">
+          <option value="warm" data-i18n="pl_opt_warm">Warm</option>
+          <option value="gemaessigt" selected data-i18n="pl_opt_moderate">Moderate</option>
+          <option value="kalt" data-i18n="pl_opt_cold">Cold</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label data-i18n="pl_label_extra">Additional</label>
+      <div class="tag-row">
+        <label class="chip"><input type="checkbox" id="opt-kinder"> <span data-i18n="pl_chip_kids">With child(ren)</span></label>
+        <label class="chip"><input type="checkbox" id="opt-wasser"> <span data-i18n="pl_chip_water">Swimming/water sports</span></label>
+        <label class="chip"><input type="checkbox" id="opt-flug"> <span data-i18n="pl_chip_flight">Flying (carry-on)</span></label>
+      </div>
+    </div>
+    <button class="btn" id="gen-btn" type="button" data-i18n="pl_btn_generate">Create packing list</button>
+  </div>
+
+  <div class="panel" id="list-panel" style="display:none;">
+    <h2 data-i18n="pl_panel2_h2">Your packing list</h2>
+    <div id="checklist-container"></div>
+    <button class="btn ghost" id="print-btn" type="button" style="margin-top:16px;" data-i18n="pl_btn_print">Print list</button>
+  </div>
+
+  <div class="cta-box">
+    <p data-i18n="common_cta_text">Already picked a hotel for your trip? We'll check the total price on Booking.com for you.</p>
+    <a class="btn" href="/en/#suche" data-i18n="common_cta_button">Find a hotel</a>
+  </div>
+  <div class="panel">
+    <h2>Nichts mehr vergessen: die passende Packliste</h2>
+    <p>Der kostenlose Packlisten-Generator erstellt dir in Sekunden eine Checkliste, die zu deiner Reise passt – abhängig von Reiseart, Klima und Dauer. So denkst du an das Wesentliche und packst weder zu viel noch zu wenig ein.</p>
+    <p>Bevor es losgeht, lohnt sich ein Blick auf den Hotelpreis: Mit dem <a href="/en/">GeoRates Hotelpreis-Check</a> prüfst du, ob dein Wunschhotel aus einem anderen Land günstiger ist.</p>
+  </div>
+</main>
+
+<footer>
+  <a href="/en/">GeoRates</a> · <a href="/impressum.html" data-i18n="common_impressum">Legal Notice</a> ·
+  <a href="/datenschutz.html" data-i18n="common_datenschutz">Privacy Policy</a> · <a href="/agb.html" data-i18n="common_agb">Terms of Use</a>
+</footer>
+
+<script src="/i18n.js"></script>
+<script src="/packliste.js"></script>
+<script src="/pwa.js" defer></script>
+</body>
+</html>

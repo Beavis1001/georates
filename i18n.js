@@ -11,7 +11,32 @@
 
   var SUPPORTED = ["de", "en", "es", "fr", "it", "nl"];
   var STORAGE_KEY = "georates_lang";
-  var LANG_PATH = "i18n/";
+  // Absolut, damit die Datei auch aus /en/, /es/ usw. gefunden wird.
+  var LANG_PATH = "/i18n/";
+
+  // Jede Sprache hat eine eigene Adresse: Deutsch unter /, die anderen unter /<code>/.
+  // Erzeugt von tools/build-langs.js.
+  function sprachePfad() {
+    var m = location.pathname.match(/^\/([a-z]{2})(?:\/|$)/);
+    return (m && SUPPORTED.indexOf(m[1]) !== -1 && m[1] !== "de") ? m[1] : null;
+  }
+
+  // Seiten, die es unter einer eigenen Adresse je Sprache gibt (siehe tools/build-langs.js).
+  // Rechtstexte und Ratgeber liegen nur auf Deutsch im Wurzelverzeichnis; dort wird weiterhin
+  // nur der Text im Browser getauscht, ohne Adresswechsel.
+  var SEITEN_MIT_SPRACHADRESSE = ["", "index.html", "budget.html", "gruppenkosten.html", "packliste.html"];
+  var UEBERSETZTE_SEITEN = SEITEN_MIT_SPRACHADRESSE.indexOf(
+    location.pathname.replace(/^\/([a-z]{2}\/)?/, "")
+  ) !== -1;
+
+  // Dieselbe Seite in einer anderen Sprache.
+  function adresseIn(code) {
+    var pfad = location.pathname;
+    var vorhanden = sprachePfad();
+    if (vorhanden) pfad = pfad.slice(vorhanden.length + 1) || "/";
+    if (code !== "de") pfad = "/" + code + (pfad === "/" ? "/" : pfad);
+    return pfad + location.search + location.hash;
+  }
 
   var translations = { de: {
       "common_impressum": "Impressum",
@@ -23,6 +48,9 @@
       "common_stand_sep2026": "Stand: September 2026",
       "common_stand_juli2026": "Stand: Juli 2026",
       "idx_title": "GeoRates – Dein automatischer Buchungs-Check für Booking.com",
+      "idx_meta_desc": "GeoRates vergleicht Hotelpreise auf Booking.com aus 15 Ländern und zeigt dir, ob dieselbe Buchung aus einem anderen Land günstiger ist – kostenlos, automatisch und unabhängig.",
+      "idx_og_title": "GeoRates – Hotelpreise aus 15 Ländern vergleichen",
+      "idx_og_desc": "Automatischer Buchungs-Check für Booking.com: Ist dein Zimmer aus einem anderen Land günstiger? Kostenlos, ohne Anmeldung.",
       "idx_nav_how": "So funktioniert's",
       "idx_nav_tools": "Tools",
       "idx_nav_transparency": "Transparenz",
@@ -117,6 +145,7 @@
       "idx_js_msg_success": "Hotelseite geöffnet & Anfrage vorbereitet – bitte die sich öffnende E-Mail absenden, damit wir sie erhalten.",
       "idx_js_msg_sent": "Anfrage gesendet! Wir prüfen deinen Preis persönlich und melden uns per E-Mail.",
       "budget_title": "Reisebudget-Rechner – GeoRates",
+      "budget_meta_desc": "Kostenloser Reisebudget-Rechner: Plane Flug, Unterkunft, Verpflegung und Aktivitäten für deine Reise und behalte deine Ausgaben im Griff.",
       "budget_h1": "Reisebudget-Rechner",
       "budget_sub": "Schätze dein Reisebudget in Sekunden – wähle eine Kategorie oder passe alle Werte selbst an.",
       "budget_panel1_h2": "Angaben zur Reise",
@@ -145,6 +174,7 @@
       "budget_r_pro_person": "Pro Person",
       "budget_r_pro_tag": "Pro Tag (Gruppe)",
       "gk_title": "Reisekosten-Tracker für Gruppen – GeoRates",
+      "gk_meta_desc": "Reisekosten-Tracker für Gruppen: Wer hat was bezahlt? Teile Ausgaben fair auf und sieh sofort, wer wem wie viel schuldet – kostenlos.",
       "gk_h1": "Reisekosten-Tracker für Gruppen",
       "gk_sub": "Erfasse gemeinsame Ausgaben und sieh auf einen Blick, wer wem noch was schuldet.",
       "gk_panel1_h2": "Mitreisende",
@@ -176,6 +206,7 @@
       "gk_pays_word": "zahlt",
       "gk_confirm_reset": "Wirklich alle Mitreisenden und Ausgaben löschen?",
       "pl_title": "Packlisten-Generator – GeoRates",
+      "pl_meta_desc": "Packlisten-Generator für deine Reise: Erstelle in Sekunden eine passende Packliste – nach Reiseart, Dauer und Ziel. Kostenlos und ohne Anmeldung.",
       "pl_h1": "Packlisten-Generator",
       "pl_sub": "Beantworte ein paar Fragen zu deiner Reise – wir erstellen dir eine passende Checkliste.",
       "pl_panel1_h2": "Deine Reise",
@@ -443,6 +474,11 @@
   var loading = {};
 
   function detectLang() {
+    // Die Adresse schlaegt alles andere: wer /es/ aufruft, bekommt Spanisch - auch wenn
+    // frueher einmal Deutsch gewaehlt wurde. Sonst zeigte dieselbe Adresse zwei Sprachen.
+    var ausPfad = sprachePfad();
+    if (ausPfad) return ausPfad;
+
     try {
       var saved = localStorage.getItem(STORAGE_KEY);
       if (saved && SUPPORTED.indexOf(saved) !== -1) return saved;
@@ -570,7 +606,17 @@
     });
     select.value = currentLang;
     select.addEventListener("change", function () {
-      applyLanguage(select.value);
+      var code = select.value;
+      try { localStorage.setItem(STORAGE_KEY, code); } catch (e) { /* ignore */ }
+      // Zur Adresse derselben Seite in der gewaehlten Sprache wechseln, damit die Wahl
+      // teilbar und fuer Suchmaschinen sichtbar ist. Nur wo es die Adresse gibt -
+      // Rechtstexte und Ratgeber liegen weiterhin nur im Wurzelverzeichnis.
+      var ziel = adresseIn(code);
+      if (UEBERSETZTE_SEITEN && ziel !== location.pathname + location.search + location.hash) {
+        location.assign(ziel);
+        return;
+      }
+      applyLanguage(code);
     });
 
     right.appendChild(select);
@@ -595,6 +641,16 @@
 
   function init() {
     injectSwitcher();
+
+    // Kommt die Seite schon uebersetzt aus dem Netz (/en/, /es/ ...), darf sie nicht
+    // erst auf Deutsch ueberschrieben werden - das waere ein sichtbares Flackern, und
+    // haette das Woerterbuch Ladeprobleme, bliebe die Seite auf Deutsch stehen.
+    var fertigUebersetzt = document.documentElement.getAttribute("data-i18n-prerendered");
+    if (fertigUebersetzt && fertigUebersetzt === currentLang) {
+      ensureLoaded(currentLang, apply);
+      return;
+    }
+
     // Erst Deutsch anwenden (sofort), dann die Zielsprache, sobald sie da ist.
     apply();
     if (currentLang !== "de") ensureLoaded(currentLang, apply);

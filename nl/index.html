@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="nl" data-i18n-prerendered="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Inhalts-Sicherheitsrichtlinie: eigene Dateien, Turnstile und die Preis-API - sonst nichts. Kein Inline-JS mehr. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; connect-src 'self' https://georates-price-api.vercel.app; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
+<meta name="description" content="GeoRates vergelijkt hotelprijzen op Booking.com vanuit 15 landen en laat zien of dezelfde boeking vanuit een ander land goedkoper is – gratis, automatisch en onafhankelijk.">
+<link rel="canonical" href="https://georates.tech/nl/">
+<!-- hreflang:start (erzeugt von tools/build-langs.js - nicht von Hand aendern) -->
+<link rel="alternate" hreflang="de" href="https://georates.tech/">
+<link rel="alternate" hreflang="en" href="https://georates.tech/en/">
+<link rel="alternate" hreflang="es" href="https://georates.tech/es/">
+<link rel="alternate" hreflang="fr" href="https://georates.tech/fr/">
+<link rel="alternate" hreflang="it" href="https://georates.tech/it/">
+<link rel="alternate" hreflang="nl" href="https://georates.tech/nl/">
+<link rel="alternate" hreflang="x-default" href="https://georates.tech/">
+<!-- hreflang:ende -->
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#011d3a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GeoRates">
+<meta property="og:title" content="GeoRates – Hotelprijzen uit 15 landen vergelijken">
+<meta property="og:description" content="Automatische boekingscheck voor Booking.com: is jouw kamer goedkoper vanuit een ander land? Gratis, zonder aanmelden.">
+<meta property="og:image" content="https://georates.tech/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://georates.tech/nl/">
+<meta property="og:locale" content="nl">
+<meta property="og:type" content="website">
+<title data-i18n-title="idx_title">GeoRates – Jouw automatische boekingscheck voor Booking.com</title>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://georates.tech/#website","name":"GeoRates","url":"https://georates.tech/","inLanguage":["de","en","es","fr","it","nl"],"publisher":{"@id":"https://georates.tech/#organization"},"description":"GeoRates vergleicht den Preis desselben Booking.com-Zimmers in Länder-Sitzungen aus über 15 Ländern und zeigt, ob derselbe Aufenthalt aus einem anderen Land günstiger angezeigt wird."},{"@type":"Organization","@id":"https://georates.tech/#organization","name":"GeoRates","url":"https://georates.tech/","logo":{"@type":"ImageObject","url":"https://georates.tech/icon-512.png","width":512,"height":512},"email":"info@georates.tech","founder":{"@type":"Person","name":"Christopher Hendrys"},"areaServed":"Worldwide"},{"@type":"WebApplication","@id":"https://georates.tech/#app","name":"GeoRates – Buchungs-Check für Booking.com","alternateName":["GeoRates Hotelpreis-Check","GeoRates Booking.com Preisvergleich nach Ländern"],"url":"https://georates.tech/","applicationCategory":"TravelApplication","applicationSubCategory":"Hotelpreisvergleich","operatingSystem":"Web, Android, iOS (installierbare Web-App)","browserRequirements":"Aktueller Browser mit JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"inLanguage":["de","en","es","fr","it","nl"],"publisher":{"@id":"https://georates.tech/#organization"},"description":"GeoRates ist ein kostenloser Preis-Check für Hotelbuchungen auf Booking.com. Man fügt den Link eines Hotels von Booking.com ein, wählt Zimmer, Verpflegung und Stornobedingung, und GeoRates ruft den öffentlich angezeigten Preis für genau dieses Zimmer zu denselben Reisedaten in Sitzungen aus über 15 Ländern ab – darunter das eigene Land des Nutzers und das Land des Hotels. Alle Preise werden inklusive Steuern und Gebühren verglichen und zum aktuellen Wechselkurs in Euro umgerechnet. So sieht man, ob derselbe Aufenthalt auf Booking.com aus einem anderen Land oder auf dem Smartphone günstiger angezeigt wird, etwa durch länderabhängige Rabatte wie „Booking.com bezahlt“ bei Online-Zahlung, Mobile Rates oder Genius. Gebucht wird anschließend direkt bei Booking.com. GeoRates ist unabhängig, nicht mit Booking.com verbunden, ohne Anmeldung und ohne Affiliate-Links.","featureList":["Preisvergleich desselben Booking.com-Zimmers über Länder-Sitzungen aus über 15 Ländern","Vergleich gegen das eigene Land des Nutzers und das Land des Hotels","Exakt gleiches Zimmer, gleiche Verpflegung, gleiche Stornobedingung, gleiche Reisedaten und Personenzahl","Alle Preise inklusive Steuern, Gebühren und fester Abgaben, umgerechnet in Euro","Smartphone-Preis (Mobile Rate) im eigenen Land","Erkennt Rabatte wie Online-Zahlung, Genius, Frühbucher und Mobile Rate je Land","Bestätigt gefundene Ersparnisse durch einen zweiten Abruf","Ergebnis als Link teilbar","Zimmer, Verpflegung und Storno werden direkt von Booking.com geladen","Kostenlos, ohne Anmeldung, ohne Affiliate-Links","Zusätzliche Reise-Tools: Reisebudget-Rechner, Packlisten-Generator, Reisekosten-Tracker für Gruppen"],"audience":{"@type":"Audience","audienceType":"Reisende, die ein Hotel auf Booking.com buchen wollen und prüfen möchten, ob es aus einem anderen Land günstiger ist"},"potentialAction":{"@type":"UseAction","target":"https://georates.tech/?link={booking_url}","name":"Booking.com-Hotel prüfen"},"keywords":"Booking.com Preisvergleich, Hotelpreise nach Land, Länderpreise Booking.com, Hotel günstiger buchen, VPN Hotelpreis, Geo-Pricing, Booking.com günstiger, Mobile Rate, Genius-Rabatt"}]}
+</script>
+<link rel="stylesheet" href="/tokens.css">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  a { color: inherit; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  header.nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 24px; max-width: 1080px; margin: 0 auto;
+  }
+  .logo { font-weight: 800; font-size: 20px; color: var(--navy-dark); letter-spacing: -0.5px; }
+  .logo span { color: var(--accent); }
+  .logo img { display: block; height: 34px; width: auto; }
+  .nav-links { display: flex; gap: 28px; font-size: 15px; font-weight: 500; }
+  .nav-links a { text-decoration: none; color: var(--muted); }
+  .nav-links a:hover { color: var(--navy-dark); }
+  .nav-cta {
+    background: var(--navy-dark); color: #fff; padding: 10px 20px; border-radius: 8px;
+    font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 55%, #2c6e9e 100%);
+    color: #fff; padding: 76px 24px 90px; position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(circle at 85% 15%, rgba(46,158,108,0.28), transparent 55%);
+  }
+  .hero-grid {
+    position: relative; max-width: 1080px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center;
+  }
+  .eyebrow {
+    display: inline-block; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+    padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; margin-bottom: 22px;
+    letter-spacing: 0.3px;
+  }
+  h1 { font-size: 40px; font-weight: 800; letter-spacing: -1px; margin-bottom: 18px; }
+  .hero p.sub { font-size: 18px; color: rgba(255,255,255,0.88); max-width: 520px; margin: 0 0 8px; }
+
+  /* Decorative comparison mockup */
+  .hero-visual { display: flex; justify-content: center; }
+  a.mock-card { display: block; color: var(--text); text-decoration: none; }
+  .mock-row span:last-child { white-space: nowrap; }
+  a.mock-card.echt { cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
+  a.mock-card.echt:hover, a.mock-card.echt:focus-visible { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(0,0,0,.28); }
+  .mock-card {
+    background: #fff; color: var(--text); border-radius: 18px; padding: 24px; width: 300px;
+    box-shadow: 0 24px 60px rgba(6,20,32,0.35); transform: rotate(2deg);
+  }
+  .mock-card-title { font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 14px; }
+  .mock-row {
+    display: flex; justify-content: space-between; align-items: center; padding: 10px 0;
+    border-bottom: 1px solid var(--border); font-size: 15px;
+  }
+  .mock-row:last-of-type { border-bottom: none; }
+  .mock-row .old-price { text-decoration: line-through; color: var(--muted); font-weight: 500; }
+  .mock-row.best { color: var(--accent-dark); font-weight: 800; }
+  .mock-arrow {
+    text-align: center; font-size: 13px; font-weight: 700; color: var(--accent-dark); padding: 4px 0;
+  }
+  .mock-badge {
+    margin-top: 14px; background: #E5F5EC; color: var(--accent-dark); font-weight: 800; font-size: 13px;
+    padding: 7px 12px; border-radius: 999px; display: inline-block;
+  }
+
+  /* Request form (Booking-Link + Zimmer + Verpflegung + Daten + E-Mail) */
+  .request-card {
+    background: #fff; border-radius: 16px; padding: 22px; box-shadow: 0 20px 44px rgba(6,20,32,0.25);
+  }
+  .request-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .request-form .full { grid-column: 1 / -1; }
+  .request-form label {
+    display: block; font-size: 12.5px; font-weight: 700; color: var(--muted); margin-bottom: 5px;
+    text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  .request-form input, .request-form select {
+    width: 100%; border: 1px solid var(--border); background: var(--bg); color: var(--text);
+    padding: 11px 12px; border-radius: 8px; font-size: 14.5px; font-family: inherit;
+  }
+  .request-form input:focus, .request-form select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .request-form input[type="date"] { color-scheme: light; }
+  .request-form button {
+    grid-column: 1 / -1; background: var(--accent); color: #fff; border: none; padding: 13px 18px;
+    border-radius: 8px; font-weight: 800; font-size: 15px; cursor: pointer; transition: background 0.15s;
+    margin-top: 4px;
+  }
+  .request-form button:hover { background: var(--accent-dark); }
+  /* Während der Prüfung dunkler statt blass – der Knopf soll "arbeitet gerade" sagen,
+     nicht "ist deaktiviert". */
+  .request-form button:disabled { background: var(--accent-dark); cursor: progress; }
+  .request-form .load-rooms-btn {
+    grid-column: auto; width: auto; margin-top: 10px;
+    background: #fff; color: var(--navy-dark); border: 1px solid var(--navy-dark);
+    padding: 9px 14px; border-radius: 8px; font-weight: 700; font-size: 13.5px; cursor: pointer;
+  }
+  .request-form .load-rooms-btn:hover { background: var(--navy-dark); color: #fff; }
+  /* Beim Laden wird der Knopf NICHT blasser, sondern gefüllt: Ein ausgegrauter Knopf sieht aus,
+     als sei er kaputt oder der Klick nicht angekommen. Gefüllt plus Spinner heißt "läuft". */
+  .request-form .load-rooms-btn:disabled {
+    background: var(--navy-dark); color: #fff; border-color: var(--navy-dark);
+    cursor: progress; opacity: 1;
+  }
+  .btn-spinner {
+    display: inline-block; width: 12px; height: 12px; margin-right: 8px; vertical-align: -1px;
+    border: 2px solid rgba(255, 255, 255, 0.35); border-top-color: #fff;
+    border-radius: 50%; animation: georates-spin 0.7s linear infinite;
+  }
+  @keyframes georates-spin { to { transform: rotate(360deg); } }
+  /* Wer Bewegung reduziert haben will, bekommt sie langsamer – aber nicht gar nicht, sonst
+     fehlt genau das Signal, um das es hier geht. */
+  @media (prefers-reduced-motion: reduce) { .btn-spinner { animation-duration: 2.4s; } }
+  .load-rooms-msg { display: block; margin-top: 8px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
+  .load-rooms-msg a { color: var(--accent-dark); font-weight: 700; }
+  /* Schritt 2 (Zimmer, Verpflegung, Storno, Laender, Absenden) ist ein Block im Formular und
+     bleibt versteckt, bis Zimmer geladen sind oder die Handeingabe gewaehlt wurde. */
+  .step2[hidden] { display: none; }
+  .step2 { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
+  .step2-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .step2-grid .full, .step2-grid button[type="submit"] { grid-column: 1 / -1; }
+  .step2-hint { margin: 10px 0 0; font-size: 12.5px; color: var(--muted); font-weight: 500; text-transform: none; letter-spacing: normal; }
+  .step2-hint a { color: var(--navy); font-weight: 600; margin-left: 6px; }
+  .request-form .cf-turnstile { margin: 10px 0 2px; }
+  /* Hinweis direkt am Link-Feld. Bewusst auffällig (gelber Kasten), aber nicht rot: Der Link
+     ist nicht falsch, er ist nur unvollständig – und der Check läuft trotzdem. */
+  .link-warn {
+    display: none; margin: 8px 0 0; padding: 9px 11px; border-radius: 8px;
+    background: #FFF6E0; border: 1px solid #E9C46A; color: #6B4E00;
+    font-size: 12.5px; line-height: 1.45; font-weight: 600;
+  }
+  .link-warn.is-visible { display: block; }
+  .form-msg { font-size: 13.5px; margin-top: 12px; font-weight: 600; color: var(--text); }
+  .result-panel {
+    margin-top: 18px; border-top: 1px solid var(--border); padding-top: 18px;
+  }
+  .result-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 14px; }
+  .result-table th, .result-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+  .result-table tr.best-row { background: #E5F5EC; font-weight: 700; }
+  .result-savings {
+    background: #E5F5EC; color: var(--accent-dark); font-weight: 800; padding: 10px 14px;
+    border-radius: 10px; margin-bottom: 14px;
+  }
+  .result-instructions {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px;
+  }
+  .result-instructions h4 { font-size: 14px; margin-bottom: 8px; }
+  .result-instructions ol { margin: 0 0 0 18px; font-size: 14px; }
+  .result-instructions li { margin-bottom: 6px; }
+  .result-instructions a { color: var(--accent-dark); font-weight: 700; }
+  .result-partial-note { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+  .hint { font-size: 12.5px; color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: normal; margin-top: 6px; }
+  .mini-guide {
+    background: var(--navy-dark); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px;
+    padding: 16px 20px; margin-bottom: 16px; color: #fff;
+  }
+  .mini-guide strong { display: block; font-size: 13.5px; margin-bottom: 10px; }
+  .mini-guide ol { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: rgba(255,255,255,0.85); }
+  .mini-guide li { margin-bottom: 4px; }
+  .final-cta .mini-guide { background: rgba(255,255,255,0.06); }
+  .guide-diagram { width: 100%; height: auto; display: block; border-radius: 10px; }
+  .hero-note { font-size: 12.5px; color: rgba(255,255,255,0.7); margin-top: 8px; }
+  .hero-counter { display: inline-block; margin-top: 14px; padding: 6px 12px; border-radius: 999px; font-size: 13.5px; font-weight: 600; color: #fff; background: rgba(255,255,255,0.12); }
+  .hero-counter[hidden] { display: none; }
+
+  section { padding: 84px 24px; }
+  .section-label {
+    text-transform: uppercase; letter-spacing: 1.2px; font-size: 13px; font-weight: 700;
+    color: var(--accent-dark); margin-bottom: 12px; text-align: center;
+  }
+  h2 { font-size: 32px; font-weight: 800; text-align: center; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .section-sub {
+    text-align: center; color: var(--muted); font-size: 17px; max-width: 620px; margin: 0 auto 56px;
+  }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .step {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 32px 26px;
+    box-shadow: 0 4px 16px rgba(20,51,73,0.05);
+  }
+  .step-num {
+    width: 40px; height: 40px; border-radius: 10px; background: var(--navy-dark); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 17px;
+    margin-bottom: 18px;
+  }
+  .step h3 { font-size: 18px; margin-bottom: 10px; font-weight: 700; }
+  .step p { color: var(--muted); font-size: 15px; }
+
+  .tools { background: var(--card); }
+  .tool-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .tool-card {
+    display: block; text-decoration: none; color: inherit;
+    border: 1px solid var(--border); border-radius: 16px; padding: 30px 26px; background: var(--bg);
+    box-shadow: 0 4px 16px rgba(20,51,73,0.04);
+    transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  }
+  .tool-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 10px 26px rgba(20,51,73,0.1); }
+  .tool-icon {
+    width: 46px; height: 46px; border-radius: 12px; background: #E5F5EC; color: var(--accent-dark);
+    display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
+  }
+  .tool-icon svg { width: 24px; height: 24px; }
+  .tool-card h3 { font-size: 17.5px; font-weight: 800; margin-bottom: 8px; color: var(--navy-dark); }
+  .tool-card p { color: var(--muted); font-size: 14.5px; margin-bottom: 0; }
+  .tool-card .tool-link { color: var(--accent-dark); font-weight: 700; font-size: 13.5px; margin-top: 12px; display: inline-block; }
+
+  .example {
+    background: linear-gradient(180deg, #fff, var(--bg));
+  }
+  .example-card {
+    max-width: 640px; margin: 0 auto; background: #fff; border: 1px solid var(--border);
+    border-radius: 16px; padding: 36px 40px; box-shadow: 0 12px 32px rgba(20,51,73,0.06);
+  }
+  .example-row { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .example-row:last-child { border-bottom: none; }
+  .example-row .label { color: var(--muted); font-size: 15px; }
+  .example-row .value { font-weight: 700; font-size: 17px; }
+  .example-row.total .value { color: var(--accent-dark); font-size: 22px; }
+  .example-disclaimer { font-size: 13px; color: var(--muted); text-align: center; margin-top: 20px; }
+
+  .trust { background: var(--card); }
+  .trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .trust-card { text-align: center; padding: 12px; }
+  .trust-icon {
+    width: 52px; height: 52px; border-radius: 50%; background: #E5F5EC; color: var(--accent-dark);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; font-size: 22px; font-weight: 800;
+  }
+  .trust-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .trust-card p { color: var(--muted); font-size: 14.5px; }
+
+  .final-cta {
+    background: var(--navy-dark); color: #fff; text-align: center; border-radius: 24px;
+    max-width: 1032px; margin: 0 auto; padding: 56px 40px;
+  }
+  .final-cta h2 { color: #fff; }
+  .final-cta p { color: rgba(255,255,255,0.8); max-width: 520px; margin: 0 auto 28px; text-align: center; }
+  .final-cta .request-card { max-width: 560px; margin: 0 auto; text-align: left; }
+
+  footer { padding: 48px 24px; text-align: center; color: var(--muted); font-size: 13.5px; }
+  footer a { color: var(--navy); font-weight: 600; text-decoration: none; }
+  /* Badge-Zeile: bewusst zurueckhaltend, damit sie den Footer nicht dominiert. */
+  .footer-badges { margin-top: 18px; font-size: 12.5px; opacity: .8; }
+  .footer-badges a { color: var(--muted); font-weight: 500; }
+  .footer-badges a:hover { color: var(--navy-dark); }
+
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: 1fr; text-align: center; }
+    .hero p.sub { margin-left: auto; margin-right: auto; }
+    .hero-visual { margin-top: 8px; }
+    .mock-card { transform: none; }
+    .request-card { text-align: left; }
+  }
+  @media (max-width: 760px) {
+    h1 { font-size: 29px; }
+    .steps, .trust-grid, .tool-grid { grid-template-columns: 1fr; }
+    .request-form, .step2-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; position: absolute; left: 0; right: 0; top: 100%; flex-direction: column; gap: 0;
+      background: #fff; border-bottom: 1px solid var(--border); padding: 6px 0; }
+    .nav-links.is-open { display: flex; }
+    .nav-links a { padding: 12px 24px; }
+    .nav-right .menu-toggle { display: inline-flex; }
+    /* Wortmarke, Knopf, Menue und Sprache muessen bei 390 px nebeneinander passen. */
+    .logo img { height: 28px; }
+    .nav-inner { gap: 10px; padding: 12px 14px; }
+    .nav-right { gap: 8px; }
+    .nav-cta { padding: 9px 12px; font-size: 13px; }
+    .guide-diagram { display: none; }
+    .countries-list { grid-template-columns: repeat(2, 1fr); }
+    .bestof-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+    section { padding: 56px 14px; }
+    /* Mobil: verschachtelte Innenabstände reduzieren, damit Felder nicht überstehen
+       und nicht unnötig nach rechts geschoben werden. */
+    .container { padding: 0 12px; }
+    #suche-hero { padding-left: 0; padding-right: 0; padding-bottom: 40px; }
+    #suche-hero .container { max-width: 100%; }
+    .mini-guide { padding: 14px 15px; margin-bottom: 10px; }
+    .request-card { padding: 16px; }
+    .final-cta { padding: 40px 16px; border-radius: 18px; }
+    /* Ergebnistabelle mit drei Spalten kompakter, damit sie auf schmalen Displays passt. */
+    .result-table { font-size: 12.5px; }
+    .result-table th, .result-table td { padding: 6px 6px; }
+  }
+  /* --- Ergaenzungen aus dem Audit --------------------------------------------------------- */
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+  .menu-toggle {
+    display: none; align-items: center; justify-content: center; width: 40px; height: 40px;
+    border: 1px solid var(--border); border-radius: 8px; background: #fff; color: var(--navy-dark); cursor: pointer;
+  }
+  .menu-toggle svg { width: 20px; height: 20px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+  .msg-error { color: var(--danger); }
+  .msg-ok { color: var(--accent-dark); }
+  .msg-muted { color: var(--muted); }
+  .result-table th[scope="row"] { font-weight: 600; }
+  .deal-tags { display: block; margin-top: 3px; }
+  .deal-tag {
+    display: inline-block; font-size: 11px; font-weight: 700; line-height: 1.2; padding: 2px 7px; margin: 0 4px 2px 0;
+    border-radius: 999px; background: var(--warn-bg); color: var(--warn-text); border: 1px solid var(--warn-border);
+  }
+  .deal-tag.device-tag { background: var(--navy-dark); color: #fff; border-color: var(--navy-dark); }
+  .result-table tr.mobile-row th, .result-table tr.mobile-row td { color: var(--navy-dark); }
+  .result-savings.result-mobile { margin-top: 10px; }
+  .row-note { display: block; font-size: 11.5px; font-weight: 500; color: var(--muted); margin-top: 2px; }
+  .result-actions { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin-bottom: 14px; }
+  .result-link { color: var(--accent-dark); font-weight: 700; }
+  .result-share {
+    background: #fff; color: var(--navy-dark); border: 1px solid var(--navy-dark); border-radius: 8px;
+    padding: 7px 12px; font-weight: 700; font-size: 13.5px; cursor: pointer; font-family: inherit;
+  }
+  .result-share:disabled { border-color: var(--border); color: var(--muted); cursor: default; }
+  /* Laenderauswahl: zu, bis man sie braucht */
+  /* Spezifischer als ".request-form button", sonst erben die Schalter den gruenen Submit-Stil. */
+  .request-form .countries-toggle {
+    grid-column: 1 / -1; width: auto; margin: 0; justify-self: start;
+    background: none; border: none; padding: 0; color: var(--navy); font-weight: 600; font-size: 13px;
+    cursor: pointer; text-align: left; font-family: inherit; text-decoration: underline;
+  }
+  .request-form .countries-toggle:hover { background: none; color: var(--navy-dark); }
+  .countries-panel { margin-top: 10px; }
+  .countries-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 10px; margin: 8px 0; }
+  .request-form .country-chip { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 13.5px; text-transform: none; letter-spacing: normal; font-weight: 500; color: var(--text); }
+  .country-chip input { width: 16px; height: 16px; margin: 0; }
+  .countries-tools { display: flex; gap: 12px; font-size: 12.5px; }
+  .request-form .countries-tools button { grid-column: auto; width: auto; margin: 0; background: none; border: none; padding: 0; color: var(--navy); font-weight: 600; font-size: 12.5px; cursor: pointer; font-family: inherit; text-decoration: underline; }
+  .request-form .countries-tools button:hover { background: none; color: var(--navy-dark); }
+  /* Best-of */
+  .bestof { background: var(--card); }
+  .bestof-list { max-width: 720px; margin: 0 auto; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 8px 22px; }
+  .bestof-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .bestof-row:last-child { border-bottom: none; }
+  .bestof-hotel strong { display: block; font-size: 15.5px; color: var(--navy-dark); }
+  .bestof-meta { font-size: 13px; color: var(--muted); }
+  .bestof-meta a { color: var(--accent-dark); font-weight: 700; margin-left: 6px; }
+  .bestof-saving { text-align: right; color: var(--accent-dark); font-weight: 800; font-size: 20px; white-space: nowrap; }
+  .bestof-saving span { display: block; font-size: 13px; color: var(--muted); font-weight: 600; }
+  .bestof-list .empty { color: var(--muted); text-align: center; padding: 18px 0; }
+  /* Ein Klick statt Kopieren */
+  .oneclick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 900px; margin: 0 auto; }
+  .oneclick-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px 26px; box-shadow: 0 4px 16px rgba(20,51,73,0.04); }
+  .oneclick-card h3 { font-size: 17px; font-weight: 800; color: var(--navy-dark); margin-bottom: 8px; }
+  .oneclick-card p { color: var(--muted); font-size: 14.5px; }
+  .bookmarklet {
+    display: inline-block; margin-top: 14px; background: var(--navy-dark); color: #fff; padding: 10px 16px; border-radius: 8px;
+    font-weight: 700; font-size: 14px; text-decoration: none; cursor: grab;
+  }
+  @media (max-width: 760px) { .oneclick-grid { grid-template-columns: 1fr; } }
+  /* Abschluss-Aufruf statt zweitem Formular */
+  .final-cta .btn-primary {
+    display: inline-block; background: var(--accent); color: #fff; padding: 13px 26px; border-radius: 8px;
+    font-weight: 800; font-size: 15px; text-decoration: none;
+  }
+  .final-cta .btn-primary:hover { background: var(--accent-dark); }
+
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="/nl/" aria-label="GeoRates – Startseite"><img src="/logo.png" srcset="/logo.png 1x, /logo@2x.png 2x" alt="GeoRates" width="125" height="34"></a>
+    <div class="nav-right">
+      <nav class="nav-links" id="nav-links" aria-label="Hauptnavigation">
+        <a href="#so-funktionierts" data-i18n="idx_nav_how">Hoe het werkt</a>
+        <a href="#tools" data-i18n="idx_nav_tools">Tools</a>
+        <a href="#transparenz" data-i18n="idx_nav_transparency">Transparantie</a>
+        <a href="/ratgeber.html" data-i18n="idx_nav_guide">Gids</a>
+      </nav>
+      <a class="nav-cta" href="#suche" data-i18n="idx_nav_cta">Prijs checken</a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-controls="nav-links" aria-expanded="false" data-i18n-aria="idx_menu_aria" aria-label="Menu openen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-grid">
+    <div>
+      <span class="eyebrow" data-i18n="idx_hero_eyebrow">Automatische boekingscheck voor Booking.com</span>
+      <h1 data-i18n="idx_hero_h1">Zeker de eerlijke totaalprijs voor jouw droomkamer.</h1>
+      <p class="sub" data-i18n="idx_hero_sub">Plak de Booking.com-link van je hotel, kies je kamer – wij checken automatisch vanuit 15 landen of precies deze kamer met deze verzorging een lagere totaalprijs heeft, inclusief belastingen en kosten.</p>
+      <p class="hero-counter" id="search-counter" hidden></p>
+    </div>
+    <div class="hero-visual">
+      <!-- Beispiel als Rueckfall; app.js ersetzt den Inhalt durch den groessten echten Fund aus dem
+           Best-of und macht die Karte zum Link auf #funde (seit 25.09.2026). -->
+      <a class="mock-card" id="hero-card" href="#funde" tabindex="-1" aria-hidden="true">
+        <div class="mock-card-title" id="hero-card-title" data-i18n="idx_mock_title">VOORBEELD · TWEEPERSOONSKAMER MET ZEEZICHT, ONTBIJT</div>
+        <div class="mock-row"><span id="hero-card-start-label" data-i18n="idx_mock_start_label">Startprijs</span><span class="old-price" id="hero-card-start">1.240 €</span></div>
+        <div class="mock-arrow" id="hero-card-arrow" data-i18n="idx_mock_arrow">↓ € 160 bespaard</div>
+        <div class="mock-row best"><span id="hero-card-best-label" data-i18n="idx_mock_best_label">Beste gevonden prijs</span><span id="hero-card-best">1.080 €</span></div>
+        <span class="mock-badge" id="hero-card-badge" data-i18n="idx_mock_badge">≈13% goedkoper</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="suche" style="padding-top:0; margin-top:-48px; position:relative; z-index:2;">
+  <div class="container" style="max-width:720px;">
+    <div class="mini-guide">
+      <strong data-i18n="idx_guide_title">Zo kom je aan de juiste link:</strong>
+      <svg class="guide-diagram" viewBox="0 0 640 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="8" y="8" width="624" height="114" rx="14" fill="#ffffff" stroke="#E3E9ED" stroke-width="2"></rect>
+        <path d="M8 22 a14 14 0 0 1 14 -14 h584 a14 14 0 0 1 14 14 v28 h-612 z" fill="#F1F4F6"></path>
+        <circle cx="34" cy="36" r="5" fill="#C7D0D6"></circle>
+        <circle cx="52" cy="36" r="5" fill="#C7D0D6"></circle>
+        <circle cx="70" cy="36" r="5" fill="#C7D0D6"></circle>
+        <rect x="96" y="24" width="500" height="24" rx="12" fill="#ffffff" stroke="#C7D0D6" stroke-width="1.5"></rect>
+        <text x="110" y="41" font-family="Menlo, Consolas, monospace" font-size="12" fill="#5B6B75">booking.com/hotel/it/grand-fasano.de.html?aid=304142&amp;label=…</text><!-- leck-check-ok: erfundenes Beispielhotel, stammt NICHT aus dem Log -->
+        <rect x="90" y="19" width="512" height="34" rx="15" fill="none" stroke="#C0392B" stroke-width="3"></rect>
+        <line x1="230" y1="88" x2="268" y2="56" stroke="#028659" stroke-width="3" stroke-linecap="round" marker-end="url(#gr-arrow-1)"></line>
+        <defs>
+          <marker id="gr-arrow-1" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 Z" fill="#028659"></path>
+          </marker>
+        </defs>
+        <text x="118" y="106" font-size="13" font-weight="700" fill="#011d3a" data-i18n="idx_guide_svg_caption">Klik in de adresbalk, selecteer alles & kopieer</text>
+      </svg>
+      <ol>
+        <li data-i18n="idx_guide_step1">Open het gewenste hotel op Booking.com.</li>
+        <li data-i18n="idx_guide_step2">Klik in de adresbalk, selecteer alles (Ctrl/⌘+A) en kopieer (Ctrl/⌘+C) – ook als deze verkort met "…" wordt weergegeven, wordt het volledige adres vastgelegd.</li>
+        <li data-i18n="idx_guide_step3">Plak de link hieronder en vul je gewenste kamer in.</li>
+      </ol>
+    </div>
+    <div class="request-card">
+      <form class="request-form" id="request-form" novalidate>
+        <div class="full">
+          <label for="link" data-i18n="idx_form_label_link">Link naar jouw gewenste hotel (Booking.com)</label>
+          <input type="url" id="link" name="link" placeholder="https://www.booking.com/hotel/..." required autocomplete="off" inputmode="url">
+          <p class="hint" data-i18n="idx_form_hint_link">Plak het volledige adres uit de adresbalk, niet alleen het zichtbare deel.</p>
+          <p class="link-warn" id="link-warn" role="status" aria-live="polite"></p>
+          <!-- Sicherheitspruefung gehoert VOR das Zimmer-Laden: Der Abruf braucht den Turnstile-Token. -->
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAD5R3U1E9Flp_-6V"></div>
+          <button type="button" class="load-rooms-btn" id="load-rooms" data-i18n="idx_load_rooms_btn">Kamers laden van Booking</button>
+          <span class="load-rooms-msg" id="load-rooms-msg" role="status" aria-live="polite"></span>
+          <!-- Zimmer, Verpflegung und Storno erscheinen erst nach dem Laden (dann mit den Optionen,
+               die es fuer das Hotel wirklich gibt) oder ueber diesen Ausweg fuer die Handeingabe.
+               Frueher standen alle Felder von Anfang an da, und der Knopf war ein Nebenweg - die
+               meisten Fehlschlaege kamen von frei getippten Zimmernamen. -->
+          <p class="step2-hint" id="step2-hint">
+            <span data-i18n="idx_step2_hint">Kamer, verzorging en annulering verschijnen na het laden – met de opties die dit hotel echt aanbiedt.</span>
+            <a href="#" id="manual-entry" data-i18n="idx_manual_entry">Of typ de kamernaam zelf</a>
+          </p>
+        </div>
+        <div class="full step2" id="step2" hidden>
+        <div class="request-form step2-grid">
+        <div>
+          <label for="room" data-i18n="idx_form_label_room">Gewenste kamer</label>
+          <select id="room-select" name="room-select" style="display:none;" aria-label="Zimmer auswählen"></select>
+          <input type="text" id="room" name="room" data-i18n-placeholder="idx_form_placeholder_room" placeholder="bijv. Tweepersoonskamer met zeezicht" maxlength="200">
+          <p class="hint" data-i18n="idx_form_hint_room">Exacte kamernaam zoals op Booking.com – verschillende kamercategorieën hebben vaak verschillende prijzen & annuleringsvoorwaarden.</p>
+        </div>
+        <div>
+          <label for="board" data-i18n="idx_form_label_board">Verblijfsvorm</label>
+          <select id="board" name="board">
+            <option value="egal" selected data-i18n="idx_board_any">Maakt niet uit – goedkoopste tarief</option>
+            <option value="uebernachtung" data-i18n="idx_board_room_only">Alleen overnachting</option>
+            <option value="fruehstueck" data-i18n="idx_board_breakfast">Ontbijt</option>
+            <option value="halbpension" data-i18n="idx_board_half">Halfpension</option>
+            <option value="vollpension" data-i18n="idx_board_full">Volpension</option>
+            <option value="allinclusive" data-i18n="idx_board_allinclusive">All-inclusive</option>
+          </select>
+        </div>
+        <div class="full">
+          <label for="cancel" data-i18n="idx_form_label_cancel">Gratis annuleerbaar?</label>
+          <select id="cancel" name="cancel">
+            <option value="ja" data-i18n="idx_cancel_yes">Ja</option>
+            <option value="nein" data-i18n="idx_cancel_no">Nee</option>
+            <option value="unsicher" selected data-i18n="idx_cancel_unsure">Maakt niet uit – goedkoopste tarief</option>
+          </select>
+          <p class="hint" style="margin-top:6px;" data-i18n="idx_form_hint_cancel">Gratis annuleerbare tarieven zijn vaak duurder – zo vergelijken we in elk land het juiste tarief.</p>
+        </div>
+        <div class="full">
+          <label for="user-price" data-i18n="idx_form_label_userprice">Prijs die je nu ziet (optioneel, €)</label>
+          <input type="text" id="user-price" name="user-price" inputmode="decimal" data-i18n-placeholder="idx_form_placeholder_userprice" placeholder="bijv. 1.240,00" maxlength="12" autocomplete="off">
+          <p class="hint" data-i18n="idx_form_hint_userprice">Booking toont per sessie licht verschillende prijzen. Vul in wat je in je browser ziet – we vergelijken met de laagste van de twee.</p>
+        </div>
+        <div class="full" id="countries">
+          <button type="button" class="countries-toggle" aria-expanded="false" aria-controls="countries-panel" data-i18n="idx_countries_toggle">Alleen bepaalde landen checken (bijv. waar je VPN servers heeft)</button>
+          <div class="countries-panel" id="countries-panel" style="display:none;">
+            <p class="hint" style="margin-top:0;" data-i18n="idx_countries_hint">Minder landen = sneller resultaat. Je thuisland zit er altijd bij.</p>
+            <div class="countries-list"></div>
+            <div class="countries-tools">
+              <button type="button" class="countries-all" data-i18n="idx_countries_all">Alle</button>
+              <button type="button" class="countries-none" data-i18n="idx_countries_none">Geen</button>
+            </div>
+          </div>
+        </div>
+        <button type="submit" data-i18n="idx_form_submit">Prijs automatisch controleren</button>
+        </div>
+        </div>
+      </form>
+      <div class="form-msg" id="request-msg" role="status" aria-live="polite"></div>
+      <div class="result-panel" id="result-panel" style="display:none;" role="region" aria-live="polite" aria-label="Ergebnis"></div>
+    </div>
+    <div class="hero-note" style="color: var(--muted); text-align:center; margin-top:14px;" data-i18n="idx_hero_note">Gratis & vrijblijvend · automatische check via meerdere landsessies.</div>
+  </div>
+</section>
+
+<section id="so-funktionierts">
+  <div class="container">
+    <div class="section-label" data-i18n="idx_how_label">Hoe het werkt</div>
+    <h2 data-i18n="idx_how_h2">In drie stappen naar de beste prijs</h2>
+    <p class="section-sub" data-i18n="idx_how_sub">Een eenvoudig proces dat je tijd en geld moet besparen – zonder omwegen bij het boeken.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3 data-i18n="idx_step1_title">Hotel-link & kamer opgeven</h3>
+        <p data-i18n="idx_step1_text">Je voegt de Booking.com-link van je hotel toe en kiest je gewenste kamer en de gewenste verblijfsvorm.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3 data-i18n="idx_step2_title">Wij checken je prijs automatisch</h3>
+        <p data-i18n="idx_step2_text">Vanuit 15 landsessies lezen we de prijs van precies deze kamer en verzorging – inclusief belastingen en kosten, met Genius-korting (die elk Booking-account krijgt), binnen een minuut.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3 data-i18n="idx_step3_title">Je boekt rechtstreeks</h3>
+        <p data-i18n="idx_step3_text">De daadwerkelijke boeking verloopt gewoon via Booking.com – wij laten je alleen de beste weg daarheen zien.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tools" class="tools">
+  <div class="container">
+    <div class="section-label" data-i18n="idx_tools_label">Gratis & zonder registratie</div>
+    <h2 data-i18n="idx_tools_h2">Reistools voor je planning</h2>
+    <p class="section-sub" data-i18n="idx_tools_sub">Handige rekentools voor je reis – ongeacht waar je uiteindelijk boekt.</p>
+    <div class="tool-grid">
+      <a class="tool-card" href="/nl/budget.html">
+        <div class="tool-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2.5" width="14" height="19" rx="2"></rect>
+            <line x1="8" y1="6.5" x2="16" y2="6.5"></line>
+            <line x1="8" y1="11" x2="8" y2="11.01"></line>
+            <line x1="12" y1="11" x2="12" y2="11.01"></line>
+            <line x1="16" y1="11" x2="16" y2="11.01"></line>
+            <line x1="8" y1="15" x2="8" y2="15.01"></line>
+            <line x1="12" y1="15" x2="12" y2="15.01"></line>
+            <line x1="16" y1="15" x2="16" y2="15.01"></line>
+            <line x1="8" y1="18.5" x2="16" y2="18.5"></line>
+          </svg>
+        </div>
+        <h3 data-i18n="idx_tool1_title">Reisbudget-calculator</h3>
+        <p data-i18n="idx_tool1_text">Schat je totale budget op basis van reisstijl, aantal personen en reisduur.</p>
+        <span class="tool-link" data-i18n="idx_tool1_link">Calculator openen →</span>
+      </a>
+      <a class="tool-card" href="/nl/packliste.html">
+        <div class="tool-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 3.5h6a1 1 0 0 1 1 1V6h1.5A2.5 2.5 0 0 1 20 8.5V19a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 19V8.5A2.5 2.5 0 0 1 6.5 6H8V4.5a1 1 0 0 1 1-1Z"></path>
+            <path d="M9 6V4.5h6V6"></path>
+            <path d="M9 10.5c0 1.4 1.3 2.2 3 2.2s3-.8 3-2.2"></path>
+          </svg>
+        </div>
+        <h3 data-i18n="idx_tool2_title">Pakli­jst-generator</h3>
+        <p data-i18n="idx_tool2_text">Persoonlijke checklist afhankelijk van reistype, klimaat en duur van de reis.</p>
+        <span class="tool-link" data-i18n="idx_tool2_link">Lijst maken →</span>
+      </a>
+      <a class="tool-card" href="/nl/gruppenkosten.html">
+        <div class="tool-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="8.5" cy="8" r="2.6"></circle>
+            <circle cx="16" cy="8.5" r="2.1"></circle>
+            <path d="M3.5 19c0-2.8 2.2-5 5-5s5 2.2 5 5"></path>
+            <path d="M13.7 14.4c2.4.3 4.3 2.3 4.3 4.9"></path>
+          </svg>
+        </div>
+        <h3 data-i18n="idx_tool3_title">Groepsuitgaven-tracker</h3>
+        <p data-i18n="idx_tool3_text">Leg gedeelde uitgaven in de groep vast en verdeel ze eerlijk.</p>
+        <span class="tool-link" data-i18n="idx_tool3_link">Tracker openen →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="example">
+  <div class="container">
+    <div class="section-label" data-i18n="idx_example_label">Ter illustratie</div>
+    <h2 data-i18n="idx_example_h2">Zo zou een besparing kunnen uitzien</h2>
+    <p class="section-sub" data-i18n="idx_example_sub">Illustratief rekenvoorbeeld op basis van typische prijsverschillen die we tijdens het testen hebben waargenomen – geen concrete boekingsbelofte voor een specifiek hotel.</p>
+    <div class="example-card">
+      <div class="example-row">
+        <span class="label" data-i18n="idx_ex_row1_label">Kamer & verblijfsvorm</span>
+        <span class="value" data-i18n="idx_ex_row1_value">Tweepersoonskamer met zeezicht, ontbijt</span>
+      </div>
+      <div class="example-row">
+        <span class="label" data-i18n="idx_ex_row2_label">Startprijs (incl. belastingen & kosten)</span>
+        <span class="value">1.240 €</span>
+      </div>
+      <div class="example-row">
+        <span class="label" data-i18n="idx_ex_row3_label">Door ons gevonden beste prijs (dezelfde kamer)</span>
+        <span class="value">1.080 €</span>
+      </div>
+      <div class="example-row total">
+        <span class="label" data-i18n="idx_ex_row4_label">Mogelijke besparing</span>
+        <span class="value" data-i18n="idx_ex_row4_value">€ 160 (≈13%)</span>
+      </div>
+    </div>
+    <p class="example-disclaimer" data-i18n="idx_example_disclaimer">Werkelijke prijsverschillen variëren per hotel en periode – soms is de weergegeven startprijs al de beste beschikbare.</p>
+  </div>
+</section>
+
+<section id="transparenz" class="trust">
+  <div class="container">
+    <div class="section-label" data-i18n="idx_trust_label">Transparantie als principe</div>
+    <h2 data-i18n="idx_trust_h2">Waarom je onze cijfers kunt vertrouwen</h2>
+    <div class="trust-grid">
+      <div class="trust-card">
+        <div class="trust-icon">€</div>
+        <h3 data-i18n="idx_trust1_title">Altijd incl. belastingen & kosten</h3>
+        <p data-i18n="idx_trust1_text">Sommige boekingssites tonen extra belastingen pas later. Wij rekenen ze altijd direct mee, zodat het door ons genoemde bedrag de werkelijke eindprijs is.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">↔</div>
+        <h3 data-i18n="idx_trust2_title">Geen kunstmatige opslag</h3>
+        <p data-i18n="idx_trust2_text">De startprijs die we voor de vergelijking gebruiken, wordt niet mooier gemaakt of verhoogd om een grotere besparing voor te wenden – beide bedragen zijn echte, identiek berekende totaalprijzen.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">✓</div>
+        <h3 data-i18n="idx_trust3_title">Je boekt nog steeds rechtstreeks</h3>
+        <p data-i18n="idx_trust3_text">GeoRates boekt, annuleert of betaalt niets voor je – we laten je alleen zien waar hetzelfde verblijf goedkoper is. Geboekt wordt gewoon bij Booking.com.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bestof" id="funde">
+  <div class="container">
+    <div class="section-label" data-i18n="idx_bestof_label">Echte vondsten</div>
+    <h2 data-i18n="idx_bestof_h2">De grootste besparingen van de laatste weken</h2>
+    <p class="section-sub" data-i18n="idx_bestof_sub">Geanonimiseerd uit echte zoekopdrachten: hotel, land van de sessie en besparing – zonder reisdata, zonder link.</p>
+    <div class="bestof-list" id="bestof-list"><p class="empty">…</p></div>
+  </div>
+</section>
+
+<section id="ein-klick">
+  <div class="container">
+    <div class="section-label" data-i18n="idx_oneclick_label">Eén klik in plaats van kopiëren</div>
+    <h2 data-i18n="idx_oneclick_h2">Stuur de Booking-pagina direct naar GeoRates</h2>
+    <div class="oneclick-grid">
+      <div class="oneclick-card">
+        <h3 data-i18n="idx_oneclick_share_title">Op je telefoon: deelmenu</h3>
+        <p data-i18n="idx_oneclick_share_text">Installeer GeoRates als app, tik dan op de Booking.com-hotelpagina op „Delen” en kies GeoRates – de link staat direct in het formulier.</p>
+      </div>
+      <div class="oneclick-card">
+        <h3 data-i18n="idx_oneclick_bm_title">Op de computer: bladwijzer</h3>
+        <p data-i18n="idx_oneclick_bm_text">Sleep deze knop naar je bladwijzerbalk. Eén klik op een Booking.com-hotelpagina opent GeoRates met de link.</p>
+        <a class="bookmarklet" id="bookmarklet" href="#" data-i18n="idx_oneclick_bm_label">→ Checken bij GeoRates</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="los">
+  <div class="container">
+    <div class="final-cta">
+      <h2 data-i18n="idx_final_h2">Klaar voor je boekingscheck?</h2>
+      <p data-i18n="idx_final_p">Vul hotellink, kamer en verzorging in – het resultaat verschijnt direct op de pagina.</p>
+      <a class="btn-primary" href="#suche" data-i18n="idx_final_button">Naar het formulier</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <span data-i18n="idx_footer_line1">GeoRates · Automatische boekingscheck voor hotelboekingen · Geen reisorganisatie, geen boekingsafhandeling.</span><br>
+    <span data-i18n="idx_footer_questions">Vragen?</span> <a href="mailto:info@georates.tech">info@georates.tech</a><br>
+    <a href="/ratgeber.html">Ratgeber: Hotelpreise je nach Land</a><br>
+    <a href="/impressum.html" data-i18n="common_impressum">Colofon</a> · <a href="/datenschutz.html" data-i18n="common_datenschutz">Privacybeleid</a> ·
+    <a href="/agb.html" data-i18n="common_agb">Gebruiksvoorwaarden</a>
+    <!-- Verweise auf die Launch-Plattformen (Bedingung für den kostenlosen Eintrag). BEWUSST Textlinks
+         statt eingebundener Bilder: Ein <img> von fremden Servern hat bei JEDEM Seitenaufruf die
+         IP-Adresse jedes Besuchers dorthin übertragen - im Widerspruch zu Abschnitt 6 der
+         Datenschutzerklärung. Ein Textlink überträgt erst etwas, wenn jemand klickt. -->
+    <div class="footer-badges">
+      <a href="https://openhunts.com/" target="_blank" rel="noopener">OpenHunts</a> ·
+      <a href="https://fazier.com/launches/georates.tech" target="_blank" rel="noopener">Fazier</a> ·
+      <a href="https://www.uneed.best/tool/georates" target="_blank" rel="noopener">Uneed</a>
+    </div>
+  </div>
+</footer>
+
+<!-- App-Installation anbieten (Android/Desktop per Prompt, iOS mit Anleitung) - Logik in pwa.js -->
+<div id="pwa-install" role="dialog" aria-labelledby="pwa-install-title" style="display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;max-width:520px;margin:0 auto;background:#011d3a;color:#fff;border-radius:14px;padding:13px 14px;box-shadow:0 10px 30px rgba(0,0,0,.28);font-size:14.5px;line-height:1.4;">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <img src="/icon-192.png" alt="" width="42" height="42" style="border-radius:10px;flex:0 0 auto;">
+    <div style="flex:1 1 auto;min-width:0;">
+      <strong id="pwa-install-title" style="display:block;" data-i18n="idx_pwa_title">GeoRates als app</strong>
+      <span id="pwa-install-text" data-i18n="idx_pwa_text">Bewaar op het startscherm – opent op volledig scherm en neemt Booking-links aan via „Delen”.</span>
+    </div>
+    <button id="pwa-install-btn" type="button" data-i18n="idx_pwa_install" style="flex:0 0 auto;background:#028659;color:#fff;border:0;border-radius:9px;padding:9px 14px;font-weight:700;font-size:14px;cursor:pointer;">Installeren</button>
+    <button id="pwa-install-close" type="button" data-i18n-aria="idx_pwa_close" aria-label="Sluiten" style="flex:0 0 auto;background:transparent;color:#cfe0ee;border:0;font-size:19px;line-height:1;cursor:pointer;padding:4px 2px;">&times;</button>
+  </div>
+</div>
+<script src="/i18n.js"></script>
+<script src="/app.js" defer></script>
+<script src="/pwa.js" defer></script>
+
+</body>
+</html>

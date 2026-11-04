@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="nl" data-i18n-prerendered="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
+<meta name="description" content="Gratis reisbudget-calculator: plan vluchten, accommodatie, eten en activiteiten en houd je uitgaven onder controle.">
+<link rel="canonical" href="https://georates.tech/nl/budget.html">
+<!-- hreflang:start (erzeugt von tools/build-langs.js - nicht von Hand aendern) -->
+<link rel="alternate" hreflang="de" href="https://georates.tech/budget.html">
+<link rel="alternate" hreflang="en" href="https://georates.tech/en/budget.html">
+<link rel="alternate" hreflang="es" href="https://georates.tech/es/budget.html">
+<link rel="alternate" hreflang="fr" href="https://georates.tech/fr/budget.html">
+<link rel="alternate" hreflang="it" href="https://georates.tech/it/budget.html">
+<link rel="alternate" hreflang="nl" href="https://georates.tech/nl/budget.html">
+<link rel="alternate" hreflang="x-default" href="https://georates.tech/budget.html">
+<!-- hreflang:ende -->
+<meta property="og:title" content="Reisbudget-calculator – GeoRates">
+<meta property="og:description" content="Gratis reisbudget-calculator: plan vluchten, accommodatie, eten en activiteiten en houd je uitgaven onder controle.">
+<meta property="og:url" content="https://georates.tech/nl/budget.html">
+<meta property="og:locale" content="nl">
+<title data-i18n-title="budget_title">Reisbudget-calculator – GeoRates</title>
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#011d3a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GeoRates">
+
+<link rel="stylesheet" href="/tokens.css">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="/nl/"><img src="/logo.png" srcset="/logo.png 1x, /logo@2x.png 2x" alt="GeoRates" width="125" height="34"></a>
+    <a class="back-link" href="/nl/" data-i18n="common_back_home">← Terug naar home</a>
+  </div>
+</header>
+
+<div class="page-header">
+  <h1 data-i18n="budget_h1">Reisbudget-calculator</h1>
+  <p data-i18n="budget_sub">Schat je reisbudget in seconden – kies een categorie of pas alle waarden zelf aan.</p>
+</div>
+
+<main class="tool">
+  <div class="panel">
+    <h2 data-i18n="budget_panel1_h2">Reisgegevens</h2>
+    <div class="field-row">
+      <div class="field">
+        <label for="preset" data-i18n="budget_label_preset">Reisstijl</label>
+        <select id="preset">
+          <option value="guenstig" data-i18n="budget_opt_cheap">Budget (hostel/laag budget)</option>
+          <option value="mittel" selected data-i18n="budget_opt_mid">Gemiddeld (standaardhotel)</option>
+          <option value="luxus" data-i18n="budget_opt_luxury">Luxe</option>
+          <option value="custom" data-i18n="budget_opt_custom">Eigen waarden</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="personen" data-i18n="budget_label_personen">Aantal personen</label>
+        <input type="number" id="personen" min="1" value="2">
+      </div>
+      <div class="field">
+        <label for="naechte" data-i18n="budget_label_naechte">Aantal nachten</label>
+        <input type="number" id="naechte" min="1" value="7">
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2 data-i18n="budget_panel2_h2">Kosten (bewerkbaar)</h2>
+    <div class="field-row">
+      <div class="field">
+        <label for="unterkunft" data-i18n="budget_label_unterkunft">Accommodatie per nacht (totaal, €)</label>
+        <input type="number" id="unterkunft" min="0" value="70">
+      </div>
+      <div class="field">
+        <label for="verpflegung" data-i18n="budget_label_verpflegung">Maaltijden per persoon/dag (€)</label>
+        <input type="number" id="verpflegung" min="0" value="35">
+      </div>
+      <div class="field">
+        <label for="transport" data-i18n="budget_label_transport">Lokaal vervoer per persoon/dag (€)</label>
+        <input type="number" id="transport" min="0" value="15">
+      </div>
+      <div class="field">
+        <label for="aktivitaeten" data-i18n="budget_label_aktivitaeten">Activiteiten per persoon/dag (€)</label>
+        <input type="number" id="aktivitaeten" min="0" value="20">
+      </div>
+      <div class="field">
+        <label for="sonstiges" data-i18n="budget_label_sonstiges">Overig per persoon/dag (€)</label>
+        <input type="number" id="sonstiges" min="0" value="10">
+      </div>
+    </div>
+    <button class="btn" id="calc-btn" type="button" data-i18n="budget_btn_calc">Budget berekenen</button>
+    <p class="hint" data-i18n="budget_hint">De waarden zijn ruwe richtwaarden – pas ze gerust aan op je bestemming.</p>
+  </div>
+
+  <div class="panel" id="result-panel" style="display:none;">
+    <h2 data-i18n="budget_result_h2">Geschat budget</h2>
+    <div class="result-row"><span data-i18n="budget_r_unterkunft">Accommodatie (totaal)</span><span id="r-unterkunft">–</span></div>
+    <div class="result-row"><span data-i18n="budget_r_verpflegung">Maaltijden (totaal)</span><span id="r-verpflegung">–</span></div>
+    <div class="result-row"><span data-i18n="budget_r_transport">Lokaal vervoer (totaal)</span><span id="r-transport">–</span></div>
+    <div class="result-row"><span data-i18n="budget_r_aktivitaeten">Activiteiten (totaal)</span><span id="r-aktivitaeten">–</span></div>
+    <div class="result-row"><span data-i18n="budget_r_sonstiges">Overig (totaal)</span><span id="r-sonstiges">–</span></div>
+    <div class="result-row total"><span data-i18n="budget_r_gesamt">Totaalbudget</span><span id="r-gesamt">–</span></div>
+    <div class="result-row"><span class="muted" data-i18n="budget_r_pro_person">Per persoon</span><span class="muted" id="r-pro-person">–</span></div>
+    <div class="result-row"><span class="muted" data-i18n="budget_r_pro_tag">Per dag (groep)</span><span class="muted" id="r-pro-tag">–</span></div>
+  </div>
+
+  <div class="cta-box">
+    <p data-i18n="common_cta_text">Al een hotel voor je reis gekozen? Wij checken de totaalprijs op Booking.com voor je.</p>
+    <a class="btn" href="/nl/#suche" data-i18n="common_cta_button">Zoek een hotel</a>
+  </div>
+  <div class="panel">
+    <h2>Wofür ist der Reisebudget-Rechner gut?</h2>
+    <p>Mit dem kostenlosen Reisebudget-Rechner planst du in Sekunden, was deine Reise ungefähr kostet. Du gibst Reisestil, Personenzahl und Nächte an und passt die Kosten für Unterkunft, Verpflegung, Transport und Aktivitäten bei Bedarf selbst an. So siehst du sofort das Gesamtbudget sowie die Kosten pro Person und pro Tag.</p>
+    <p>Praktisch ist das vor allem, um verschiedene Reiseziele oder Reisestile zu vergleichen und Überraschungen zu vermeiden. Tipp: Bei der Unterkunft lohnt sich zusätzlich ein Preisvergleich – mit dem <a href="/nl/">GeoRates Hotelpreis-Check</a> siehst du, ob dasselbe Hotel aus einem anderen Land günstiger ist.</p>
+  </div>
+</main>
+
+<footer>
+  <a href="/nl/">GeoRates</a> · <a href="/impressum.html" data-i18n="common_impressum">Colofon</a> ·
+  <a href="/datenschutz.html" data-i18n="common_datenschutz">Privacybeleid</a> · <a href="/agb.html" data-i18n="common_agb">Gebruiksvoorwaarden</a>
+</footer>
+
+<script src="/i18n.js"></script>
+<script src="/budget.js"></script>
+<script src="/pwa.js" defer></script>
+</body>
+</html>

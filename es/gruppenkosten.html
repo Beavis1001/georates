@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es" data-i18n-prerendered="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
+<meta name="description" content="Control de gastos de viaje en grupo: ¿quién pagó qué? Reparte los gastos de forma justa y ve al instante quién debe cuánto a quién, gratis.">
+<link rel="canonical" href="https://georates.tech/es/gruppenkosten.html">
+<!-- hreflang:start (erzeugt von tools/build-langs.js - nicht von Hand aendern) -->
+<link rel="alternate" hreflang="de" href="https://georates.tech/gruppenkosten.html">
+<link rel="alternate" hreflang="en" href="https://georates.tech/en/gruppenkosten.html">
+<link rel="alternate" hreflang="es" href="https://georates.tech/es/gruppenkosten.html">
+<link rel="alternate" hreflang="fr" href="https://georates.tech/fr/gruppenkosten.html">
+<link rel="alternate" hreflang="it" href="https://georates.tech/it/gruppenkosten.html">
+<link rel="alternate" hreflang="nl" href="https://georates.tech/nl/gruppenkosten.html">
+<link rel="alternate" hreflang="x-default" href="https://georates.tech/gruppenkosten.html">
+<!-- hreflang:ende -->
+<meta property="og:title" content="Control de gastos en grupo – GeoRates">
+<meta property="og:description" content="Control de gastos de viaje en grupo: ¿quién pagó qué? Reparte los gastos de forma justa y ve al instante quién debe cuánto a quién, gratis.">
+<meta property="og:url" content="https://georates.tech/es/gruppenkosten.html">
+<meta property="og:locale" content="es">
+<title data-i18n-title="gk_title">Control de gastos en grupo – GeoRates</title>
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#011d3a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GeoRates">
+
+<link rel="stylesheet" href="/tokens.css">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="/es/"><img src="/logo.png" srcset="/logo.png 1x, /logo@2x.png 2x" alt="GeoRates" width="125" height="34"></a>
+    <a class="back-link" href="/es/" data-i18n="common_back_home">← Volver al inicio</a>
+  </div>
+</header>
+
+<div class="page-header">
+  <h1 data-i18n="gk_h1">Control de gastos en grupo</h1>
+  <p data-i18n="gk_sub">Registra los gastos compartidos y ve de un vistazo quién debe qué a quién.</p>
+</div>
+
+<main class="tool">
+  <div class="panel">
+    <h2 data-i18n="gk_panel1_h2">Acompañantes de viaje</h2>
+    <div class="tag-row" id="member-chips"></div>
+    <div class="field-row">
+      <div class="field" style="margin-bottom:0;">
+        <input type="text" id="member-input" data-i18n-placeholder="gk_placeholder_name" placeholder="Introduce un nombre">
+      </div>
+      <div>
+        <button class="btn secondary" id="add-member-btn" type="button" data-i18n="gk_btn_add_member">Añadir</button>
+      </div>
+    </div>
+    <p class="hint" data-i18n="gk_hint_local">Todos los datos permanecen localmente en tu navegador (sin servidor, sin inicio de sesión).</p>
+  </div>
+
+  <div class="panel">
+    <h2 data-i18n="gk_panel2_h2">Añadir gasto</h2>
+    <div class="field-row">
+      <div class="field">
+        <label for="exp-desc" data-i18n="gk_label_desc">Descripción</label>
+        <input type="text" id="exp-desc" data-i18n-placeholder="gk_placeholder_desc" placeholder="p. ej. Taxi al hotel">
+      </div>
+      <div class="field">
+        <label for="exp-amount" data-i18n="gk_label_amount">Importe (€)</label>
+        <input type="number" id="exp-amount" min="0" step="0.01">
+      </div>
+      <div class="field">
+        <label for="exp-paidby" data-i18n="gk_label_paidby">Pagado por</label>
+        <select id="exp-paidby"></select>
+      </div>
+    </div>
+    <div class="field">
+      <label data-i18n="gk_label_split">Repartido entre</label>
+      <div class="tag-row" id="split-checkboxes"></div>
+    </div>
+    <button class="btn" id="add-expense-btn" type="button" data-i18n="gk_btn_save_expense">Guardar gasto</button>
+  </div>
+
+  <div class="panel">
+    <h2 data-i18n="gk_panel3_h2">Todos los gastos</h2>
+    <div id="expense-table-container"><p class="empty" data-i18n="gk_empty_expenses">Aún no se han registrado gastos.</p></div>
+  </div>
+
+  <div class="panel">
+    <h2 data-i18n="gk_panel4_h2">Saldo</h2>
+    <div id="balance-container"><p class="empty" data-i18n="gk_empty_data">Aún no hay datos.</p></div>
+  </div>
+
+  <div class="panel">
+    <h2 data-i18n="gk_panel5_h2">¿Quién paga a quién? (simplificado)</h2>
+    <div id="settle-container"><p class="empty" data-i18n="gk_empty_data">Aún no hay datos.</p></div>
+    <button class="btn ghost" id="reset-btn" type="button" style="margin-top:16px;" data-i18n="gk_btn_reset">Empezar un nuevo viaje (borrar todo)</button>
+  </div>
+
+  <div class="cta-box">
+    <p data-i18n="common_cta_text">¿Ya has elegido el hotel para tu viaje? Comprobamos el precio total en Booking.com por ti.</p>
+    <a class="btn" href="/es/#suche" data-i18n="common_cta_button">Buscar hotel</a>
+  </div>
+  <div class="panel">
+    <h2>Reisekosten in der Gruppe fair aufteilen</h2>
+    <p>Auf gemeinsamen Reisen zahlt oft mal die eine, mal der andere. Mit dem kostenlosen Reisekosten-Tracker trägst du alle Ausgaben mit dem jeweiligen Zahler ein und siehst sofort, wer wem wie viel schuldet – ganz ohne Zettelwirtschaft und ohne Anmeldung.</p>
+    <p>So lässt sich am Ende der Reise mit möglichst wenigen Überweisungen alles fair ausgleichen. Für die Unterkunft lohnt sich vorab ein Preisvergleich mit dem <a href="/es/">GeoRates Hotelpreis-Check</a>.</p>
+  </div>
+</main>
+
+<footer>
+  <a href="/es/">GeoRates</a> · <a href="/impressum.html" data-i18n="common_impressum">Aviso legal</a> ·
+  <a href="/datenschutz.html" data-i18n="common_datenschutz">Política de privacidad</a> · <a href="/agb.html" data-i18n="common_agb">Condiciones de uso</a>
+</footer>
+
+<script src="/i18n.js"></script>
+<script src="/gruppenkosten.js"></script>
+<script src="/pwa.js" defer></script>
+</body>
+</html>
