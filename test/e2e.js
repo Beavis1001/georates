@@ -157,6 +157,14 @@ async function zweiSchritte(browser, base) {
     ld.mainEntity.length === 4 && ld.mainEntity[0].name.startsWith('Are hotels'), ld.mainEntity[0] && ld.mainEntity[0].name);
   ok('EN-Ratgeber: FAQ-Text ohne HTML', !JSON.stringify(ld).includes('<strong>'));
 
+  // SEO-Ratgeber haben eigene Sprachadressen; die FAQ-Auszeichnung muss die Sprache der Seite haben.
+  await page.goto(base + 'en/booking-usa.html', { waitUntil: 'load' }); await page.waitForTimeout(400);
+  ok('EN-USA: lang-Attribut', (await page.getAttribute('html', 'lang')) === 'en');
+  ok('EN-USA: Ueberschrift uebersetzt', (await page.textContent('h1')).includes('United States'));
+  const ldUsa = JSON.parse(await page.textContent('script[data-i18n-ld="faq"]'));
+  ok('EN-USA: FAQ in Englisch', ldUsa.mainEntity[0].name.indexOf('United States') !== -1, ldUsa.mainEntity[0].name);
+  ok('EN-USA: hreflang', (await page.getAttribute('link[hreflang="de"]', 'href')) === 'https://georates.tech/booking-usa.html');
+
   await page.goto(base, { waitUntil: 'load' });
   await page.evaluate(() => localStorage.setItem('georates_lang', 'de'));
 

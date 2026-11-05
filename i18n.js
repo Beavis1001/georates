@@ -22,9 +22,12 @@
   }
 
   // Seiten, die es unter einer eigenen Adresse je Sprache gibt (siehe tools/build-langs.js).
-  // Rechtstexte und Ratgeber liegen nur auf Deutsch im Wurzelverzeichnis; dort wird weiterhin
-  // nur der Text im Browser getauscht, ohne Adresswechsel.
-  var SEITEN_MIT_SPRACHADRESSE = ["", "index.html", "budget.html", "gruppenkosten.html", "packliste.html"];
+  // Rechtstexte liegen nur auf Deutsch im Wurzelverzeichnis; dort wird der Text im
+  // Browser getauscht, ohne Adresswechsel. Der Ratgeber bleibt bei dem aelteren
+  // Verhalten (Uebersetzung an Ort und Stelle). Die SEO-Ratgeber wechseln die Adresse.
+  var SEITEN_MIT_SPRACHADRESSE = ["", "index.html", "budget.html", "gruppenkosten.html", "packliste.html",
+    "booking-laenderpreise.html", "hotel-vpn-guenstiger-buchen.html", "booking-aus-japan-buchen.html",
+    "booking-indien.html", "booking-usa.html", "booking-laender-ranking.html"];
   var UEBERSETZTE_SEITEN = SEITEN_MIT_SPRACHADRESSE.indexOf(
     location.pathname.replace(/^\/([a-z]{2}\/)?/, "")
   ) !== -1;
@@ -638,6 +641,12 @@
       "jp_faq5_a": "In Yen (JPY), mit einer Karte ohne Fremdwährungsgebühr. Die Umrechnung in Euro, die Booking anbietet, ist meist teurer.",
       "jp_faq6_q": "Ist das erlaubt?",
       "jp_faq6_a": "Ein VPN zu nutzen ist in Deutschland legal. Ob ein konkreter Tarif für dich gilt, steht in den Buchungsbedingungen. Tarife, die ausdrücklich nur für Einwohner Japans gelten, solltest du nicht buchen. Das ist keine Rechtsberatung.",
+      "lp_meta_desc": "Länderpreise bei Booking.com erklärt: was dahintersteckt, warum das in der EU kaum hilft und wie oft eine Buchung aus einem anderen Land in echten Messungen günstiger war.",
+      "vpn_meta_desc": "So findest du heraus, ob dein Booking.com-Hotel aus einem anderen Land günstiger ist, ohne stundenlang VPN-Server durchzuprobieren. Mit Anleitung, Haken und echten Messwerten.",
+      "jp_meta_desc": "In 22 Japan-Treffern lag die Ersparnis im Mittel bei 12,8 % (Median 11,0 %, einmal 38,1 %). Häufiger günstig waren USA und Indien. Zahlen aus dem GeoRates-Log.",
+      "in_meta_desc": "Nach der Genius-Korrektur war Indien 20 Mal das günstigste Land, im Median um 7,8 %. Zahlen aus 140 Abfragen, ein bestätigtes Beispiel und die Haken beim Buchen.",
+      "us_meta_desc": "Nach der Genius-Korrektur waren die USA 31 von 140 Mal das günstigste Land, im Median um 5,7 %. Oft bei Hotels in Griechenland und Italien. Zahlen und Haken.",
+      "rk_meta_desc": "Ranking aus 140 Abfragen ab dem 19.09.2026: Die USA waren 31 Mal günstigstes Land, Indien 20 Mal, Kolumbien 13 Mal. Der Median über alle Abfragen lag bei 2,1 %.",
       "rat_more_h2": "Weitere Ratgeber",
       "rat_more_p": "Auswertungen unserer Messungen: wie oft ein anderes Land günstiger ist, das Ranking ab dem 19.09.2026, und was Buchungen aus den USA, aus Indien und aus Japan in den Daten gezeigt haben.",
       "rat_more_lp": "Booking.com Länderpreise: Was sie sind und wie oft sie sich lohnen",
@@ -961,8 +970,8 @@
       var code = select.value;
       try { localStorage.setItem(STORAGE_KEY, code); } catch (e) { /* ignore */ }
       // Zur Adresse derselben Seite in der gewaehlten Sprache wechseln, damit die Wahl
-      // teilbar und fuer Suchmaschinen sichtbar ist. Nur wo es die Adresse gibt -
-      // Rechtstexte und Ratgeber liegen weiterhin nur im Wurzelverzeichnis.
+      // teilbar und fuer Suchmaschinen sichtbar ist. Nur wo es die Adresse gibt.
+      // Rechtstexte und der aeltere Ratgeber bleiben auf der deutschen URL.
       var ziel = adresseIn(code);
       if (UEBERSETZTE_SEITEN && ziel !== location.pathname + location.search + location.hash) {
         location.assign(ziel);
