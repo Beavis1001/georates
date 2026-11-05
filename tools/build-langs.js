@@ -20,10 +20,10 @@
  * Nach jeder Aenderung an einer Seite aus SEITEN oder an den Sprachdateien neu laufen
  * lassen. test/check.js erinnert daran, falls nicht.
  *
- * Nie deutschen Text in i18n/en.json und die Geschwister kopieren, nur damit der
- * Schluessel-Abgleich gruen ist. Eine Seite ohne Uebersetzung gehoert nach NUR_DEUTSCH
- * und wird erst in einem zweiten Schritt nach SEITEN verschoben, wenn die Texte
- * wirklich uebersetzt sind. test/check.js meldet kopierten Langtext.
+ * Nie deutschen Text in i18n/en.json oder auch nur in eine der Geschwister kopieren,
+ * nur damit der Schluessel-Abgleich gruen ist. Eine Seite ohne Uebersetzung gehoert
+ * nach NUR_DEUTSCH und wird erst nach SEITEN verschoben, wenn die Texte wirklich
+ * uebersetzt sind. test/check.js meldet den kopierten Langtext je Datei.
  */
 
 'use strict';

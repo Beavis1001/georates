@@ -114,8 +114,8 @@ Text-Check sieht sie nicht, so ging am 21.09.2026 der Enter-Fehler live.
   kostenlosen Eintrag dort, aber ohne Requests an fremde Server.
 - **SEO-Ratgeber** stehen in `SEITEN` und haben Sprachadressen. Eine Seite ohne Uebersetzung
   gehoert nach `NUR_DEUTSCH`. Nie deutschen Text in `i18n/en.json` (und es/fr/it/nl) kopieren, nur
-  damit `test/check.js` schweigt: der Check wertet einen in allen fuenf Sprachen identischen Langtext
-  als unuebersetzt. `data-i18n-lock="de"` ist nur fuer Seiten, die eine Sprache behalten sollen.
+  damit `test/check.js` schweigt: der Check wertet Langtext als unuebersetzt, wenn er in
+  allen fuenf Sprachen gleich ist oder in einer einzelnen Datei woertlich Deutsch bleibt. `data-i18n-lock="de"` ist nur fuer Seiten, die eine Sprache behalten sollen.
   Empfehlungsplaetze fuer VPN und Karte sind HTML-Kommentare, keine sichtbaren Platzhalter und keine Links.
 - **Farb-Tokens folgen dem Logo** (`tokens.css`: `--navy-dark #011d3a`, `--accent #028659`); dieselben
   Werte stehen als `theme-color` in allen Seiten und im Manifest. Keine Hex-Farben in HTML/JS
