@@ -9,12 +9,12 @@
 //  5. Leck-Check wie im API-Repo: keine echten Booking-Links mit Tracking-Parametern.
 //
 //  7. Kein deutscher Text, der nur kopiert wurde, damit der Schluessel-Abgleich gruen ist.
-//     Ein Wert, der in allen fuenf Nicht-Deutsch-Dateien gleich und laenger als
-//     UNTRANSLATED_MIN Zeichen ist, gilt als unuebersetzt. Deutsche Seiten, die noch
-//     keine Uebersetzung haben, gehoeren nach NUR_DEUTSCH (tools/build-langs.js) und
-//     bleiben dort, bis ein zweiter Schritt wirklich uebersetzt. Nie Deutsch in
-//     en/es/fr/it/nl kopieren, nur damit der Check schweigt: sonst liefert ein spaeterer
-//     Umzug nach SEITEN deutschen Text unter lang="en".
+//     Zwei Regeln, beide ab UNTRANSLATED_MIN Zeichen:
+//     a) derselbe Wortlaut in allen fuenf Nicht-Deutsch-Dateien
+//     b) jede einzelne Datei (en, es, fr, it, nl) zeichenweise gleich dem deutschen Wert
+//     Regel (a) allein schweigt, wenn Deutsch nur in eine oder zwei Dateien kopiert wurde.
+//     Deutsche Seiten ohne Uebersetzung gehoeren nach NUR_DEUTSCH (tools/build-langs.js).
+//     Nie Deutsch in en/es/fr/it/nl kopieren, nur damit der Check schweigt.
 //
 // Aufruf: node test/check.js   (Exit-Code 1 bei Fehlern)
 
@@ -23,15 +23,85 @@ const path = require('path');
 const vm = require('vm');
 const root = path.resolve(__dirname, '..');
 
-// Laenger als das: gleicher Wortlaut in en, es, fr, it und nl ist keine Uebersetzung.
+// Laenger als das: gleicher Wortlaut wie das Deutsche ist keine Uebersetzung.
 const UNTRANSLATED_MIN = 25;
 
-// Absichtlich in allen Sprachen gleich, je Eintrag der Grund.
+const fremdsprachen = ['en', 'es', 'fr', 'it', 'nl'];
+
+// Ausnahme fuer alle fuenf Sprachen, je Eintrag der Grund.
 // Markennamen, die allein stehen und laenger als UNTRANSLATED_MIN sind, gehoeren hierher.
 // Kurze Tokens (Zahlen, "USA", "EUR-Lex") fallen unter die Laengengrenze und brauchen keinen Eintrag.
 const UNTRANSLATED_OK = {
   // 'beispiel_key': 'Markenname, weltweit gleich geschrieben'
 };
+
+// Ausnahme nur fuer eine Sprache: Schluessel, dann Sprachcode, dann Grund.
+// Fuer den Fall, dass EIN Wortlaut zufaellig mit dem Deutschen uebereinstimmt
+// (Eigenname, festes Zitat), waehrend die anderen Sprachen uebersetzt sind.
+const UNTRANSLATED_OK_LANG = {
+  // 'beispiel_key': { fr: 'Zitat bleibt franzoesisch und ist woertlich der deutsche Satz' }
+};
+
+function unuebersetztAusgenommen(key, lang) {
+  if (UNTRANSLATED_OK[key]) return true;
+  const nurEine = UNTRANSLATED_OK_LANG[key];
+  return !!(nurEine && nurEine[lang]);
+}
+
+// Jede Fremdsprache einzeln gegen Deutsch. Liefert { lang, key } je Treffer.
+function trefferGegenDeutsch(deDict, fremdDicts, sprachen) {
+  const treffer = [];
+  for (const key of Object.keys(deDict)) {
+    const deutsch = String(deDict[key]);
+    if (deutsch.length <= UNTRANSLATED_MIN) continue;
+    for (const lang of sprachen) {
+      const dict = fremdDicts[lang];
+      if (!dict || dict[key] === undefined) continue;
+      if (unuebersetztAusgenommen(key, lang)) continue;
+      if (dict[key] === deutsch) treffer.push({ lang: lang, key: key });
+    }
+  }
+  return treffer;
+}
+
+// Beweist, dass ein deutscher Satz in NUR EINER Datei rot wird, ein kurzer Wert
+// nicht, und dass beide Ausnahmeformen (alle Sprachen / eine Sprache) schweigen.
+function selbsttestUnuebersetzt() {
+  const lang = 'Dies ist ein ausreichend langer deutscher Satz fuer den Selbsttest der Pruefung.';
+  const deT = {
+    kopiert: lang,
+    kurz: 'zu kurz dafuer',
+    marke: 'Eine bewusst gleiche lange Markenzeile fuer alle Sprachen hier.',
+    nurFr: 'Ein langer Satz der nur im Franzoesischen als Ausnahme gleich bleiben darf.'
+  };
+  const anders = 'A different sentence that is long enough and not the German original at all.';
+  const fremd = {};
+  for (const code of fremdsprachen) {
+    fremd[code] = { kopiert: anders, kurz: deT.kurz, marke: deT.marke, nurFr: anders };
+  }
+  fremd.en.kopiert = lang;
+  fremd.fr.nurFr = deT.nurFr;
+  const alteAlle = UNTRANSLATED_OK.marke;
+  const alteEine = UNTRANSLATED_OK_LANG.nurFr;
+  UNTRANSLATED_OK.marke = 'Selbsttest: Marke in allen Sprachen gleich';
+  UNTRANSLATED_OK_LANG.nurFr = { fr: 'Selbsttest: nur Franzoesisch ausgenommen' };
+  let treffer;
+  try {
+    treffer = trefferGegenDeutsch(deT, fremd, fremdsprachen);
+  } finally {
+    if (alteAlle === undefined) delete UNTRANSLATED_OK.marke;
+    else UNTRANSLATED_OK.marke = alteAlle;
+    if (alteEine === undefined) delete UNTRANSLATED_OK_LANG.nurFr;
+    else UNTRANSLATED_OK_LANG.nurFr = alteEine;
+  }
+  const nurEn = treffer.length === 1 && treffer[0].lang === 'en' && treffer[0].key === 'kopiert';
+  if (!nurEn) {
+    fehl('Selbsttest unuebersetzt: erwartet nur en/kopiert, bekommen ' +
+      treffer.map((t) => t.lang + ':' + t.key).join(', '));
+    return;
+  }
+  ok('Selbsttest: deutscher Satz nur in en.json wird erkannt, Ausnahmen schweigen');
+}
 
 let fehler = 0;
 const fehl = (m) => { fehler++; console.log('FEHL | ' + m); };
@@ -56,22 +126,29 @@ for (const [l, dict] of Object.entries(langs)) {
   if (!fehlt.length && !zuviel.length) ok(`${l}: ${Object.keys(dict).length} Schluessel, vollstaendig`);
 }
 
-// Kopierter deutscher Text: in allen fuenf Fremdsprachen identisch und lang genug,
-// dass es kein "USA" oder eine Zahl ist. Ausnahmen nur mit Begruendung in UNTRANSLATED_OK.
-const fremdsprachen = ['en', 'es', 'fr', 'it', 'nl'];
-const unuebersetzt = deKeys.filter((k) => {
-  if (k in UNTRANSLATED_OK) return false;
+// a) Kopiert in alle fuenf Dateien: derselbe Wortlaut, lang genug.
+const unuebersetztAlle = deKeys.filter((k) => {
+  if (UNTRANSLATED_OK[k]) return false;
   const werte = fremdsprachen.map((code) => langs[code][k]);
   if (werte.some((v) => v === undefined)) return false;
   if (!werte.every((v) => v === werte[0])) return false;
   return String(werte[0]).length > UNTRANSLATED_MIN;
 });
-if (unuebersetzt.length) {
+if (unuebersetztAlle.length) {
   fehl('unuebersetzt (en/es/fr/it/nl identisch, >' + UNTRANSLATED_MIN + ' Zeichen): ' +
-    unuebersetzt.length + ' Schluessel, z. B. ' + unuebersetzt.slice(0, 8).join(', '));
+    unuebersetztAlle.length + ' Schluessel, z. B. ' + unuebersetztAlle.slice(0, 8).join(', '));
 } else {
-  ok('keine unuebersetzten Langtexte in den Sprachdateien');
+  ok('keine Langtexte, die in allen fuenf Sprachdateien gleich sind');
 }
+
+// b) Jede Datei einzeln gegen Deutsch. Eine Kopie in nur en.json reicht.
+const einzeln = trefferGegenDeutsch(de, langs, fremdsprachen);
+if (einzeln.length) {
+  for (const t of einzeln) fehl('unuebersetzt: i18n/' + t.lang + '.json ' + t.key + ' ist woertlich Deutsch');
+} else {
+  ok('kein Fremdspracheneintrag ist woertlich der deutsche Langtext');
+}
+selbsttestUnuebersetzt();
 
 // --- HTML-Dateien ---
 const ERLAUBTE_HOSTS = ['challenges.cloudflare.com', 'georates.tech']; // georates.tech = eigene Canonical-/OG-Links
