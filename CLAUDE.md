@@ -22,7 +22,7 @@ Ruft die Preis-API im Repo `georates-price-api` (Vercel) auf. Betreiber: Christo
 | `i18n.js` | Laufzeit + deutsches Woerterbuch inline; `i18n/<code>.json` fuer en, es, fr, it, nl werden nachgeladen |
 | `tokens.css` | Einzige Quelle der Farb- und Schrift-Tokens; `app.css` (Tools), `legal.css` (Rechtstexte, Ratgeber) bauen darauf |
 | `budget.html`, `packliste.html`, `gruppenkosten.html` + `budget.js`, `packliste.js`, `gruppenkosten.js` | Rechner, laufen komplett im Browser; Logik seit 21.09.2026 ausgelagert, dieselbe strenge CSP wie die Startseite |
-| `booking-laenderpreise.html`, `hotel-vpn-guenstiger-buchen.html`, `booking-aus-japan-buchen.html`, `booking-indien.html`, `booking-usa.html`, `booking-laender-ranking.html` | Deutschsprachige SEO-Ratgeber, nur Deutsch (`NUR_DEUTSCH`). Laenderseiten und Ranking ab 19.09.2026; der Ueberblick und Japan nennen zusaetzlich das gesamte Log ab 16.09. |
+| `booking-laenderpreise.html`, `hotel-vpn-guenstiger-buchen.html`, `booking-aus-japan-buchen.html`, `booking-indien.html`, `booking-usa.html`, `booking-laender-ranking.html` | SEO-Ratgeber in allen Sprachen (`SEITEN`). Zahlen: Ranking/Indien/USA ab 19.09.2026, Ueberblick und Japan zusaetzlich das Log ab 16.09. |
 | `sw.js`, `manifest.webmanifest` | PWA; Manifest hat `share_target` fuer Booking-Links aus dem Teilen-Menue |
 | `test/check.js` | i18n-Vollstaendigkeit, fremde Hosts, Inline-Skripte und CSP auf allen Seiten, Syntax, Leck-Check |
 | `test/e2e.js` | Playwright im echten Chromium mit gemockter API: Zwei-Schritte-Formular, Stream, Streuung, Enter-Verhalten, Rechner. `test/package.json` nur dafuer |
@@ -112,11 +112,10 @@ Text-Check sieht sie nicht, so ging am 21.09.2026 der Enter-Fehler live.
   `app.js` ist nur der Rueckfall.
 - **Footer-Links zu den Launch-Plattformen sind Textlinks**, keine Bilder. Bedingung fuer den
   kostenlosen Eintrag dort, aber ohne Requests an fremde Server.
-- **Deutschsprachige SEO-Ratgeber** (seit 04.11.2026) stehen in `NUR_DEUTSCH`, nicht in `SEITEN`.
-  Eine erzeugte `/en/`-Fassung waere deutscher Text unter englischer Adresse. `data-i18n-lock="de"`
-  haelt `lang` auf Deutsch und blendet den Umschalter aus, sonst setzt `i18n.js` bei englischem
-  Browser `lang="en"` auf der deutschen URL. Die Schluessel stehen trotzdem in allen Sprachdateien
-  (der Check verlangt volle Woerterbuecher); der Text dort ist Deutsch, bis jemand wirklich uebersetzt.
+- **SEO-Ratgeber** stehen in `SEITEN` und haben Sprachadressen. Eine Seite ohne Uebersetzung
+  gehoert nach `NUR_DEUTSCH`. Nie deutschen Text in `i18n/en.json` (und es/fr/it/nl) kopieren, nur
+  damit `test/check.js` schweigt: der Check wertet einen in allen fuenf Sprachen identischen Langtext
+  als unuebersetzt. `data-i18n-lock="de"` ist nur fuer Seiten, die eine Sprache behalten sollen.
   Empfehlungsplaetze fuer VPN und Karte sind HTML-Kommentare, keine sichtbaren Platzhalter und keine Links.
 - **Farb-Tokens folgen dem Logo** (`tokens.css`: `--navy-dark #011d3a`, `--accent #028659`); dieselben
   Werte stehen als `theme-color` in allen Seiten und im Manifest. Keine Hex-Farben in HTML/JS

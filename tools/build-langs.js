@@ -17,8 +17,13 @@
  * Aufruf:  node tools/build-langs.js          (schreibt die Dateien)
  *          node tools/build-langs.js --check  (prueft nur, Exit-Code 1 bei Abweichung)
  *
- * Nach jeder Aenderung an index.html, budget.html, gruppenkosten.html, packliste.html
- * oder an den Sprachdateien neu laufen lassen. test/check.js erinnert daran, falls nicht.
+ * Nach jeder Aenderung an einer Seite aus SEITEN oder an den Sprachdateien neu laufen
+ * lassen. test/check.js erinnert daran, falls nicht.
+ *
+ * Nie deutschen Text in i18n/en.json und die Geschwister kopieren, nur damit der
+ * Schluessel-Abgleich gruen ist. Eine Seite ohne Uebersetzung gehoert nach NUR_DEUTSCH
+ * und wird erst in einem zweiten Schritt nach SEITEN verschoben, wenn die Texte
+ * wirklich uebersetzt sind. test/check.js meldet kopierten Langtext.
  */
 
 'use strict';
@@ -33,15 +38,16 @@ const BASIS = 'https://georates.tech';
 const QUELLSPRACHE = 'de';
 const SPRACHEN = ['de', 'en', 'es', 'fr', 'it', 'nl'];
 
-// Seiten, die es in allen Sprachen gibt.
-const SEITEN = ['index.html', 'budget.html', 'gruppenkosten.html', 'packliste.html', 'ratgeber.html'];
-
-// Seiten, die es nur auf Deutsch als Adresse gibt (Rechtstexte und SEO-Ratgeber).
-// Links darauf zeigen aus jeder Sprachfassung auf die deutsche Datei im Wurzelverzeichnis.
-// Die drei Ratgeber bleiben bewusst ohne Sprachordner: es gibt keine Uebersetzung,
-// eine erzeugte /en/-Adresse waere deutsch unter englischer URL (04.11.2026).
+// Seiten, die es in allen Sprachen gibt. Die sechs SEO-Ratgeber gehoeren hierher,
+// seit die Texte in en/es/fr/it/nl wirklich uebersetzt sind (nicht nur kopiertes Deutsch).
 const GUIDE_DE = ['booking-laenderpreise.html', 'hotel-vpn-guenstiger-buchen.html', 'booking-aus-japan-buchen.html', 'booking-indien.html', 'booking-usa.html', 'booking-laender-ranking.html'];
-const NUR_DEUTSCH = ['impressum.html', 'datenschutz.html', 'agb.html'].concat(GUIDE_DE);
+const SEITEN = ['index.html', 'budget.html', 'gruppenkosten.html', 'packliste.html', 'ratgeber.html'].concat(GUIDE_DE);
+
+// Seiten, die es nur auf Deutsch als Adresse gibt (Rechtstexte).
+// Links darauf zeigen aus jeder Sprachfassung auf die deutsche Datei im Wurzelverzeichnis.
+// Wer eine neue deutsche Seite noch nicht uebersetzt hat, haengt sie hier an und
+// kopiert den deutschen Text NICHT in die fremden Sprachdateien.
+const NUR_DEUTSCH = ['impressum.html', 'datenschutz.html', 'agb.html'];
 
 // Welcher i18n-Schluessel liefert Beschreibung und og-Texte je Seite.
 const META = {
@@ -49,12 +55,44 @@ const META = {
   'budget.html':        { desc: 'budget_meta_desc', ogTitle: 'budget_title', ogDesc: 'budget_meta_desc' },
   'gruppenkosten.html': { desc: 'gk_meta_desc',     ogTitle: 'gk_title',     ogDesc: 'gk_meta_desc' },
   'packliste.html':     { desc: 'pl_meta_desc',     ogTitle: 'pl_title',     ogDesc: 'pl_meta_desc' },
-  'ratgeber.html':      { desc: 'rat_meta_desc',    ogTitle: 'rat_og_title', ogDesc: 'rat_og_desc' }
+  'ratgeber.html':      { desc: 'rat_meta_desc',    ogTitle: 'rat_og_title', ogDesc: 'rat_og_desc' },
+  'booking-laenderpreise.html':       { desc: 'lp_meta_desc', ogTitle: 'lp_h1', ogDesc: 'lp_meta_desc' },
+  'hotel-vpn-guenstiger-buchen.html': { desc: 'vpn_meta_desc', ogTitle: 'vpn_h1', ogDesc: 'vpn_meta_desc' },
+  'booking-aus-japan-buchen.html':    { desc: 'jp_meta_desc', ogTitle: 'jp_h1', ogDesc: 'jp_meta_desc' },
+  'booking-indien.html':              { desc: 'in_meta_desc', ogTitle: 'in_h1', ogDesc: 'in_meta_desc' },
+  'booking-usa.html':                 { desc: 'us_meta_desc', ogTitle: 'us_h1', ogDesc: 'us_meta_desc' },
+  'booking-laender-ranking.html':     { desc: 'rk_meta_desc', ogTitle: 'rk_h1', ogDesc: 'rk_meta_desc' }
 };
 
-// Die FAQ-Fragen des Ratgebers, in der Reihenfolge, in der sie auf der Seite stehen.
-const FAQ_PAARE = [['rat_faq1_q', 'rat_faq1_a'], ['rat_faq2_q', 'rat_faq2_a'],
-                   ['rat_faq3_q', 'rat_faq3_a'], ['rat_faq4_q', 'rat_faq4_a']];
+// FAQ je Seite, in der Reihenfolge auf der Seite. Article-Headline und -Beschreibung
+// kommen aus ARTICLE, damit die Auszeichnung wortgleich mit dem sichtbaren Text ist.
+const ARTICLE = {
+  'ratgeber.html': { h1: 'rat_h1', desc: 'rat_og_desc' },
+  'booking-laenderpreise.html': { h1: 'lp_h1', desc: 'lp_meta_desc', dated: true },
+  'hotel-vpn-guenstiger-buchen.html': { h1: 'vpn_h1', desc: 'vpn_meta_desc', dated: true },
+  'booking-aus-japan-buchen.html': { h1: 'jp_h1', desc: 'jp_meta_desc', dated: true },
+  'booking-indien.html': { h1: 'in_h1', desc: 'in_meta_desc', dated: true },
+  'booking-usa.html': { h1: 'us_h1', desc: 'us_meta_desc', dated: true },
+  'booking-laender-ranking.html': { h1: 'rk_h1', desc: 'rk_meta_desc', dated: true }
+};
+
+const FAQ_PAARE = {
+  'ratgeber.html': [['rat_faq1_q', 'rat_faq1_a'], ['rat_faq2_q', 'rat_faq2_a'],
+                    ['rat_faq3_q', 'rat_faq3_a'], ['rat_faq4_q', 'rat_faq4_a']],
+  'booking-laenderpreise.html': [['lp_faq1_q', 'lp_faq1_a'], ['lp_faq2_q', 'lp_faq2_a'],
+    ['lp_faq3_q', 'lp_faq3_a'], ['lp_faq4_q', 'lp_faq4_a'], ['lp_faq5_q', 'lp_faq5_a']],
+  'hotel-vpn-guenstiger-buchen.html': [['vpn_faq1_q', 'vpn_faq1_a'], ['vpn_faq2_q', 'vpn_faq2_a'],
+    ['vpn_faq3_q', 'vpn_faq3_a'], ['vpn_faq4_q', 'vpn_faq4_a'], ['vpn_faq5_q', 'vpn_faq5_a']],
+  'booking-aus-japan-buchen.html': [['jp_faq1_q', 'jp_faq1_a'], ['jp_faq2_q', 'jp_faq2_a'],
+    ['jp_faq3_q', 'jp_faq3_a'], ['jp_faq4_q', 'jp_faq4_a'], ['jp_faq5_q', 'jp_faq5_a'],
+    ['jp_faq6_q', 'jp_faq6_a']],
+  'booking-indien.html': [['in_faq1_q', 'in_faq1_a'], ['in_faq2_q', 'in_faq2_a'],
+    ['in_faq3_q', 'in_faq3_a'], ['in_faq4_q', 'in_faq4_a'], ['in_faq5_q', 'in_faq5_a']],
+  'booking-usa.html': [['us_faq1_q', 'us_faq1_a'], ['us_faq2_q', 'us_faq2_a'],
+    ['us_faq3_q', 'us_faq3_a'], ['us_faq4_q', 'us_faq4_a'], ['us_faq5_q', 'us_faq5_a']],
+  'booking-laender-ranking.html': [['rk_faq1_q', 'rk_faq1_a'], ['rk_faq2_q', 'rk_faq2_a'],
+    ['rk_faq3_q', 'rk_faq3_a'], ['rk_faq4_q', 'rk_faq4_a'], ['rk_faq5_q', 'rk_faq5_a']]
+};
 
 /* ---------------------------------------------------------------- Woerterbuecher */
 
@@ -125,24 +163,30 @@ function ohneHtml(s) {
     .replace(/\s+/g, ' ').trim();
 }
 
-// Article- und FAQPage-Block des Ratgebers aus den Schluesseln derselben Sprache bauen.
+// Article- und FAQPage-Block aus den Schluesseln derselben Sprache bauen.
 function strukturierteDaten(html, code, seite, dict, deDict) {
-  if (seite !== 'ratgeber.html') return html;
+  const art = ARTICLE[seite];
+  const paare = FAQ_PAARE[seite];
+  if (!art) return html;
   const t = (k) => (dict[k] !== undefined ? dict[k] : deDict[k]);
   const adresse = adresseFuer(code, seite);
 
   const article = {
     '@context': 'https://schema.org', '@type': 'Article',
-    headline: ohneHtml(t('rat_h1')),
-    description: ohneHtml(t('rat_og_desc')),
+    headline: ohneHtml(t(art.h1)),
+    description: ohneHtml(t(art.desc)),
     inLanguage: code,
     author: { '@type': 'Organization', name: 'GeoRates' },
     publisher: { '@type': 'Organization', name: 'GeoRates' },
     mainEntityOfPage: adresse
   };
+  if (art.dated) {
+    article.datePublished = '2026-11-04';
+    article.dateModified = '2026-11-04';
+  }
   const faq = {
     '@context': 'https://schema.org', '@type': 'FAQPage',
-    mainEntity: FAQ_PAARE.map(([f, a]) => ({
+    mainEntity: paare.map(([f, a]) => ({
       '@type': 'Question', name: ohneHtml(t(f)),
       acceptedAnswer: { '@type': 'Answer', text: ohneHtml(t(a)) }
     }))

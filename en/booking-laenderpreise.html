@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-i18n-prerendered="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
+<meta name="description" content="Why Booking.com shows different prices by country, why a VPN inside the EU rarely helps, and how often another country was actually cheaper in real measurements.">
+<link rel="canonical" href="https://georates.tech/en/booking-laenderpreise.html">
+<!-- hreflang:start (erzeugt von tools/build-langs.js - nicht von Hand aendern) -->
+<link rel="alternate" hreflang="de" href="https://georates.tech/booking-laenderpreise.html">
+<link rel="alternate" hreflang="en" href="https://georates.tech/en/booking-laenderpreise.html">
+<link rel="alternate" hreflang="es" href="https://georates.tech/es/booking-laenderpreise.html">
+<link rel="alternate" hreflang="fr" href="https://georates.tech/fr/booking-laenderpreise.html">
+<link rel="alternate" hreflang="it" href="https://georates.tech/it/booking-laenderpreise.html">
+<link rel="alternate" hreflang="nl" href="https://georates.tech/nl/booking-laenderpreise.html">
+<link rel="alternate" hreflang="x-default" href="https://georates.tech/booking-laenderpreise.html">
+<!-- hreflang:ende -->
+<meta property="og:title" content="Booking.com country prices: what they are and how often they are worth it">
+<meta property="og:description" content="Why Booking.com shows different prices by country, why a VPN inside the EU rarely helps, and how often another country was actually cheaper in real measurements.">
+<meta property="og:image" content="https://georates.tech/og-image.jpg">
+<meta property="og:url" content="https://georates.tech/en/booking-laenderpreise.html">
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<title data-i18n-title="lp_title">Booking.com prices by country: how often do they pay off? | GeoRates</title>
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#011d3a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GeoRates">
+<link rel="stylesheet" href="/tokens.css">
+<link rel="stylesheet" href="/legal.css">
+<script type="application/ld+json" data-i18n-ld="article">
+{"@context":"https://schema.org","@type":"Article","headline":"Booking.com country prices: what they are and how often they are worth it","description":"Why Booking.com shows different prices by country, why a VPN inside the EU rarely helps, and how often another country was actually cheaper in real measurements.","inLanguage":"en","author":{"@type":"Organization","name":"GeoRates"},"publisher":{"@type":"Organization","name":"GeoRates"},"mainEntityOfPage":"https://georates.tech/en/booking-laenderpreise.html","datePublished":"2026-11-04","dateModified":"2026-11-04"}
+</script>
+<script type="application/ld+json" data-i18n-ld="faq">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does Booking.com really show different prices by country?","acceptedAnswer":{"@type":"Answer","text":"Yes. Hotels can set country discounts from 5% for specific markets. In our measurements another country was at least 1% cheaper in 59.6% of checks. The median, though, was only 2.2%."}},{"@type":"Question","name":"Is a VPN inside the EU worth it?","acceptedAnswer":{"@type":"Answer","text":"Usually not. The EU Geo-blocking Regulation forbids different prices by place of residence inside the EU. Countries outside the EEA are the interesting ones."}},{"@type":"Question","name":"Which country is cheapest on Booking.com?","acceptedAnswer":{"@type":"Answer","text":"In the full log from 16 Sep, the USA (42 times), India (30) and Japan (22) were cheaper most often, each by at least 1%. Among the frequent countries Japan had the highest average (12.8%); Argentina was higher at 17.7%, but on only 5 hits. From 19 Sep (140 checks) the counts were the USA 31 times, India 20 and Japan 6."}},{"@type":"Question","name":"Do I need a VPN to compare?","acceptedAnswer":{"@type":"Answer","text":"No. GeoRates fetches the prices from every country for you. You only need a VPN if you want to book the price you found yourself."}},{"@type":"Question","name":"Why does GeoRates sometimes say “no difference” when a country is slightly cheaper?","acceptedAnswer":{"@type":"Answer","text":"Gaps below 1% usually come from rounding in the currency conversion, and they are not real when you pay."}}]}
+</script>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="/en/"><img src="/logo.png" srcset="/logo.png 1x, /logo@2x.png 2x" alt="GeoRates" width="125" height="34"></a>
+    <a class="back-link" href="/en/" data-i18n="common_back_home">← Back to homepage</a>
+  </div>
+</header>
+<main>
+  <h1 data-i18n="lp_h1">Booking.com country prices: what they are and how often they are worth it</h1>
+  <div class="updated" data-i18n="guide_stand">Data as of 4 November 2026</div>
+
+  <p data-i18n="lp_intro">Booking.com can show the same room, on the same dates, at a different price depending on the country. That is not a myth, and it is not a trick that always works. Here is how country prices come about, and what our measurements actually show.</p>
+
+  <h2 data-i18n="lp_h2_woher">Where country prices come from</h2>
+  <p data-i18n="lp_woher_p">Hotels can set so-called <strong>prices for specific countries</strong> on Booking.com: a discount of at least 5% that only guests see when they use the platform from certain countries or regions (<a href="https://partner.booking.com/de/hilfe/raten-verf%C3%BCgbarkeiten/raten-angebote/preise-f%C3%BCr-bestimmte-l%C3%A4nder-einstellen" target="_blank" rel="noopener">Booking.com for Partners</a>). Booking says these discounts can be combined with Genius, early-booker and last-minute offers, but <strong>not</strong> with mobile rates or time-limited deals.</p>
+  <p data-i18n="lp_woher_p2">Other effects look like country prices and are not: exchange rates, rounded conversions, taxes that are included one time and not the next, and Genius discounts that appear in some sessions and not in others.</p>
+
+  <h2 data-i18n="lp_h2_eu">Why a VPN inside the EU usually does nothing</h2>
+  <p data-i18n="lp_eu_p">The EU Geo-blocking Regulation forbids offering customers in the EU different prices or conditions because of nationality or place of residence. That expressly includes hotels (<a href="https://www.verbraucherzentrale.de/wissen/digitale-welt/onlinedienste/kein-geoblocking-mehr-beim-onlineshopping-32025" target="_blank" rel="noopener">Verbraucherzentrale</a>, <a href="https://eur-lex.europa.eu/EN/legal-content/summary/geo-blocking-addressing-discriminatory-treatment-of-customers.html" target="_blank" rel="noopener">EUR-Lex</a>). Switching from Germany to Spain therefore usually brings no price advantage. Countries outside the EEA are the interesting ones.</p>
+
+  <h2 data-i18n="lp_h2_messung">What our measurements show</h2>
+  <p data-i18n="lp_messung_p">GeoRates requests the same room, with the same board, the same cancellation terms, the same dates and the same number of guests, from 15 country sessions in the same run, always including taxes and fees, converted into euros. We treat a gap below 1% as “no difference”.</p>
+  <p data-i18n="lp_messung_lead"><strong>Our data (GeoRates log, 16 Sep–4 Nov 2026):</strong> 223 checks with a result, covering 139 hotels, almost all with Germany as the starting country.</p>
+  <ul>
+    <li data-i18n="lp_stat1">In <strong>59.6%</strong> of checks another country was at least 1% cheaper (51.8% if repeated checks of the same offer are removed).</li>
+    <li data-i18n="lp_stat2">A saving of <strong>at least 10%</strong> showed up in 26.9% of checks.</li>
+    <li data-i18n="lp_stat3">The typical result is small: the <strong>median saving is 2.2%, or €12.60</strong>, and the average is 4.89%, or €61.29. When there was a hit, the median was 8.3% (€42.79).</li>
+  </ul>
+
+  <table>
+    <caption data-i18n="lp_cap">How often the country was cheapest by at least 1%, and the average saving on those hits. GeoRates log, 16 Sep–4 Nov 2026.</caption>
+    <thead>
+      <tr>
+        <th scope="col" data-i18n="lp_th_land">Country</th>
+        <th scope="col" data-i18n="lp_th_n">Hits</th>
+        <th scope="col" data-i18n="lp_th_avg">Avg. saving</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-i18n="lp_c_us">USA</td>
+        <td data-i18n="lp_c_us_n">42</td>
+        <td data-i18n="lp_c_us_avg">6.7%</td>
+      </tr>
+      <tr>
+        <td data-i18n="lp_c_in">India</td>
+        <td data-i18n="lp_c_in_n">30</td>
+        <td data-i18n="lp_c_in_avg">8.4%</td>
+      </tr>
+      <tr>
+        <td data-i18n="lp_c_jp">Japan</td>
+        <td data-i18n="lp_c_jp_n">22</td>
+        <td data-i18n="lp_c_jp_avg">12.8%</td>
+      </tr>
+      <tr>
+        <td data-i18n="lp_c_co">Colombia</td>
+        <td data-i18n="lp_c_co_n">19</td>
+        <td data-i18n="lp_c_co_avg">6.0%</td>
+      </tr>
+      <tr>
+        <td data-i18n="lp_c_ar">Argentina</td>
+        <td data-i18n="lp_c_ar_n">5</td>
+        <td data-i18n="lp_c_ar_avg">17.7%</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p data-i18n="lp_ausreisser">Outliers: 51.1% via Argentina (€400.01 → €195.58, a hotel in Thailand, 20 Sep 2026) and the largest euro saving, €553.54 via India (€2,873.40 → €2,319.86, 17 Sep 2026). Some hits were not stable on a second fetch.</p>
+  <p data-i18n="lp_korrektur">For context: on 18 Sep 2026 we added a correction, because Genius discounts could distort the comparison. From 19 Sep (140 checks with a result) another country was at least 1% cheaper in 62.1% of checks, the average was 4.46% and the median 2.1%. Before that (83 checks) the figures were 55.4%, 5.61% and 3.3%. The table above mixes both periods. The Argentina outlier on 20 Sep is after the correction; the India saving of €553.54 on 17 Sep is before it.</p>
+
+  <p data-i18n="lp_forum_lead">For comparison, our earlier sample published in a forum (49 measurements from late July to September 2026, before the Genius correction, so only partly reliable):</p>
+  <ul>
+    <li data-i18n="lp_forum1">Double-digit savings appeared only via <strong>Colombia</strong> (up to 29.4%) and <strong>India</strong> (up to 19.3%).</li>
+    <li data-i18n="lp_forum2">The largest single savings in euros: €647.35 and €553.54 (India).</li>
+    <li data-i18n="lp_forum3"><strong>Egypt</strong> was often “the cheapest”, but only by 0.1–0.3%. That is rounding, not a find.</li>
+    <li data-i18n="lp_forum4">For quite a few hotels <strong>Germany itself was the cheapest</strong>.</li>
+  </ul>
+
+  <p data-i18n="lp_lesart">Our honest reading: country prices exist, but less often than many guides claim, and they cluster in a few markets. It is worth checking, especially for expensive stays. A saving is never guaranteed. What the Japan figures mean in detail is in the <a href="/en/booking-aus-japan-buchen.html">note on booking from Japan</a>.</p>
+
+  <h2 data-i18n="lp_h2_buchen">Actually booking the price</h2>
+  <p data-i18n="lp_buchen_p">Comparing on GeoRates does not need a VPN. To <strong>book</strong> a country price you need two things:</p>
+  <ol>
+    <li data-i18n="lp_buchen_li1">a VPN with a server in the country that came up,</li>
+    <li data-i18n="lp_buchen_li2">a card with no foreign-currency fee, if you are charged in local currency.</li>
+  </ol>
+  <!-- Empfehlung folgt: VPN mit Server im gefundenen Land und Karte ohne Fremdwaehrungsgebuehr.
+       Erst einsetzen, wenn der Anbieter geprueft ist. Dann als Werbelink kennzeichnen und auf die
+       Offenlegungsseite verweisen. Bis dahin leer, damit die Seite ohne Affiliate-Link veroeffentlicht werden kann. -->
+  <p data-i18n="lp_bedingungen">Read the conditions before you book. If a rate is expressly only for residents of a country, do not book it.</p>
+
+  <p class="cta" data-i18n="lp_cta"><a href="/en/">Check your Booking.com link now →</a></p>
+
+  <h2 data-i18n="lp_h2_faq">Frequently asked questions</h2>
+  <h3 data-i18n="lp_faq1_q">Does Booking.com really show different prices by country?</h3>
+  <p data-i18n="lp_faq1_a">Yes. Hotels can set country discounts from 5% for specific markets. In our measurements another country was at least 1% cheaper in 59.6% of checks. The median, though, was only 2.2%.</p>
+  <h3 data-i18n="lp_faq2_q">Is a VPN inside the EU worth it?</h3>
+  <p data-i18n="lp_faq2_a">Usually not. The EU Geo-blocking Regulation forbids different prices by place of residence inside the EU. Countries outside the EEA are the interesting ones.</p>
+  <h3 data-i18n="lp_faq3_q">Which country is cheapest on Booking.com?</h3>
+  <p data-i18n="lp_faq3_a">In the full log from 16 Sep, the USA (42 times), India (30) and Japan (22) were cheaper most often, each by at least 1%. Among the frequent countries Japan had the highest average (12.8%); Argentina was higher at 17.7%, but on only 5 hits. From 19 Sep (140 checks) the counts were the USA 31 times, India 20 and Japan 6.</p>
+  <h3 data-i18n="lp_faq4_q">Do I need a VPN to compare?</h3>
+  <p data-i18n="lp_faq4_a">No. GeoRates fetches the prices from every country for you. You only need a VPN if you want to book the price you found yourself.</p>
+  <h3 data-i18n="lp_faq5_q">Why does GeoRates sometimes say “no difference” when a country is slightly cheaper?</h3>
+  <p data-i18n="lp_faq5_a">Gaps below 1% usually come from rounding in the currency conversion, and they are not real when you pay.</p>
+
+  <h2 data-i18n="guide_more_h2">Read on</h2>
+  <ul>
+    <li><a href="/en/booking-laender-ranking.html" data-i18n="guide_link_rank">Which country is cheapest on Booking.com? The ranking</a></li>
+    <li><a href="/en/booking-usa.html" data-i18n="guide_link_us">Booking from the United States on Booking.com: cheaper more often than you’d expect</a></li>
+    <li><a href="/en/booking-indien.html" data-i18n="guide_link_in">Booking from India on Booking.com: measured numbers, not a myth</a></li>
+    <li><a href="/en/hotel-vpn-guenstiger-buchen.html" data-i18n="guide_link_vpn">Book a hotel cheaper with a VPN, without switching servers for hours</a></li>
+    <li><a href="/en/booking-aus-japan-buchen.html" data-i18n="guide_link_jp">Booking from Japan on Booking.com: how much can you actually save?</a></li>
+  </ul>
+</main>
+<footer>
+  <a href="/en/">GeoRates</a> · <a href="/en/ratgeber.html" data-i18n="guide_footer_rat">Guide</a> · <a href="/impressum.html" data-i18n="common_impressum">Legal Notice</a> · <a href="/datenschutz.html" data-i18n="common_datenschutz">Privacy Policy</a>
+</footer>
+<script src="/i18n.js" defer></script>
+<script src="/pwa.js" defer></script>
+</body>
+</html>

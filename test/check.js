@@ -8,12 +8,31 @@
 //  6. Alle eigenen Skripte sind syntaktisch sauber (Chromium-Rechner eingeschlossen).
 //  5. Leck-Check wie im API-Repo: keine echten Booking-Links mit Tracking-Parametern.
 //
+//  7. Kein deutscher Text, der nur kopiert wurde, damit der Schluessel-Abgleich gruen ist.
+//     Ein Wert, der in allen fuenf Nicht-Deutsch-Dateien gleich und laenger als
+//     UNTRANSLATED_MIN Zeichen ist, gilt als unuebersetzt. Deutsche Seiten, die noch
+//     keine Uebersetzung haben, gehoeren nach NUR_DEUTSCH (tools/build-langs.js) und
+//     bleiben dort, bis ein zweiter Schritt wirklich uebersetzt. Nie Deutsch in
+//     en/es/fr/it/nl kopieren, nur damit der Check schweigt: sonst liefert ein spaeterer
+//     Umzug nach SEITEN deutschen Text unter lang="en".
+//
 // Aufruf: node test/check.js   (Exit-Code 1 bei Fehlern)
 
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 const root = path.resolve(__dirname, '..');
+
+// Laenger als das: gleicher Wortlaut in en, es, fr, it und nl ist keine Uebersetzung.
+const UNTRANSLATED_MIN = 25;
+
+// Absichtlich in allen Sprachen gleich, je Eintrag der Grund.
+// Markennamen, die allein stehen und laenger als UNTRANSLATED_MIN sind, gehoeren hierher.
+// Kurze Tokens (Zahlen, "USA", "EUR-Lex") fallen unter die Laengengrenze und brauchen keinen Eintrag.
+const UNTRANSLATED_OK = {
+  // 'beispiel_key': 'Markenname, weltweit gleich geschrieben'
+};
+
 let fehler = 0;
 const fehl = (m) => { fehler++; console.log('FEHL | ' + m); };
 const ok = (m) => console.log('OK   | ' + m);
@@ -35,6 +54,23 @@ for (const [l, dict] of Object.entries(langs)) {
   if (fehlt.length) fehl(`${l}: ${fehlt.length} Schluessel fehlen: ${fehlt.slice(0, 5).join(', ')}`);
   if (zuviel.length) fehl(`${l}: ${zuviel.length} Schluessel ohne deutsches Original: ${zuviel.slice(0, 5).join(', ')}`);
   if (!fehlt.length && !zuviel.length) ok(`${l}: ${Object.keys(dict).length} Schluessel, vollstaendig`);
+}
+
+// Kopierter deutscher Text: in allen fuenf Fremdsprachen identisch und lang genug,
+// dass es kein "USA" oder eine Zahl ist. Ausnahmen nur mit Begruendung in UNTRANSLATED_OK.
+const fremdsprachen = ['en', 'es', 'fr', 'it', 'nl'];
+const unuebersetzt = deKeys.filter((k) => {
+  if (k in UNTRANSLATED_OK) return false;
+  const werte = fremdsprachen.map((code) => langs[code][k]);
+  if (werte.some((v) => v === undefined)) return false;
+  if (!werte.every((v) => v === werte[0])) return false;
+  return String(werte[0]).length > UNTRANSLATED_MIN;
+});
+if (unuebersetzt.length) {
+  fehl('unuebersetzt (en/es/fr/it/nl identisch, >' + UNTRANSLATED_MIN + ' Zeichen): ' +
+    unuebersetzt.length + ' Schluessel, z. B. ' + unuebersetzt.slice(0, 8).join(', '));
+} else {
+  ok('keine unuebersetzten Langtexte in den Sprachdateien');
 }
 
 // --- HTML-Dateien ---
