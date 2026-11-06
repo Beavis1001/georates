@@ -1,5 +1,5 @@
 /* GeoRates Service Worker – App-Shell-Cache für Offline-Nutzung & Installierbarkeit */
-const CACHE = 'georates-v26';
+const CACHE = 'georates-v27';
 const ASSETS = [
   '/', '/index.html', '/budget.html', '/gruppenkosten.html', '/packliste.html', '/ratgeber.html',
   '/booking-laenderpreise.html', '/hotel-vpn-guenstiger-buchen.html', '/booking-aus-japan-buchen.html',
@@ -14,7 +14,14 @@ const ASSETS = [
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE)
-      .then((c) => Promise.allSettled(ASSETS.map((u) => c.add(u))))
+      // cache: 'reload' erzwingt, dass jede Datei frisch vom Server geholt wird, am Browser-
+      // und am CDN-Zwischenspeicher vorbei. Ohne das kann beim Ausrollen ein Wettlauf
+      // entstehen: GitHub Pages liefert das neue sw.js bereits aus, waehrend das CDN fuer
+      // andere Dateien noch die alte Fassung hat. Der Service Worker friert dann genau diese
+      // veraltete Fassung unter der NEUEN Cache-Version ein - und sie bleibt dort, bis jemand
+      // die Version erneut hochzaehlt. Am 06.11.2026 ist so der frisch gebaute Besucherzaehler
+      // auf der Live-Seite nicht angelaufen, obwohl die Datei auf dem Server korrekt war.
+      .then((c) => Promise.allSettled(ASSETS.map((u) => c.add(new Request(u, { cache: 'reload' })))))
       .then(() => self.skipWaiting())
   );
 });
