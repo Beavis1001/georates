@@ -38,9 +38,9 @@ const BASIS = 'https://georates.tech';
 const QUELLSPRACHE = 'de';
 const SPRACHEN = ['de', 'en', 'es', 'fr', 'it', 'nl'];
 
-// Seiten, die es in allen Sprachen gibt. Die sechs SEO-Ratgeber gehoeren hierher,
+// Seiten, die es in allen Sprachen gibt. Die SEO-Ratgeber gehoeren hierher,
 // seit die Texte in en/es/fr/it/nl wirklich uebersetzt sind (nicht nur kopiertes Deutsch).
-const GUIDE_DE = ['booking-laenderpreise.html', 'hotel-vpn-guenstiger-buchen.html', 'booking-aus-japan-buchen.html', 'booking-indien.html', 'booking-usa.html', 'booking-laender-ranking.html'];
+const GUIDE_DE = ['booking-laenderpreise.html', 'hotel-vpn-guenstiger-buchen.html', 'booking-aus-japan-buchen.html', 'booking-indien.html', 'booking-usa.html', 'booking-laender-ranking.html', 'booking-tuerkei.html', 'booking-aegypten.html', 'hotel-vpn-eu-geoblocking.html'];
 const SEITEN = ['index.html', 'budget.html', 'gruppenkosten.html', 'packliste.html', 'ratgeber.html'].concat(GUIDE_DE);
 
 // Seiten, die es nur auf Deutsch als Adresse gibt (Rechtstexte).
@@ -61,7 +61,10 @@ const META = {
   'booking-aus-japan-buchen.html':    { desc: 'jp_meta_desc', ogTitle: 'jp_h1', ogDesc: 'jp_meta_desc' },
   'booking-indien.html':              { desc: 'in_meta_desc', ogTitle: 'in_h1', ogDesc: 'in_meta_desc' },
   'booking-usa.html':                 { desc: 'us_meta_desc', ogTitle: 'us_h1', ogDesc: 'us_meta_desc' },
-  'booking-laender-ranking.html':     { desc: 'rk_meta_desc', ogTitle: 'rk_h1', ogDesc: 'rk_meta_desc' }
+  'booking-laender-ranking.html':     { desc: 'rk_meta_desc', ogTitle: 'rk_h1', ogDesc: 'rk_meta_desc' },
+  'booking-tuerkei.html':             { desc: 'tr_meta_desc', ogTitle: 'tr_h1', ogDesc: 'tr_meta_desc' },
+  'booking-aegypten.html':            { desc: 'eg_meta_desc', ogTitle: 'eg_h1', ogDesc: 'eg_meta_desc' },
+  'hotel-vpn-eu-geoblocking.html':    { desc: 'eu_meta_desc', ogTitle: 'eu_h1', ogDesc: 'eu_meta_desc' }
 };
 
 // FAQ je Seite, in der Reihenfolge auf der Seite. Article-Headline und -Beschreibung
@@ -73,7 +76,11 @@ const ARTICLE = {
   'booking-aus-japan-buchen.html': { h1: 'jp_h1', desc: 'jp_meta_desc', dated: true },
   'booking-indien.html': { h1: 'in_h1', desc: 'in_meta_desc', dated: true },
   'booking-usa.html': { h1: 'us_h1', desc: 'us_meta_desc', dated: true },
-  'booking-laender-ranking.html': { h1: 'rk_h1', desc: 'rk_meta_desc', dated: true }
+  'booking-laender-ranking.html': { h1: 'rk_h1', desc: 'rk_meta_desc', dated: true },
+  // Datenfenster dieser drei Seiten endet am 07.11.2026, deshalb eigenes Datum.
+  'booking-tuerkei.html': { h1: 'tr_h1', desc: 'tr_meta_desc', dated: true, date: '2026-11-07' },
+  'booking-aegypten.html': { h1: 'eg_h1', desc: 'eg_meta_desc', dated: true, date: '2026-11-07' },
+  'hotel-vpn-eu-geoblocking.html': { h1: 'eu_h1', desc: 'eu_meta_desc', dated: true, date: '2026-11-07' }
 };
 
 const FAQ_PAARE = {
@@ -91,7 +98,15 @@ const FAQ_PAARE = {
   'booking-usa.html': [['us_faq1_q', 'us_faq1_a'], ['us_faq2_q', 'us_faq2_a'],
     ['us_faq3_q', 'us_faq3_a'], ['us_faq4_q', 'us_faq4_a'], ['us_faq5_q', 'us_faq5_a']],
   'booking-laender-ranking.html': [['rk_faq1_q', 'rk_faq1_a'], ['rk_faq2_q', 'rk_faq2_a'],
-    ['rk_faq3_q', 'rk_faq3_a'], ['rk_faq4_q', 'rk_faq4_a'], ['rk_faq5_q', 'rk_faq5_a']]
+    ['rk_faq3_q', 'rk_faq3_a'], ['rk_faq4_q', 'rk_faq4_a'], ['rk_faq5_q', 'rk_faq5_a']],
+  'booking-tuerkei.html': [['tr_faq1_q', 'tr_faq1_a'], ['tr_faq2_q', 'tr_faq2_a'],
+    ['tr_faq3_q', 'tr_faq3_a'], ['tr_faq4_q', 'tr_faq4_a'], ['tr_faq5_q', 'tr_faq5_a'],
+    ['tr_faq6_q', 'tr_faq6_a']],
+  'booking-aegypten.html': [['eg_faq1_q', 'eg_faq1_a'], ['eg_faq2_q', 'eg_faq2_a'],
+    ['eg_faq3_q', 'eg_faq3_a'], ['eg_faq4_q', 'eg_faq4_a'], ['eg_faq5_q', 'eg_faq5_a'],
+    ['eg_faq6_q', 'eg_faq6_a']],
+  'hotel-vpn-eu-geoblocking.html': [['eu_faq1_q', 'eu_faq1_a'], ['eu_faq2_q', 'eu_faq2_a'],
+    ['eu_faq3_q', 'eu_faq3_a'], ['eu_faq4_q', 'eu_faq4_a'], ['eu_faq5_q', 'eu_faq5_a']]
 };
 
 /* ---------------------------------------------------------------- Woerterbuecher */
@@ -181,8 +196,11 @@ function strukturierteDaten(html, code, seite, dict, deDict) {
     mainEntityOfPage: adresse
   };
   if (art.dated) {
-    article.datePublished = '2026-11-04';
-    article.dateModified = '2026-11-04';
+    // Seit 09.11.2026 kann eine Seite ein eigenes Datum tragen. Die aelteren
+    // Ratgeber bleiben beim 04.11.2026, dem Datenstand ihrer Auswertung.
+    const datum = art.date || '2026-11-04';
+    article.datePublished = datum;
+    article.dateModified = datum;
   }
   const faq = {
     '@context': 'https://schema.org', '@type': 'FAQPage',
