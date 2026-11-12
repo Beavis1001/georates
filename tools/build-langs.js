@@ -406,6 +406,105 @@ function sitemap() {
          eintraege.join('\n') + '\n</urlset>\n';
 }
 
+/* ------------------------------------------------------- Echte Funde fest einsetzen */
+/*
+ * Die Startseite laedt die groessten Ersparnisse per JavaScript nach. Crawler fuehren das
+ * nicht aus und sahen an der Stelle nur "…" - ausgerechnet dort, wo die nachpruefbaren
+ * Belege der Seite stehen. Hier werden sie fest in die Seite geschrieben, in jeder Sprache.
+ *
+ * Das JavaScript bleibt: Es ueberschreibt den festen Stand beim Laden mit dem aktuellen.
+ * Besucher sehen also weiterhin Tagesaktuelles, Crawler sehen wenigstens den Stand des
+ * letzten Laufs statt nichts.
+ *
+ * Die Daten kommen aus data/bestof.json (tools/fetch-bestof.js). Fehlt die Datei, bleibt
+ * die Seite unveraendert - der Bau darf nicht am fehlenden Netz scheitern.
+ */
+
+const FUNDE_DATEI = path.join(root, 'data', 'bestof.json');
+
+function ladeFunde() {
+  if (!fs.existsSync(FUNDE_DATEI)) return null;
+  try {
+    const d = JSON.parse(fs.readFileSync(FUNDE_DATEI, 'utf8'));
+    return Array.isArray(d.eintraege) && d.eintraege.length ? d : null;
+  } catch (e) {
+    console.log('WARN | data/bestof.json ist unlesbar, Startseite bleibt ohne feste Funde.');
+    return null;
+  }
+}
+
+const LOCALE = { de: 'de-DE', en: 'en-GB', es: 'es-ES', fr: 'fr-FR', it: 'it-IT', nl: 'nl-NL' };
+
+// Gleiche Darstellung wie in app.js - sonst springt die Liste beim Laden sichtbar um.
+function escHtml(s) {
+  return String(s === null || s === undefined ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function landName(code, loc) {
+  if (!code) return '';
+  try {
+    const n = new Intl.DisplayNames([loc], { type: 'region' }).of(code);
+    if (n && n !== code) return n;
+  } catch (e) { /* Sprache ohne Laenderliste -> Code */ }
+  return code;
+}
+function datumText(d, loc) {
+  try {
+    return new Date(d + 'T12:00:00Z').toLocaleDateString(loc, { day: '2-digit', month: '2-digit', year: 'numeric' });
+  } catch (e) { return d; }
+}
+function euroText(v, loc) {
+  return Number(v).toLocaleString(loc, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+}
+// app.js schreibt Prozente mit Komma, ausser auf Englisch. Hier genauso.
+function prozentText(v, code) {
+  return String(v).replace('.', code === 'en' ? '.' : ',');
+}
+function setze(vorlage, werte) {
+  return String(vorlage || '').replace(/\{(\w+)\}/g, (m, k) => (k in werte ? werte[k] : m));
+}
+
+function fundZeile(e, code, w) {
+  const loc = LOCALE[code] || 'de-DE';
+  const offen = e.resultId
+    ? ' <a href="?r=' + escHtml(e.resultId) + '">' + escHtml(w.idx_bestof_open) + '</a>'
+    : '';
+  return '<div class="bestof-row"><div class="bestof-hotel"><strong>' + escHtml(e.hotel)
+    + '</strong><span class="bestof-meta">' + escHtml(landName(e.hotelLand, loc))
+    + ' · ' + escHtml(setze(w.idx_bestof_via, { country: landName(e.land, loc) }))
+    + ' · ' + escHtml(datumText(e.datum, loc)) + offen + '</span></div>'
+    + '<div class="bestof-saving">−' + escHtml(prozentText(e.pct, code))
+    + ' %<span>' + escHtml(euroText(e.euro, loc)) + '</span></div></div>';
+}
+
+function echteFundeEinsetzen(html, code, w, funde) {
+  if (!funde) return html;
+  const loc = LOCALE[code] || 'de-DE';
+
+  // Die Liste. Der Ersatz greift auch, wenn schon Zeilen drinstehen - das Skript muss
+  // mehrfach hintereinander laufen koennen, ohne etwas anzuhaengen.
+  // Die eingesetzten Zeilen stehen zwischen Markierungen. Ohne sie waere nicht zu
+  // erkennen, wo der Inhalt aufhoert: Jede Fundzeile enthaelt selbst "</div></div>",
+  // ein Ersatz "bis zum naechsten </div>" wuerde beim zweiten Lauf mittendrin abbrechen.
+  const zeilen = funde.eintraege.map((e) => fundZeile(e, code, w)).join('');
+  const reListe = /<div class="bestof-list" id="bestof-list">(?:<!--funde-->[\s\S]*?<!--\/funde-->|<p class="empty">[\s\S]*?<\/p>)<\/div>/;
+  if (!reListe.test(html)) throw new Error('index.html: Behaelter #bestof-list nicht gefunden oder von Hand veraendert.');
+  html = html.replace(reListe,
+    '<div class="bestof-list" id="bestof-list"><!--funde-->' + zeilen + '<!--/funde--></div>');
+
+  // Der Zaehler im Kopfbereich. Er steht auf "hidden", weil ihn sonst niemand fuellt;
+  // mit festem Wert darf er sichtbar sein.
+  if (funde.suchenGesamt > 0) {
+    const text = escHtml(setze(w.idx_hero_counter, { n: Number(funde.suchenGesamt).toLocaleString(loc) }));
+    html = html.replace(
+      /<p class="hero-counter" id="search-counter"[^>]*>[\s\S]*?<\/p>/,
+      '<p class="hero-counter" id="search-counter">' + text + '</p>'
+    );
+  }
+  return html;
+}
+
 /* --------------------------------------------------------------------- Lauf */
 
 function baue() {
@@ -413,19 +512,26 @@ function baue() {
   const de = woerter.de;
   const dateien = new Map();
   const warnungen = [];
+  const funde = ladeFunde();
+  if (!funde) warnungen.push('data/bestof.json fehlt - die Startseite bleibt ohne feste Funde (nur Crawler merken das).');
 
   for (const seite of SEITEN) {
     const quelle = fs.readFileSync(path.join(root, seite), 'utf8');
+    // Nur die Startseite traegt die Fundliste und den Zaehler.
+    const funde1 = seite === 'index.html' ? funde : null;
 
     // Deutsch: nur der Kopf wird gepflegt (hreflang, canonical, og) - Text bleibt wie er ist.
-    dateien.set(seite, strukturierteDaten(kopfSetzen(quelle, QUELLSPRACHE, seite, de, de), QUELLSPRACHE, seite, de, de));
+    dateien.set(seite, echteFundeEinsetzen(
+      strukturierteDaten(kopfSetzen(quelle, QUELLSPRACHE, seite, de, de), QUELLSPRACHE, seite, de, de),
+      QUELLSPRACHE, de, funde1));
 
     for (const code of SPRACHEN) {
       if (code === QUELLSPRACHE) continue;
       const { html, fehlend } = uebersetze(quelle, woerter[code], de, seite, code);
       if (fehlend.length) warnungen.push(code + '/' + seite + ': ohne Uebersetzung -> ' + fehlend.join(', '));
       const mitKopf = strukturierteDaten(kopfSetzen(html, code, seite, woerter[code], de), code, seite, woerter[code], de);
-      dateien.set(path.join(code, seite), pfadeUmschreiben(mitKopf, code));
+      dateien.set(path.join(code, seite), echteFundeEinsetzen(
+        pfadeUmschreiben(mitKopf, code), code, woerter[code], funde1));
     }
   }
 

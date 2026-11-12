@@ -1,0 +1,54 @@
+# Haelt die "Echten Funde" auf der Startseite aktuell.
+#
+# Die Funde stehen seit dem 12.11.2026 fest in der Seite, damit Suchmaschinen und
+# KI-Crawler sie ueberhaupt sehen (sie fuehren das JavaScript nicht aus). Fest heisst
+# aber auch: Ohne diesen Lauf veralten sie. Also einmal am Tag holen, einbauen und,
+# wenn sich etwas geaendert hat, einchecken.
+#
+# Scheitert der Abruf, bricht der Lauf ab und data/bestof.json bleibt unveraendert -
+# lieber ein paar Tage alte echte Funde als eine leergeraeumte Startseite.
+name: Echte Funde aktualisieren
+
+on:
+  schedule:
+    # Taeglich 05:17 UTC. Die krumme Minute mit Absicht: Zur vollen Stunde stehen bei
+    # GitHub die meisten Laeufe an und starten mit Verspaetung.
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bestof
+  cancel-in-progress: false
+
+jobs:
+  aktualisieren:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Funde von der API holen
+        run: node tools/fetch-bestof.js
+
+      - name: In die Startseiten einbauen
+        run: node tools/build-langs.js
+
+      - name: Pruefen, dass nichts kaputtgegangen ist
+        run: node test/check.js
+
+      - name: Einchecken, falls sich etwas geaendert hat
+        run: |
+          if git diff --quiet; then
+            echo "Keine Aenderung - nichts einzuchecken."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/bestof.json index.html en/index.html es/index.html fr/index.html it/index.html nl/index.html
+          git commit -m "Echte Funde auf den aktuellen Stand gebracht"
+          git push
