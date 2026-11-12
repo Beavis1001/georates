@@ -1,0 +1,95 @@
+{
+  "hinweis": "Erzeugt von tools/fetch-bestof.js - nicht von Hand aendern.",
+  "stand": "2026-11-12",
+  "suchenGesamt": 293,
+  "eintraege": [
+    {
+      "hotel": "ADEA Lifestyle Suites Fieberbrunn",
+      "hotelLand": "AT",
+      "land": "US",
+      "baseline": "DE",
+      "pct": 17.1,
+      "euro": 1222.29,
+      "basisEuro": 7158.9,
+      "datum": "2026-11-09",
+      "resultId": "uzJVZAI9Gw3W"
+    },
+    {
+      "hotel": "Borneo Natural Sukau Bilit Resort",
+      "hotelLand": "MY",
+      "land": "AR",
+      "baseline": "DE",
+      "pct": 17,
+      "euro": 77.33,
+      "basisEuro": 455,
+      "datum": "2026-11-01",
+      "resultId": "L1G5AFEOY8jj"
+    },
+    {
+      "hotel": "Uga Halloowella - Hatton - All Inclusive",
+      "hotelLand": "LK",
+      "land": "PH",
+      "baseline": "DE",
+      "pct": 15.1,
+      "euro": 249.27,
+      "basisEuro": 1647.12,
+      "datum": "2026-10-11",
+      "resultId": "_yqCBgvNXemS"
+    },
+    {
+      "hotel": "The Gantry Hotel, formerly Z Hotel NYC",
+      "hotelLand": "US",
+      "land": "CO",
+      "baseline": "DE",
+      "pct": 14.5,
+      "euro": 53.02,
+      "basisEuro": 366.84,
+      "datum": "2026-11-05",
+      "resultId": "zquNKwZ6BRpi"
+    },
+    {
+      "hotel": "Dar Rajli",
+      "hotelLand": "TN",
+      "land": "MX",
+      "baseline": "DE",
+      "pct": 14.4,
+      "euro": 79.7,
+      "basisEuro": 552,
+      "datum": "2026-10-09",
+      "resultId": "QPEW8BEeEg9y"
+    },
+    {
+      "hotel": "Pestana Collection Plaza Mayor",
+      "hotelLand": "ES",
+      "land": "IN",
+      "baseline": "FR",
+      "pct": 10.9,
+      "euro": 96.29,
+      "basisEuro": 885.6,
+      "datum": "2026-10-14",
+      "resultId": "BRIIwsljaMxJ"
+    },
+    {
+      "hotel": "Royal Palm Hotel",
+      "hotelLand": "HR",
+      "land": "US",
+      "baseline": "DE",
+      "pct": 9.5,
+      "euro": 112.8,
+      "basisEuro": 1187.78,
+      "datum": "2026-11-05",
+      "resultId": "r70vBuGXDitQ"
+    },
+    {
+      "hotel": "Royal Princess Hotel",
+      "hotelLand": "HR",
+      "land": "US",
+      "baseline": "DE",
+      "pct": 8.9,
+      "euro": 170.37,
+      "basisEuro": 1920,
+      "datum": "2026-11-05",
+      "resultId": "ct_oP72iEwhg"
+    }
+  ]
+}

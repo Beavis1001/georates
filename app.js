@@ -654,7 +654,16 @@
     var box = document.getElementById('bestof-list');
     if (!box || !PRICE_API_READY) return;
     var render = function (eintraege) {
-      if (!eintraege || !eintraege.length) { box.innerHTML = '<p class="empty">' + escHtml(t('idx_bestof_empty')) + '</p>'; return; }
+      if (!eintraege || !eintraege.length) {
+        // Seit 12.11.2026 stehen die Funde beim Ausliefern schon in der Seite (siehe
+        // tools/build-langs.js). Faellt die API aus, bleibt dieser Stand lieber stehen,
+        // statt durch "keine Funde" ersetzt zu werden - das waere schlechter als ein
+        // paar Tage alte, aber echte Zahlen. Nur eine wirklich leere Liste bekommt den Hinweis.
+        if (!box.querySelector('.bestof-row')) {
+          box.innerHTML = '<p class="empty">' + escHtml(t('idx_bestof_empty')) + '</p>';
+        }
+        return;
+      }
       box.innerHTML = eintraege.map(function (e) {
         var open = e.resultId ? ' <a href="?r=' + escHtml(e.resultId) + '">' + escHtml(t('idx_bestof_open')) + '</a>' : '';
         return '<div class="bestof-row"><div class="bestof-hotel"><strong>' + escHtml(e.hotel || '–') + '</strong><span class="bestof-meta">' + escHtml(countryName(e.hotelLand)) + ' · ' + escHtml(t('idx_bestof_via', { country: countryName(e.land) })) + ' · ' + escHtml(datumText(e.datum)) + open + '</span></div>'
