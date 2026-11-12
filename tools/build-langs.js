@@ -511,6 +511,39 @@ function echteFundeEinsetzen(html, code, w, funde) {
   html = html.replace(reListe,
     '<div class="bestof-list" id="bestof-list"><!--funde-->' + zeilen + '<!--/funde--></div>');
 
+  // Die Karte im Kopfbereich. Im Quelltext steht dort ein erfundenes Beispielhotel, das
+  // app.js beim Laden durch den groessten echten Fund ersetzt. Crawler sehen deshalb
+  // zuerst eine Phantasiezahl ("1.240 € -> 1.080 €, ≈13 % guenstiger") und koennten die
+  // als Ergebnis von GeoRates zitieren. Hier steht ab sofort der echte groesste Fund.
+  //
+  // Nachgebaut wird genau der Zustand, den app.js herstellt: Klasse "echt", kein
+  // aria-hidden, kein tabindex, eigenes aria-label - die Karte ist dann ein echter Link
+  // zur Fundliste und kein reines Schaubild mehr.
+  const gross = funde.eintraege[0];
+  if (gross && gross.pct > 0 && gross.euro > 0) {
+    const basis = gross.basisEuro > 0 ? gross.basisEuro : Math.round(gross.euro * 10000 / gross.pct) / 100;
+    const z = (id, klasse, text) => '<span' + (klasse ? ' class="' + klasse + '"' : '')
+      + ' id="' + id + '">' + escHtml(text) + '</span>';
+    const karte = '<a class="mock-card echt" id="hero-card" href="#funde" aria-label="'
+      + escHtml(w.idx_mock_real_aria) + '">'
+      + '<div class="mock-card-title" id="hero-card-title">'
+      + escHtml(setze(w.idx_mock_real_title, { hotel: gross.hotel })) + '</div>'
+      + '<div class="mock-row">'
+      + z('hero-card-start-label', '', setze(w.idx_mock_real_start, { country: landName(gross.baseline || 'DE', loc) }))
+      + z('hero-card-start', 'old-price', euroText(basis, loc)) + '</div>'
+      + '<div class="mock-arrow" id="hero-card-arrow">'
+      + escHtml(setze(w.idx_mock_real_arrow, { euro: euroText(gross.euro, loc) })) + '</div>'
+      + '<div class="mock-row best">'
+      + z('hero-card-best-label', '', setze(w.idx_mock_real_best, { country: landName(gross.land, loc) }))
+      + z('hero-card-best', '', euroText(Math.round((basis - gross.euro) * 100) / 100, loc)) + '</div>'
+      + '<span class="mock-badge" id="hero-card-badge">'
+      + escHtml(setze(w.idx_mock_real_badge, { pct: prozentText(gross.pct, code) })) + '</span>'
+      + '</a>';
+    const reKarte = /<a class="mock-card[^"]*" id="hero-card"[\s\S]*?<\/a>/;
+    if (!reKarte.test(html)) throw new Error('index.html: Karte #hero-card nicht gefunden.');
+    html = html.replace(reKarte, karte);
+  }
+
   // Der Zaehler im Kopfbereich. Er steht auf "hidden", weil ihn sonst niemand fuellt;
   // mit festem Wert darf er sichtbar sein.
   if (funde.suchenGesamt > 0) {

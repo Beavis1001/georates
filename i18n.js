@@ -145,6 +145,7 @@
       "idx_final_p": "Hotel-Link, Zimmer und Verpflegung eintragen – das Ergebnis erscheint direkt auf der Seite.",
       "idx_footer_line1": "GeoRates · Automatischer Buchungs-Check für Hotelbuchungen · Kein Reiseveranstalter, keine Buchungsabwicklung.",
       "idx_footer_questions": "Fragen?",
+      "idx_footer_ratgeber": "Ratgeber: Hotelpreise je nach Land",
       "idx_js_msg_success": "Hotelseite geöffnet & Anfrage vorbereitet – bitte die sich öffnende E-Mail absenden, damit wir sie erhalten.",
       "idx_js_msg_sent": "Anfrage gesendet! Wir prüfen deinen Preis persönlich und melden uns per E-Mail.",
       "budget_title": "Reisebudget-Rechner – GeoRates",
