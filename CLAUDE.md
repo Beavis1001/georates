@@ -98,6 +98,18 @@ Text-Check sieht sie nicht, so ging am 21.09.2026 der Enter-Fehler live.
   mit Plakette "Smartphone" direkt unter dem Ausgangsland, NICHT in `results` (Geraet ist kein
   Land) und bekommt einen eigenen Hinweis ohne VPN-Schritt (`idx_res_mobile_*`). Ohne Flag kommt
   nichts davon, das Frontend muss beides koennen.
+- **Genius steckt nicht im gemessenen Preis** (16.11.2026): `idx_step2_text` liest den ausgeloggten
+  Preis, in allen Laendern gleich gemessen, verlinkt `booking-genius-rabatt.html` und sagt, dass der
+  eigene Preis eingeloggt niedriger sein kann – dann gehoert er ins Preisfeld. Nicht behaupten, der
+  Preis sei inklusive Genius-Rabatt und jedes Konto bekomme ihn. Dieselbe Aussage steht auf der
+  Genius-Seite und in `llms.txt`.
+- **Handy-Vorteil unter 10 % ist Schwankung** (16.11.2026): Die Mobile-Rate-Seite zaehlt 3,4 %, 5,2 %
+  und 7,0 % weiter als „Smartphone guenstiger“, ordnet sie aber als Sitzungsschwankung ein, weil
+  Booking fuer eine Handy-Rate mindestens 10 % verlangt. Verweis auf die Aegypten-Seite (0,2 %).
+  Zaehlungen nicht aendern, nur deuten.
+- **Kolumbien: 15 gegen 14** (16.11.2026): „15 Mal guenstigstes Land mit mindestens 1 %“ gilt fuer
+  alle 178 Abfragen. 16 davon hatten nicht beide Preise, der Vergleich mit Deutschland zaehlt
+  deshalb 14. Die Fussnote auf `booking-kolumbien.html` sagt das; die 15 bleibt stehen.
 - **Verpflegung steht auf "Egal".** "Fruehstueck" als Standard erzeugte "kein Preis"-Faelle. Nach
   "Zimmer laden" ist das erste Zimmer sofort ausgewaehlt und Verpflegung/Storno werden mit den
   Optionen befuellt, die es fuer dieses Zimmer wirklich gibt; dafuer muss ein `change`-Event
