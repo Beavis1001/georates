@@ -40,7 +40,7 @@ const SPRACHEN = ['de', 'en', 'es', 'fr', 'it', 'nl'];
 
 // Seiten, die es in allen Sprachen gibt. Die SEO-Ratgeber gehoeren hierher,
 // seit die Texte in en/es/fr/it/nl wirklich uebersetzt sind (nicht nur kopiertes Deutsch).
-const GUIDE_DE = ['booking-laenderpreise.html', 'hotel-vpn-guenstiger-buchen.html', 'booking-aus-japan-buchen.html', 'booking-indien.html', 'booking-usa.html', 'booking-laender-ranking.html', 'booking-tuerkei.html', 'booking-aegypten.html', 'hotel-vpn-eu-geoblocking.html'];
+const GUIDE_DE = ['booking-laenderpreise.html', 'hotel-vpn-guenstiger-buchen.html', 'booking-aus-japan-buchen.html', 'booking-indien.html', 'booking-usa.html', 'booking-laender-ranking.html', 'booking-tuerkei.html', 'booking-aegypten.html', 'hotel-vpn-eu-geoblocking.html', 'booking-kolumbien.html', 'booking-genius-rabatt.html', 'booking-mobile-rate.html'];
 const SEITEN = ['index.html', 'budget.html', 'gruppenkosten.html', 'packliste.html', 'ratgeber.html'].concat(GUIDE_DE);
 
 // Seiten, die es nur auf Deutsch als Adresse gibt (Rechtstexte).
@@ -64,7 +64,10 @@ const META = {
   'booking-laender-ranking.html':     { desc: 'rk_meta_desc', ogTitle: 'rk_h1', ogDesc: 'rk_meta_desc' },
   'booking-tuerkei.html':             { desc: 'tr_meta_desc', ogTitle: 'tr_h1', ogDesc: 'tr_meta_desc' },
   'booking-aegypten.html':            { desc: 'eg_meta_desc', ogTitle: 'eg_h1', ogDesc: 'eg_meta_desc' },
-  'hotel-vpn-eu-geoblocking.html':    { desc: 'eu_meta_desc', ogTitle: 'eu_h1', ogDesc: 'eu_meta_desc' }
+  'hotel-vpn-eu-geoblocking.html':    { desc: 'eu_meta_desc', ogTitle: 'eu_h1', ogDesc: 'eu_meta_desc' },
+  'booking-kolumbien.html':           { desc: 'co_meta_desc', ogTitle: 'co_h1', ogDesc: 'co_meta_desc' },
+  'booking-genius-rabatt.html':       { desc: 'ge_meta_desc', ogTitle: 'ge_h1', ogDesc: 'ge_meta_desc' },
+  'booking-mobile-rate.html':         { desc: 'mo_meta_desc', ogTitle: 'mo_h1', ogDesc: 'mo_meta_desc' }
 };
 
 // FAQ je Seite, in der Reihenfolge auf der Seite. Article-Headline und -Beschreibung
@@ -80,7 +83,11 @@ const ARTICLE = {
   // Datenfenster dieser drei Seiten endet am 07.11.2026, deshalb eigenes Datum.
   'booking-tuerkei.html': { h1: 'tr_h1', desc: 'tr_meta_desc', dated: true, date: '2026-11-07' },
   'booking-aegypten.html': { h1: 'eg_h1', desc: 'eg_meta_desc', dated: true, date: '2026-11-07' },
-  'hotel-vpn-eu-geoblocking.html': { h1: 'eu_h1', desc: 'eu_meta_desc', dated: true, date: '2026-11-07' }
+  'hotel-vpn-eu-geoblocking.html': { h1: 'eu_h1', desc: 'eu_meta_desc', dated: true, date: '2026-11-07' },
+  // Datenfenster dieser drei Seiten endet am 15.11.2026, deshalb eigenes Datum.
+  'booking-kolumbien.html': { h1: 'co_h1', desc: 'co_meta_desc', dated: true, date: '2026-11-15' },
+  'booking-genius-rabatt.html': { h1: 'ge_h1', desc: 'ge_meta_desc', dated: true, date: '2026-11-15' },
+  'booking-mobile-rate.html': { h1: 'mo_h1', desc: 'mo_meta_desc', dated: true, date: '2026-11-15' }
 };
 
 const FAQ_PAARE = {
@@ -106,7 +113,13 @@ const FAQ_PAARE = {
     ['eg_faq3_q', 'eg_faq3_a'], ['eg_faq4_q', 'eg_faq4_a'], ['eg_faq5_q', 'eg_faq5_a'],
     ['eg_faq6_q', 'eg_faq6_a']],
   'hotel-vpn-eu-geoblocking.html': [['eu_faq1_q', 'eu_faq1_a'], ['eu_faq2_q', 'eu_faq2_a'],
-    ['eu_faq3_q', 'eu_faq3_a'], ['eu_faq4_q', 'eu_faq4_a'], ['eu_faq5_q', 'eu_faq5_a']]
+    ['eu_faq3_q', 'eu_faq3_a'], ['eu_faq4_q', 'eu_faq4_a'], ['eu_faq5_q', 'eu_faq5_a']],
+  'booking-kolumbien.html': [['co_faq1_q', 'co_faq1_a'], ['co_faq2_q', 'co_faq2_a'],
+    ['co_faq3_q', 'co_faq3_a'], ['co_faq4_q', 'co_faq4_a'], ['co_faq5_q', 'co_faq5_a']],
+  'booking-genius-rabatt.html': [['ge_faq1_q', 'ge_faq1_a'], ['ge_faq2_q', 'ge_faq2_a'],
+    ['ge_faq3_q', 'ge_faq3_a'], ['ge_faq4_q', 'ge_faq4_a'], ['ge_faq5_q', 'ge_faq5_a']],
+  'booking-mobile-rate.html': [['mo_faq1_q', 'mo_faq1_a'], ['mo_faq2_q', 'mo_faq2_a'],
+    ['mo_faq3_q', 'mo_faq3_a'], ['mo_faq4_q', 'mo_faq4_a']]
 };
 
 /* ---------------------------------------------------------------- Woerterbuecher */
