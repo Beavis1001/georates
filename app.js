@@ -20,7 +20,8 @@
   var REVOLUT_AFFILIATE_URL = 'YOUR_REVOLUT_AFFILIATE_URL';
 
   // Die 15 festen Laender in der Reihenfolge des Backends - Grundlage fuer die Laenderauswahl.
-  var FIXED_COUNTRIES = ['DE', 'CO', 'AR', 'EG', 'IN', 'VN', 'ID', 'PK', 'LK', 'PE', 'MX', 'PH', 'TH', 'US', 'JP'];
+  // 17.11.2026: Indonesien raus, Georgien rein - muss mit ALL_COUNTRIES im Backend uebereinstimmen.
+  var FIXED_COUNTRIES = ['DE', 'CO', 'AR', 'EG', 'IN', 'VN', 'GE', 'PK', 'LK', 'PE', 'MX', 'PH', 'TH', 'US', 'JP'];
 
   // Die 15 festen Laender plus alle, die ueber den dynamischen Platz dazukommen koennen (das Land
   // der Unterkunft). Fehlt ein Eintrag, zeigt die Tabelle das Kuerzel - unschoen, aber nicht falsch.
@@ -28,7 +29,7 @@
   // hier ist nur der Rueckfall fuer alte Browser.
   var COUNTRY_NAMES_DE = {
     DE: 'Deutschland', CO: 'Kolumbien', US: 'USA', TH: 'Thailand', IN: 'Indien', EG: 'Ägypten',
-    AR: 'Argentinien', TR: 'Türkei', LK: 'Sri Lanka', VN: 'Vietnam', ID: 'Indonesien', PK: 'Pakistan',
+    AR: 'Argentinien', TR: 'Türkei', LK: 'Sri Lanka', VN: 'Vietnam', GE: 'Georgien', ID: 'Indonesien', PK: 'Pakistan',
     PE: 'Peru', MX: 'Mexiko', PH: 'Philippinen', JP: 'Japan',
     FR: 'Frankreich', IT: 'Italien', ES: 'Spanien', PT: 'Portugal', NL: 'Niederlande',
     BE: 'Belgien', AT: 'Österreich', IE: 'Irland', GR: 'Griechenland', FI: 'Finnland',
