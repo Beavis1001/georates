@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr" data-i18n-prerendered="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self' https://georates-price-api.vercel.app; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
+<meta name="description" content="Pourquoi les prix Booking sans taxes induisent en erreur, comment GeoRates compare toujours les prix par pays taxes et frais compris, et à quoi faire attention avant de réserver.">
+<link rel="canonical" href="https://georates.tech/fr/booking-steuern-gebuehren.html">
+<!-- hreflang:start (erzeugt von tools/build-langs.js - nicht von Hand aendern) -->
+<link rel="alternate" hreflang="de" href="https://georates.tech/booking-steuern-gebuehren.html">
+<link rel="alternate" hreflang="en" href="https://georates.tech/en/booking-steuern-gebuehren.html">
+<link rel="alternate" hreflang="es" href="https://georates.tech/es/booking-steuern-gebuehren.html">
+<link rel="alternate" hreflang="fr" href="https://georates.tech/fr/booking-steuern-gebuehren.html">
+<link rel="alternate" hreflang="it" href="https://georates.tech/it/booking-steuern-gebuehren.html">
+<link rel="alternate" hreflang="nl" href="https://georates.tech/nl/booking-steuern-gebuehren.html">
+<link rel="alternate" hreflang="x-default" href="https://georates.tech/booking-steuern-gebuehren.html">
+<!-- hreflang:ende -->
+<meta property="og:title" content="Taxes et frais sur Booking.com : pourquoi seul le prix final compte">
+<meta property="og:description" content="Pourquoi les prix Booking sans taxes induisent en erreur, comment GeoRates compare toujours les prix par pays taxes et frais compris, et à quoi faire attention avant de réserver.">
+<meta property="og:image" content="https://georates.tech/og-image.jpg">
+<meta property="og:url" content="https://georates.tech/fr/booking-steuern-gebuehren.html">
+<meta property="og:locale" content="fr">
+<meta property="og:type" content="article">
+<title data-i18n-title="sg_title">Taxes et frais sur Booking.com : pourquoi seul le prix final compte | GeoRates</title>
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#011d3a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GeoRates">
+<link rel="stylesheet" href="/tokens.css">
+<link rel="stylesheet" href="/legal.css">
+<script type="application/ld+json" data-i18n-ld="article">
+{"@context":"https://schema.org","@type":"Article","headline":"Taxes et frais sur Booking.com : pourquoi seul le prix final compte","description":"Pourquoi les prix Booking sans taxes induisent en erreur, comment GeoRates compare toujours les prix par pays taxes et frais compris, et à quoi faire attention avant de réserver.","inLanguage":"fr","author":{"@type":"Organization","name":"GeoRates"},"publisher":{"@type":"Organization","name":"GeoRates"},"mainEntityOfPage":"https://georates.tech/fr/booking-steuern-gebuehren.html","datePublished":"2026-11-22","dateModified":"2026-11-22"}
+</script>
+<script type="application/ld+json" data-i18n-ld="faq">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Booking.com affiche-t-il des prix sans taxes ?","acceptedAnswer":{"@type":"Answer","text":"Selon le pays, oui. Dans certains pays les taxes sont dans le prix affiché, dans d'autres elles s'ajoutent plus tard. Ce qui compte, c'est le prix total à l'étape de réservation."}},{"@type":"Question","name":"GeoRates calcule-t-il avec ou sans taxes ?","acceptedAnswer":{"@type":"Answer","text":"Toujours avec les taxes et les frais. Le chiffre que nous donnons est donc le prix final."}},{"@type":"Question","name":"Pourquoi GeoRates ne montre-t-il pas les écarts sous 1 % comme une économie ?","acceptedAnswer":{"@type":"Answer","text":"Ils viennent le plus souvent d'un arrondi lors du change. À partir du 19.09.2026, c'est arrivé 66 fois."}},{"@type":"Question","name":"Et les frais dus à l'hôtel ?","acceptedAnswer":{"@type":"Answer","text":"À l'étape de réservation, vérifiez si un montant est à payer sur place. Il fait partie du prix final."}}]}
+</script>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="/fr/"><img src="/logo.png" srcset="/logo.png 1x, /logo@2x.png 2x" alt="GeoRates" width="125" height="34"></a>
+    <a class="back-link" href="/fr/" data-i18n="common_back_home">← Retour à l'accueil</a>
+  </div>
+</header>
+<main>
+  <h1 data-i18n="sg_h1">Taxes et frais sur Booking.com : pourquoi seul le prix final compte</h1>
+  <div class="updated" data-i18n="sg_stand">Données du 16.09. au 22.11.2026 (journal GeoRates), état au 23.11.2026</div>
+  <p data-i18n="sg_intro">Un hôtel coûte 180 € dans un pays et 200 € dans un autre ? Cela ressemble à une trouvaille. Souvent, ce n'en est pas une : le prix le plus bas ne contient peut-être pas les taxes. C'est pourquoi GeoRates compare toujours le prix final. Nous expliquons ici pourquoi.</p>
+  <h2 data-i18n="sg_h2_warum">Pourquoi les prix n'ont pas le même aspect selon le pays</h2>
+  <p data-i18n="sg_warum_p1">Booking.com n'affiche pas les prix de la même façon partout. Dans certains pays, le prix apparaît toutes charges comprises, dans d'autres les taxes et frais ne sont ajoutés que plus tard. S'y ajoutent des montants qui ne sont dus qu'à l'hôtel.</p>
+  <p data-i18n="sg_warum_p2">Qui compare deux pays en mettant côte à côte un prix avec taxes et un prix sans taxes voit une économie qui n'existe pas à la caisse.</p>
+  <h2 data-i18n="sg_h2_rechnen">Comment GeoRates calcule</h2>
+  <ul>
+    <li data-i18n="sg_li1">GeoRates interroge la même chambre, avec la même pension, la même annulation, les mêmes dates et le même nombre de personnes, dans la même passe, depuis 15 sessions pays.</li>
+    <li data-i18n="sg_li2">Chaque prix est pris <strong>taxes et frais compris</strong> et converti en euros.</li>
+    <li data-i18n="sg_li3">Les écarts <strong>sous 1 %</strong> ne comptent pas comme trouvaille. C'est le plus souvent un arrondi lors du change.</li>
+    <li data-i18n="sg_li4">Un avantage trouvé est vérifié par une seconde consultation (« stable » ou « pas stable »).</li>
+  </ul>
+  <h2 data-i18n="sg_h2_daten">Ce que nos données montrent</h2>
+  <p data-i18n="sg_daten_lead">D'après le journal GeoRates (16.09.–22.11.2026) :</p>
+  <ul>
+    <li data-i18n="sg_li5"><strong>292 vérifications</strong> avec un résultat, toutes calculées avec le prix final.</li>
+    <li data-i18n="sg_li6">À partir du 19.09.2026, un pays a gagné <strong>66 fois</strong> avec moins de 1 % d'avance, dont 32 fois le Pérou. Nous ne montrons volontairement pas ces mini-écarts comme une économie.</li>
+    <li data-i18n="sg_li7">Dans <strong>187 vérifications</strong> avec un prix allemand et au moins cinq autres pays, au moins un pays était <strong>au moins 10 % plus cher</strong> que l'Allemagne dans <strong>45</strong> d'entre elles (196 prix pays sur 2 475). Les prix par pays vont donc dans les deux sens. Nos données ne disent pas ce qui expliquait chaque cas.</li>
+  </ul>
+  <p data-i18n="sg_nicht"><strong>Ce que nous ne mesurons pas :</strong> combien de fois un pays affiche des prix sans taxes. Nous n'enregistrons que le prix final, pas le prix affiché avant.</p>
+  <h2 data-i18n="sg_h2_vorgehen">Comment vérifier vous-même le prix final</h2>
+  <ol>
+    <li data-i18n="sg_s1">Vérifiez votre hôtel avec <a href="/fr/">GeoRates</a> et notez le prix final trouvé.</li>
+    <li data-i18n="sg_s2">Ouvrez l'offre dans le pays trouvé et allez jusqu'au récapitulatif de l'étape de réservation.</li>
+    <li data-i18n="sg_s3">Comparez-y le <strong>prix total</strong> taxes et frais compris, pas le prix de la liste d'hôtels.</li>
+    <li data-i18n="sg_s4">Repérez les montants à payer <strong>sur place</strong>. Ils figurent souvent à part et font partie du prix final.</li>
+    <li data-i18n="sg_s5">Vérifiez que la chambre, la pension et l'annulation sont vraiment les mêmes.</li>
+  </ol>
+  <p data-i18n="sg_eu">Pour les pays de l'UE, le règlement sur le blocage géographique s'applique : les prix ne peuvent pas y différer selon l'origine. Un vrai prix par pays est donc à attendre surtout dans les pays hors de l'EEE.</p>
+  <!-- AFFILIATE-PLATZHALTER: VPN für das gefundene Nicht-EU-Land und Karte ohne Fremdwährungsgebühr – erst nach Programm-Zulassung, als Werbelink kennzeichnen -->
+  <p class="cta" data-i18n="sg_cta"><a href="/fr/">Comparer le prix final dans 15 pays →</a></p>
+  <h2 data-i18n="sg_h2_haken">Réserves</h2>
+  <ul>
+    <li data-i18n="sg_haken1">Les <strong>montants dus sur place</strong> se paient à l'hôtel dans la monnaie du pays. C'est le taux de votre carte qui s'applique, pas celui de Booking.</li>
+    <li data-i18n="sg_haken2"><strong>Les prix bougent :</strong> entre deux consultations, le prix final peut changer. Mieux vaut vérifier deux fois.</li>
+    <li data-i18n="sg_haken3"><strong>Les mini-écarts ne sont pas une économie :</strong> sous 1 %, l'effort d'un VPN et d'une devise étrangère ne vaut pas le coup.</li>
+  </ul>
+  <h2 data-i18n="sg_h2_faq">Questions fréquentes</h2>
+  <h3 data-i18n="sg_faq1_q">Booking.com affiche-t-il des prix sans taxes ?</h3>
+  <p data-i18n="sg_faq1_a">Selon le pays, oui. Dans certains pays les taxes sont dans le prix affiché, dans d'autres elles s'ajoutent plus tard. Ce qui compte, c'est le prix total à l'étape de réservation.</p>
+  <h3 data-i18n="sg_faq2_q">GeoRates calcule-t-il avec ou sans taxes ?</h3>
+  <p data-i18n="sg_faq2_a">Toujours avec les taxes et les frais. Le chiffre que nous donnons est donc le prix final.</p>
+  <h3 data-i18n="sg_faq3_q">Pourquoi GeoRates ne montre-t-il pas les écarts sous 1 % comme une économie ?</h3>
+  <p data-i18n="sg_faq3_a">Ils viennent le plus souvent d'un arrondi lors du change. À partir du 19.09.2026, c'est arrivé 66 fois.</p>
+  <h3 data-i18n="sg_faq4_q">Et les frais dus à l'hôtel ?</h3>
+  <p data-i18n="sg_faq4_a">À l'étape de réservation, vérifiez si un montant est à payer sur place. Il fait partie du prix final.</p>
+  <h2 data-i18n="guide_more_h2">À lire aussi</h2>
+  <ul>
+    <li><a href="/fr/booking-bezahlt-rabatt.html" data-i18n="guide_link_bz">« Booking.com paie » : que cache la remise pour paiement en ligne ?</a></li>
+    <li><a href="/fr/booking-landeswaehrung-bezahlen.html" data-i18n="guide_link_lw">Payer en euros ou en monnaie locale ? Le piège du change sur Booking.com</a></li>
+    <li><a href="/fr/booking-laenderpreise.html" data-i18n="guide_link_lp">Prix Booking.com par pays : ce qu'ils sont, et à quelle fréquence ils valent le coup</a></li>
+    <li><a href="/fr/hotel-vpn-guenstiger-buchen.html" data-i18n="guide_link_vpn">Réserver un hôtel moins cher avec un VPN, sans passer des heures à changer de serveur</a></li>
+    <li><a href="/fr/hotel-vpn-eu-geoblocking.html" data-i18n="guide_link_eu">Un VPN vaut-il le coup dans l'UE ? Le règlement sur le blocage géographique expliqué</a></li>
+    <li><a href="/fr/booking-usa.html" data-i18n="guide_link_us">Réserver depuis les États-Unis sur Booking.com est plus souvent moins cher qu'on ne le croit</a></li>
+  </ul>
+</main>
+<footer>
+  <a href="/fr/">GeoRates</a> · <a href="/fr/ratgeber.html" data-i18n="guide_footer_rat">Guide</a> · <a href="/impressum.html" data-i18n="common_impressum">Mentions légales</a> · <a href="/datenschutz.html" data-i18n="common_datenschutz">Politique de confidentialité</a>
+</footer>
+<script src="/i18n.js" defer></script>
+<script src="/pwa.js" defer></script>
+</body>
+</html>
