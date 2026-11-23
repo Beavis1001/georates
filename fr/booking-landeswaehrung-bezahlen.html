@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr" data-i18n-prerendered="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self' https://georates-price-api.vercel.app; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
+<meta name="description" content="Faut-il payer sur Booking.com en euros ou dans la devise de l'hébergement ? Ce que coûte « Payer dans votre propre devise », et dans quelles devises se trouvaient les prix par pays les moins chers dans nos données.">
+<link rel="canonical" href="https://georates.tech/fr/booking-landeswaehrung-bezahlen.html">
+<!-- hreflang:start (erzeugt von tools/build-langs.js - nicht von Hand aendern) -->
+<link rel="alternate" hreflang="de" href="https://georates.tech/booking-landeswaehrung-bezahlen.html">
+<link rel="alternate" hreflang="en" href="https://georates.tech/en/booking-landeswaehrung-bezahlen.html">
+<link rel="alternate" hreflang="es" href="https://georates.tech/es/booking-landeswaehrung-bezahlen.html">
+<link rel="alternate" hreflang="fr" href="https://georates.tech/fr/booking-landeswaehrung-bezahlen.html">
+<link rel="alternate" hreflang="it" href="https://georates.tech/it/booking-landeswaehrung-bezahlen.html">
+<link rel="alternate" hreflang="nl" href="https://georates.tech/nl/booking-landeswaehrung-bezahlen.html">
+<link rel="alternate" hreflang="x-default" href="https://georates.tech/booking-landeswaehrung-bezahlen.html">
+<!-- hreflang:ende -->
+<meta property="og:title" content="Payer en euros ou en monnaie locale ? Le piège du change sur Booking.com">
+<meta property="og:description" content="Faut-il payer sur Booking.com en euros ou dans la devise de l'hébergement ? Ce que coûte « Payer dans votre propre devise », et dans quelles devises se trouvaient les prix par pays les moins chers dans nos données.">
+<meta property="og:image" content="https://georates.tech/og-image.jpg">
+<meta property="og:url" content="https://georates.tech/fr/booking-landeswaehrung-bezahlen.html">
+<meta property="og:locale" content="fr">
+<meta property="og:type" content="article">
+<title data-i18n-title="lw_title">Booking.com : payer en euros ou en monnaie locale ? (le piège du change) | GeoRates</title>
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#011d3a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GeoRates">
+<link rel="stylesheet" href="/tokens.css">
+<link rel="stylesheet" href="/legal.css">
+<script type="application/ld+json" data-i18n-ld="article">
+{"@context":"https://schema.org","@type":"Article","headline":"Payer en euros ou en monnaie locale ? Le piège du change sur Booking.com","description":"Faut-il payer sur Booking.com en euros ou dans la devise de l'hébergement ? Ce que coûte « Payer dans votre propre devise », et dans quelles devises se trouvaient les prix par pays les moins chers dans nos données.","inLanguage":"fr","author":{"@type":"Organization","name":"GeoRates"},"publisher":{"@type":"Organization","name":"GeoRates"},"mainEntityOfPage":"https://georates.tech/fr/booking-landeswaehrung-bezahlen.html","datePublished":"2026-11-22","dateModified":"2026-11-22"}
+</script>
+<script type="application/ld+json" data-i18n-ld="faq">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Dois-je payer sur Booking.com en euros ou en monnaie locale ?","acceptedAnswer":{"@type":"Answer","text":"Si vous avez une carte sans frais de change : dans la devise de l'hébergement. Avec « Payer dans votre propre devise », la majoration de Booking est dans le taux de change selon les conditions, ou figure sur une ligne propre."}},{"@type":"Question","name":"Qu'est-ce que « Payer dans votre propre devise » chez Booking ?","acceptedAnswer":{"@type":"Answer","text":"Un service de Booking où vous payez dans la devise de votre pays et où Booking convertit. Les frais sont dans le taux ou indiqués à part à l'étape de paiement."}},{"@type":"Question","name":"Dans quelle devise les prix par pays sont-ils le plus souvent moins chers ?","acceptedAnswer":{"@type":"Answer","text":"Dans nos données à partir du 19.09.2026, le plus souvent en dollars américains (35 fois), en roupies (28 fois) et en pesos colombiens (15 fois)."}},{"@type":"Question","name":"Un prix par pays avec 1 % d'économie vaut-il le coup ?","acceptedAnswer":{"@type":"Answer","text":"En général, non. Même de petits frais de change peuvent annuler l'avantage."}}]}
+</script>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="/fr/"><img src="/logo.png" srcset="/logo.png 1x, /logo@2x.png 2x" alt="GeoRates" width="125" height="34"></a>
+    <a class="back-link" href="/fr/" data-i18n="common_back_home">← Retour à l'accueil</a>
+  </div>
+</header>
+<main>
+  <h1 data-i18n="lw_h1">Payer en euros ou en monnaie locale ? Le piège du change sur Booking.com</h1>
+  <div class="updated" data-i18n="lw_stand">Données du 19.09. au 22.11.2026 (journal GeoRates), état au 23.11.2026</div>
+  <p data-i18n="lw_intro">Vous avez trouvé via GeoRates un pays où votre hôtel est moins cher. Au paiement, Booking vous propose de débiter le montant directement en euros. C'est commode, mais cela peut coûter une partie de votre économie.</p>
+  <h2 data-i18n="lw_h2_sagt">Ce que Booking en dit</h2>
+  <p data-i18n="lw_sagt_lead">Selon les <a href="https://www.booking.com/content/terms.html" target="_blank" rel="noopener">conditions de Booking.com</a> (section A8, Paiement) :</p>
+  <ul>
+    <li data-i18n="lw_li1">Si la devise choisie n'est pas celle de l'hébergement, Booking peut afficher les prix dans votre devise et proposer l'option <strong>« Payer dans votre propre devise »</strong> (Pay In Your Own Currency).</li>
+    <li data-i18n="lw_li2">Les frais sont <strong>inclus dans le taux de change</strong> ou figurent sur une ligne propre à l'étape de paiement.</li>
+    <li data-i18n="lw_li3">Si vous payez dans la <strong>devise de l'hébergement</strong>, cette option ne s'applique pas. Votre banque ou l'émetteur de la carte peut alors prélever des frais si votre carte est dans une autre devise. Booking le signale pendant la réservation.</li>
+  </ul>
+  <p data-i18n="lw_kurz">En bref : soit Booking convertit (la majoration est dans le taux), soit votre carte convertit (le coût dépend de votre carte). Avec une carte sans frais de change, la deuxième voie est en général moins chère.</p>
+  <h2 data-i18n="lw_h2_daten">Ce que nos données montrent</h2>
+  <p data-i18n="lw_daten_lead">À partir du 19.09.2026, GeoRates a trouvé dans <strong>108 vérifications</strong> un pays au moins 1 % moins cher. Le meilleur prix était dans ces devises :</p>
+  <ul>
+    <li data-i18n="lw_li_usd"><strong>Dollar américain (USD) : 35 fois</strong></li>
+    <li data-i18n="lw_li_inr"><strong>Roupie indienne (INR) : 28 fois</strong></li>
+    <li data-i18n="lw_li_cop"><strong>Peso colombien (COP) : 15 fois</strong></li>
+    <li data-i18n="lw_li_rest">Yen japonais (JPY) 6, sol péruvien (PEN), peso argentin (ARS) et peso mexicain (MXN) 5 chacun, plus rarement VND, PKR, LKR, EGP (2 chacun) et PHP (1).</li>
+  </ul>
+  <p data-i18n="lw_umrechnung">L'économie naît donc presque toujours dans une devise étrangère. Nous convertissons chaque devise en euros. Quand nous avons dû convertir le prix le moins cher depuis une autre devise, GeoRates fixe un seuil plus haut que 1 %, parce que Booking y vend avec son propre taux.</p>
+  <p data-i18n="lw_mini">En outre : à partir du 19.09.2026, un pays a gagné <strong>66 fois</strong> avec moins de 1 % d'avance. Une conversion avale très vite des écarts aussi petits.</p>
+  <p data-i18n="lw_nicht"><strong>Ce que nous ne mesurons pas :</strong> le taux que Booking utilise pour « Payer dans votre propre devise », et les frais de votre carte. Ce qu'il reste de l'avantage à la fin en dépend.</p>
+  <h2 data-i18n="lw_h2_vorgehen">Comment procéder</h2>
+  <ol>
+    <li data-i18n="lw_s1">Vérifiez votre hôtel avec <a href="/fr/">GeoRates</a>. La colonne « Prix local » indique le montant dans la monnaie locale de la session.</li>
+    <li data-i18n="lw_s2">Connectez-vous au pays trouvé et rechargez la page de l'hôtel. Le prix devrait correspondre à celui qui a été trouvé.</li>
+    <li data-i18n="lw_s3">À l'étape de paiement, choisissez la <strong>devise de l'hébergement</strong>, pas la conversion en euros de Booking.</li>
+    <li data-i18n="lw_s4">Payez avec une carte <strong>sans frais de change</strong>, c'est-à-dire sans commission sur les paiements à l'étranger.</li>
+    <li data-i18n="lw_s5">Pour de très petites économies (sous 2–3 %), calculez si l'effort en vaut la peine.</li>
+  </ol>
+  <p data-i18n="lw_eu">Pour les pays de l'UE, le règlement sur le blocage géographique s'applique : les prix ne peuvent pas y différer selon l'origine. La question de la devise se pose donc surtout pour les pays hors de l'EEE.</p>
+  <!-- AFFILIATE-PLATZHALTER: Karte ohne Fremdwährungsgebühr (Revolut/Wise-Vergleich) – erst nach Programm-Zulassung, als Werbelink kennzeichnen -->
+  <p class="cta" data-i18n="lw_cta"><a href="/fr/">Vérifier dans quel pays et quelle devise votre hôtel est moins cher →</a></p>
+  <h2 data-i18n="lw_h2_haken">Réserves</h2>
+  <ul>
+    <li data-i18n="lw_haken1">Les <strong>cartes bancaires ordinaires</strong> prélèvent souvent une commission de paiement à l'étranger en devise étrangère. Vérifiez les conditions de votre carte avant de réserver.</li>
+    <li data-i18n="lw_haken2"><strong>Paiement à l'hôtel :</strong> si vous ne payez qu'une fois sur place, c'est le taux du jour du paiement qui s'applique, pas celui de la réservation.</li>
+    <li data-i18n="lw_haken3"><strong>Mêmes conditions :</strong> chambre, pension, annulation et prix final taxes comprises doivent correspondre.</li>
+  </ul>
+  <h2 data-i18n="lw_h2_faq">Questions fréquentes</h2>
+  <h3 data-i18n="lw_faq1_q">Dois-je payer sur Booking.com en euros ou en monnaie locale ?</h3>
+  <p data-i18n="lw_faq1_a">Si vous avez une carte sans frais de change : dans la devise de l'hébergement. Avec « Payer dans votre propre devise », la majoration de Booking est dans le taux de change selon les conditions, ou figure sur une ligne propre.</p>
+  <h3 data-i18n="lw_faq2_q">Qu'est-ce que « Payer dans votre propre devise » chez Booking ?</h3>
+  <p data-i18n="lw_faq2_a">Un service de Booking où vous payez dans la devise de votre pays et où Booking convertit. Les frais sont dans le taux ou indiqués à part à l'étape de paiement.</p>
+  <h3 data-i18n="lw_faq3_q">Dans quelle devise les prix par pays sont-ils le plus souvent moins chers ?</h3>
+  <p data-i18n="lw_faq3_a">Dans nos données à partir du 19.09.2026, le plus souvent en dollars américains (35 fois), en roupies (28 fois) et en pesos colombiens (15 fois).</p>
+  <h3 data-i18n="lw_faq4_q">Un prix par pays avec 1 % d'économie vaut-il le coup ?</h3>
+  <p data-i18n="lw_faq4_a">En général, non. Même de petits frais de change peuvent annuler l'avantage.</p>
+  <h2 data-i18n="guide_more_h2">À lire aussi</h2>
+  <ul>
+    <li><a href="/fr/booking-bezahlt-rabatt.html" data-i18n="guide_link_bz">« Booking.com paie » : que cache la remise pour paiement en ligne ?</a></li>
+    <li><a href="/fr/booking-steuern-gebuehren.html" data-i18n="guide_link_sg">Taxes et frais sur Booking.com : pourquoi seul le prix final compte</a></li>
+    <li><a href="/fr/booking-usa.html" data-i18n="guide_link_us">Réserver depuis les États-Unis sur Booking.com est plus souvent moins cher qu'on ne le croit</a></li>
+    <li><a href="/fr/booking-indien.html" data-i18n="guide_link_in">Réserver depuis l'Inde sur Booking.com : des chiffres mesurés, pas un mythe</a></li>
+    <li><a href="/fr/booking-kolumbien.html" data-i18n="guide_link_co">Réserver depuis la Colombie sur Booking.com : combien économise-t-on vraiment ?</a></li>
+    <li><a href="/fr/hotel-vpn-guenstiger-buchen.html" data-i18n="guide_link_vpn">Réserver un hôtel moins cher avec un VPN, sans passer des heures à changer de serveur</a></li>
+  </ul>
+</main>
+<footer>
+  <a href="/fr/">GeoRates</a> · <a href="/fr/ratgeber.html" data-i18n="guide_footer_rat">Guide</a> · <a href="/impressum.html" data-i18n="common_impressum">Mentions légales</a> · <a href="/datenschutz.html" data-i18n="common_datenschutz">Politique de confidentialité</a>
+</footer>
+<script src="/i18n.js" defer></script>
+<script src="/pwa.js" defer></script>
+</body>
+</html>

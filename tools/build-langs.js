@@ -40,7 +40,7 @@ const SPRACHEN = ['de', 'en', 'es', 'fr', 'it', 'nl'];
 
 // Seiten, die es in allen Sprachen gibt. Die SEO-Ratgeber gehoeren hierher,
 // seit die Texte in en/es/fr/it/nl wirklich uebersetzt sind (nicht nur kopiertes Deutsch).
-const GUIDE_DE = ['booking-laenderpreise.html', 'hotel-vpn-guenstiger-buchen.html', 'booking-aus-japan-buchen.html', 'booking-indien.html', 'booking-usa.html', 'booking-laender-ranking.html', 'booking-tuerkei.html', 'booking-aegypten.html', 'hotel-vpn-eu-geoblocking.html', 'booking-kolumbien.html', 'booking-genius-rabatt.html', 'booking-mobile-rate.html'];
+const GUIDE_DE = ['booking-laenderpreise.html', 'hotel-vpn-guenstiger-buchen.html', 'booking-aus-japan-buchen.html', 'booking-indien.html', 'booking-usa.html', 'booking-laender-ranking.html', 'booking-tuerkei.html', 'booking-aegypten.html', 'hotel-vpn-eu-geoblocking.html', 'booking-kolumbien.html', 'booking-genius-rabatt.html', 'booking-mobile-rate.html', 'booking-bezahlt-rabatt.html', 'booking-steuern-gebuehren.html', 'booking-landeswaehrung-bezahlen.html'];
 const SEITEN = ['index.html', 'budget.html', 'gruppenkosten.html', 'packliste.html', 'ratgeber.html'].concat(GUIDE_DE);
 
 // Seiten, die es nur auf Deutsch als Adresse gibt (Rechtstexte).
@@ -67,7 +67,10 @@ const META = {
   'hotel-vpn-eu-geoblocking.html':    { desc: 'eu_meta_desc', ogTitle: 'eu_h1', ogDesc: 'eu_meta_desc' },
   'booking-kolumbien.html':           { desc: 'co_meta_desc', ogTitle: 'co_h1', ogDesc: 'co_meta_desc' },
   'booking-genius-rabatt.html':       { desc: 'ge_meta_desc', ogTitle: 'ge_h1', ogDesc: 'ge_meta_desc' },
-  'booking-mobile-rate.html':         { desc: 'mo_meta_desc', ogTitle: 'mo_h1', ogDesc: 'mo_meta_desc' }
+  'booking-mobile-rate.html':         { desc: 'mo_meta_desc', ogTitle: 'mo_h1', ogDesc: 'mo_meta_desc' },
+  'booking-bezahlt-rabatt.html':      { desc: 'bz_meta_desc', ogTitle: 'bz_h1', ogDesc: 'bz_meta_desc' },
+  'booking-steuern-gebuehren.html':   { desc: 'sg_meta_desc', ogTitle: 'sg_h1', ogDesc: 'sg_meta_desc' },
+  'booking-landeswaehrung-bezahlen.html': { desc: 'lw_meta_desc', ogTitle: 'lw_h1', ogDesc: 'lw_meta_desc' }
 };
 
 // FAQ je Seite, in der Reihenfolge auf der Seite. Article-Headline und -Beschreibung
@@ -87,7 +90,12 @@ const ARTICLE = {
   // Datenfenster dieser drei Seiten endet am 15.11.2026, deshalb eigenes Datum.
   'booking-kolumbien.html': { h1: 'co_h1', desc: 'co_meta_desc', dated: true, date: '2026-11-15' },
   'booking-genius-rabatt.html': { h1: 'ge_h1', desc: 'ge_meta_desc', dated: true, date: '2026-11-15' },
-  'booking-mobile-rate.html': { h1: 'mo_h1', desc: 'mo_meta_desc', dated: true, date: '2026-11-15' }
+  'booking-mobile-rate.html': { h1: 'mo_h1', desc: 'mo_meta_desc', dated: true, date: '2026-11-15' },
+  // Datenfenster dieser drei Seiten endet am 22.11.2026, deshalb eigenes Datum.
+  // Die sichtbare Standzeile bleibt der 23.11.2026 aus dem Entwurf.
+  'booking-bezahlt-rabatt.html': { h1: 'bz_h1', desc: 'bz_meta_desc', dated: true, date: '2026-11-22' },
+  'booking-steuern-gebuehren.html': { h1: 'sg_h1', desc: 'sg_meta_desc', dated: true, date: '2026-11-22' },
+  'booking-landeswaehrung-bezahlen.html': { h1: 'lw_h1', desc: 'lw_meta_desc', dated: true, date: '2026-11-22' }
 };
 
 const FAQ_PAARE = {
@@ -119,7 +127,13 @@ const FAQ_PAARE = {
   'booking-genius-rabatt.html': [['ge_faq1_q', 'ge_faq1_a'], ['ge_faq2_q', 'ge_faq2_a'],
     ['ge_faq3_q', 'ge_faq3_a'], ['ge_faq4_q', 'ge_faq4_a'], ['ge_faq5_q', 'ge_faq5_a']],
   'booking-mobile-rate.html': [['mo_faq1_q', 'mo_faq1_a'], ['mo_faq2_q', 'mo_faq2_a'],
-    ['mo_faq3_q', 'mo_faq3_a'], ['mo_faq4_q', 'mo_faq4_a']]
+    ['mo_faq3_q', 'mo_faq3_a'], ['mo_faq4_q', 'mo_faq4_a']],
+  'booking-bezahlt-rabatt.html': [['bz_faq1_q', 'bz_faq1_a'], ['bz_faq2_q', 'bz_faq2_a'],
+    ['bz_faq3_q', 'bz_faq3_a'], ['bz_faq4_q', 'bz_faq4_a'], ['bz_faq5_q', 'bz_faq5_a']],
+  'booking-steuern-gebuehren.html': [['sg_faq1_q', 'sg_faq1_a'], ['sg_faq2_q', 'sg_faq2_a'],
+    ['sg_faq3_q', 'sg_faq3_a'], ['sg_faq4_q', 'sg_faq4_a']],
+  'booking-landeswaehrung-bezahlen.html': [['lw_faq1_q', 'lw_faq1_a'], ['lw_faq2_q', 'lw_faq2_a'],
+    ['lw_faq3_q', 'lw_faq3_a'], ['lw_faq4_q', 'lw_faq4_a']]
 };
 
 /* ---------------------------------------------------------------- Woerterbuecher */
