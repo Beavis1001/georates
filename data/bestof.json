@@ -1,7 +1,7 @@
 {
   "hinweis": "Erzeugt von tools/fetch-bestof.js - nicht von Hand aendern.",
-  "stand": "2026-11-23",
-  "suchenGesamt": 325,
+  "stand": "2026-11-24",
+  "suchenGesamt": 330,
   "eintraege": [
     {
       "hotel": "ADEA Lifestyle Suites Fieberbrunn",
@@ -48,15 +48,15 @@
       "resultId": "zquNKwZ6BRpi"
     },
     {
-      "hotel": "Dar Rajli",
-      "hotelLand": "TN",
-      "land": "MX",
+      "hotel": "DAS SIEBEN - Adults Only",
+      "hotelLand": "AT",
+      "land": "IN",
       "baseline": "DE",
-      "pct": 14.4,
-      "euro": 79.7,
-      "basisEuro": 552,
-      "datum": "2026-10-09",
-      "resultId": "QPEW8BEeEg9y"
+      "pct": 10.9,
+      "euro": 130.06,
+      "basisEuro": 1190.45,
+      "datum": "2026-11-24",
+      "resultId": "tNgSTacaG2Qg"
     },
     {
       "hotel": "Pestana Collection Plaza Mayor",
