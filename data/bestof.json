@@ -1,6 +1,6 @@
 {
   "hinweis": "Erzeugt von tools/fetch-bestof.js - nicht von Hand aendern.",
-  "stand": "2026-11-25",
+  "stand": "2026-11-26",
   "suchenGesamt": 330,
   "eintraege": [
     {
@@ -24,17 +24,6 @@
       "basisEuro": 455,
       "datum": "2026-11-01",
       "resultId": "L1G5AFEOY8jj"
-    },
-    {
-      "hotel": "Uga Halloowella - Hatton - All Inclusive",
-      "hotelLand": "LK",
-      "land": "PH",
-      "baseline": "DE",
-      "pct": 15.1,
-      "euro": 249.27,
-      "basisEuro": 1647.12,
-      "datum": "2026-10-11",
-      "resultId": "_yqCBgvNXemS"
     },
     {
       "hotel": "The Gantry Hotel, formerly Z Hotel NYC",
@@ -90,6 +79,17 @@
       "basisEuro": 1187.78,
       "datum": "2026-11-05",
       "resultId": "r70vBuGXDitQ"
+    },
+    {
+      "hotel": "Royal Princess Hotel",
+      "hotelLand": "HR",
+      "land": "US",
+      "baseline": "DE",
+      "pct": 8.9,
+      "euro": 170.37,
+      "basisEuro": 1920,
+      "datum": "2026-11-05",
+      "resultId": "ct_oP72iEwhg"
     }
   ]
 }
