@@ -1,7 +1,7 @@
 {
   "hinweis": "Erzeugt von tools/fetch-bestof.js - nicht von Hand aendern.",
-  "stand": "2026-11-27",
-  "suchenGesamt": 334,
+  "stand": "2026-11-28",
+  "suchenGesamt": 335,
   "eintraege": [
     {
       "hotel": "ADEA Lifestyle Suites Fieberbrunn",
@@ -35,6 +35,17 @@
       "basisEuro": 366.84,
       "datum": "2026-11-05",
       "resultId": "zquNKwZ6BRpi"
+    },
+    {
+      "hotel": "Au Charmant Petit Lac - Ecohotel Parc & Spa",
+      "hotelLand": "IT",
+      "land": "IN",
+      "baseline": "IT",
+      "pct": 11.8,
+      "euro": 161.97,
+      "basisEuro": 1369,
+      "datum": "2026-11-27",
+      "resultId": "wGSFitG8fhvB"
     },
     {
       "hotel": "DAS SIEBEN - Adults Only",
@@ -79,17 +90,6 @@
       "basisEuro": 1187.78,
       "datum": "2026-11-05",
       "resultId": "r70vBuGXDitQ"
-    },
-    {
-      "hotel": "Royal Princess Hotel",
-      "hotelLand": "HR",
-      "land": "US",
-      "baseline": "DE",
-      "pct": 8.9,
-      "euro": 170.37,
-      "basisEuro": 1920,
-      "datum": "2026-11-05",
-      "resultId": "ct_oP72iEwhg"
     }
   ]
 }
